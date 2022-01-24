@@ -1,0 +1,10 @@
+<svg id="size-1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="矩形_17" data-name="矩形 17" transform="translate(3)" fill="#def1ff" stroke="#707070" stroke-width="2">
+    <rect width="17" height="17" stroke="none"/>
+    <rect x="1" y="1" width="15" height="15" fill="none"/>
+  </g>
+  <g id="路径_9" data-name="路径 9" transform="translate(0 3)" fill="#def1ff">
+    <path d="M 16 16 L 1 16 L 1 1 L 16 1 L 16 16 Z" stroke="none"/>
+    <path d="M 2 2 L 2 15 L 15 15 L 15 2 L 2 2 M 0 0 L 17 0 L 17 17 L 0 17 L 0 0 Z" stroke="none" fill="#707070"/>
+  </g>
+</svg>

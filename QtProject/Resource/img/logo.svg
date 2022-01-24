@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="170" height="32.35" viewBox="0 0 170 32.35">
+  <g id="logo" transform="translate(-17 -18)" style="isolation: isolate">
+    <g id="路径_11" data-name="路径 11" transform="translate(20 18)" fill="#def1ff">
+      <path d="M 163.5 31.85032653808594 L 0.5 31.85032653808594 L 0.5 0.4999927878379822 L 163.5 0.4999927878379822 L 163.5 31.85032653808594 Z" stroke="none"/>
+      <path d="M 1 0.9999923706054688 L 1 31.35032653808594 L 163 31.35032653808594 L 163 0.9999923706054688 L 1 0.9999923706054688 M 0 -7.62939453125e-06 L 164 -7.62939453125e-06 L 164 32.35032653808594 L 0 32.35032653808594 L 0 -7.62939453125e-06 Z" stroke="none" fill="#def1ff"/>
+    </g>
+    <text id="Y-Serialplot" transform="translate(20 43)" fill="#707070" stroke="#707070" stroke-width="3" font-size="25" font-family="YouYuan" letter-spacing="0.05em"><tspan x="0" y="0">Y-Serialplot</tspan></text>
+  </g>
+</svg>

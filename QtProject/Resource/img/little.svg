@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20">
+  <g id="little" transform="translate(-1148.5 -23)">
+    <g id="矩形" transform="translate(1149 23)" fill="#def1ff" stroke="#def1ff" stroke-width="2">
+      <rect width="21" height="20" stroke="none"/>
+      <rect x="1" y="1" width="19" height="18" fill="none"/>
+    </g>
+    <line id="直线_4" data-name="直线 4" x2="20" transform="translate(1149.5 33)" fill="none" stroke="#707070" stroke-linecap="round" stroke-width="2"/>
+  </g>
+</svg>
