@@ -17,19 +17,20 @@
 
 **仓库文件介绍**
 
+
 # 1 软件页面说明
 
 + 标题栏
 
-  ![image-202201221954316](./picture/image-202201221954316.png)
+  ![](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026433.png)
 
 + 视窗区域
 
-![image-20220122195822184](./picture/image-20220122195822184.png)
+![image-20220122195822184](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026464.png)
 
 + 命令发送区域
 
-![image-20220122200411307](./picture/image-20220122200411307.png)
+![image-20220122200411307](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026466.png)
 
 命令的发送有：按对应的快捷键，鼠标点击发送按钮，输入指令后按下回车键，这三种发送方式。使用起来更加方便。
 
@@ -37,11 +38,11 @@
 
 + 有线连接
 
-<img src="./picture/image-20220123225050246.png" alt="image-20220123225050246" style="zoom: 80%;" />
+<img src="https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026467.png" alt="image-20220123225050246" style="zoom: 80%;" />
 
 + 无线连接
 
-  <img src="./picture/image-20220123225129042.png" alt="image-20220123225129042" style="zoom: 80%;" />
+  <img src="https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026468.png" alt="image-20220123225129042" style="zoom: 80%;" />
 
 单片机的串口能够被电脑识别，必须要有USB-TTL转接模块才行。因为一般单片机的串口为TTL电平信号，和USB接口的电平信号不兼容，因此需要特殊的芯片进行转接。常用的芯片有CH340和CP2102。
 
@@ -49,13 +50,13 @@
 
 驱动安装好了之后，应该能够在电脑的设备管理器中看到该串口设备。（下图中的芯片为CH340芯片）
 
-<img src="./picture/image-20220123225552491.png" alt="image-20220123225552491" style="zoom:67%;" />
+<img src="https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026469.png" alt="image-20220123225552491" style="zoom:67%;" />
 
 这里提供了CH340的驱动，一起放在软件目录下了。
 
 如果安装失败，可以尝试先点击卸载，然后再点击安装。
 
-![image-20220123225836851](./picture/image-20220123225836851.png)
+![image-20220123225836851](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026470.png)
 
 # 3 通信协议说明
 
@@ -65,7 +66,7 @@
 
 为了能够自动适应波形通道的名称，通信协议分为两段。
 
-![image-20220122201344398](./picture/image-20220122201344398.png)
+![image-20220122201344398](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026471.png)
 
 + 注意：**软件和STM32使用的均是小端模式。**
 
@@ -108,7 +109,7 @@
 
 下面主要介绍波形发送、命令接受的程序。
 
-<img src="./picture/image-20220123230435684.png" alt="image-20220123230435684" style="zoom:80%;" />
+<img src="https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026472.png" alt="image-20220123230435684" style="zoom:80%;" />
 
 ## 4.1 波形发送
 
@@ -281,21 +282,21 @@ void getdatas(void)
 
 然后：
 
-![image-20220123235528345](./picture/image-20220123235528345.png)
+![image-20220123235528345](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026473.png)
 
 
 
-![image-20220123235708548](./picture/image-20220123235708548.png)
+![image-20220123235708548](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026474.png)
 
 就可以看到：
 
-![image-20220123235733974](./picture/image-20220123235733974.png)
+![image-20220123235733974](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026475.png)
 
 
 
 然后在命令窗口输入PID设置命令并发送，就可以看到后三个通道的数据变化了
 
-![image-20220123235934500](./picture/image-20220123235934500.png)
+![image-20220123235934500](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026476.png)
 
 
 
@@ -309,4 +310,4 @@ void getdatas(void)
 
 拉取项目后在下图框选的文件夹中使用 `QT Creator` 打开.pro文件即可进行二次开发。
 
-![image-20220123235029302](./picture/image-20220123235029302.png)
+![image-20220123235029302](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026477.png)
