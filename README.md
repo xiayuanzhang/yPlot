@@ -310,4 +310,8 @@ void getdatas(void)
 
 拉取项目后在下图框选的文件夹中使用 `QT Creator` 打开.pro文件即可进行二次开发。
 
++ `Bin` 目录是用来放可执行文件和依赖库的，相当于发布前的中转站
+
+
+
 ![image-20220123235029302](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026477.png)
