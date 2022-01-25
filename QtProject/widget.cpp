@@ -1,4 +1,4 @@
-#include "widget.h"
+﻿#include "widget.h"
 #include "ui_widget.h"
 #include "outputdata.h"
 
@@ -8,6 +8,7 @@
 
 #include <QPushButton>
 #include <QComboBox>
+#pragma execution_character_set("utf-8")
 
 Widget::Widget(bool resizeEnable,
                bool shadowBorder,
@@ -154,6 +155,7 @@ Widget::~Widget()
     configFile.write("buffSize",setupPage->getBuffSize());
 
     configFile.close();
+    serialport.close();
     delete ui;
 }
 
@@ -364,13 +366,14 @@ void Widget::on_checkBox_open_clicked(bool checked)
             ui->comboBox_port->setDisabled(true);
         }
         else{// 串口打开失败
-            QMessageBox::warning(this,"提示" ," 设备连接失败\n串口可能被占用  \n",QMessageBox::Ok);
+            QMessageBox::warning(this,"提示" ,"连接失败\n串口可能被占用",QMessageBox::Ok);
             ui->checkBox_open->setChecked(false);
             ui->comboBox_baud->setDisabled(false);
             ui->comboBox_port->setDisabled(false);
         }
     }else if(ui->comboBox_port->currentIndex()<0){//没有搜索到串口
-        QMessageBox::warning(this,"提示" ,"  设备未连接     \n",QMessageBox::Ok);
+        ui->checkBox_open->setChecked(false);
+        QMessageBox::warning(this,"提示","设备未连接",QMessageBox::Ok);
         ui->comboBox_baud->setDisabled(false);
         ui->comboBox_port->setDisabled(false);
     }
@@ -380,7 +383,6 @@ void Widget::on_checkBox_open_clicked(bool checked)
         serialport.close();//关闭串口
         ui->comboBox_baud->setDisabled(false);
         ui->comboBox_port->setDisabled(false);
-
     }
 }
 

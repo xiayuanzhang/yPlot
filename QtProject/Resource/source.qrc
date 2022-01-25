@@ -1,5 +1,20 @@
 <RCC>
     <qresource prefix="/">
         <file>help/help.html</file>
+        <file>help/picture/image-202201221954316.png</file>
+        <file>help/picture/image-20220122195822184.png</file>
+        <file>help/picture/image-20220122200411307.png</file>
+        <file>help/picture/image-20220122201344398.png</file>
+        <file>help/picture/image-20220123225050246.png</file>
+        <file>help/picture/image-20220123225127502.png</file>
+        <file>help/picture/image-20220123225129042.png</file>
+        <file>help/picture/image-20220123225552491.png</file>
+        <file>help/picture/image-20220123225836851.png</file>
+        <file>help/picture/image-20220123230435684.png</file>
+        <file>help/picture/image-20220123235029302.png</file>
+        <file>help/picture/image-20220123235528345.png</file>
+        <file>help/picture/image-20220123235708548.png</file>
+        <file>help/picture/image-20220123235733974.png</file>
+        <file>help/picture/image-20220123235934500.png</file>
     </qresource>
 </RCC>
