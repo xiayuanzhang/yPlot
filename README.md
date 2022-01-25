@@ -310,8 +310,13 @@ void getdatas(void)
 
 拉取项目后在下图框选的文件夹中使用 `QT Creator` 打开.pro文件即可进行二次开发。
 
+
+
+![image-20220125190517286](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/2022-1-25/image-20220125190517286.png)
+
 + `Bin` 目录是用来放可执行文件和依赖库的，相当于发布前的中转站
-
-
-
-![image-20220123235029302](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/%202021-9-27/202201242026477.png)
++ `CH340驱动` 中是ch340芯片的驱动
++ `QtProject` 目录中是Qt的工程，二次开发其实只需要这一个目录即可
++ `ReleasePack` 是放打包好的发布版的目录
++ `STM32-DEMO` 是单片机的示例程序
++ `UI Designe` 是使用 Adobe XD 设计的界面，但是和最后的软件界面还是有一点出入，没有严格按照这个实践。
