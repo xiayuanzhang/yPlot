@@ -1,4 +1,4 @@
-#include "drawplot.h"
+﻿#include "drawplot.h"
 
 drawplot::drawplot(QObject *parent) : QObject(parent)
 {
@@ -239,6 +239,9 @@ void drawplot::clearPlot()
     for(int j = 0;j<channels;j++){
         series[j]->replace(buff);
     }
+    axisYRangeMax = -9999999999;
+    axisYRangeMin = 9999999999;
+
     interruptFlag = false;
 }
 

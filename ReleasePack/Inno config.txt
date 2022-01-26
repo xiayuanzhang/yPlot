@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Y-Serialplot"
-#define MyAppVersion "1.0"
+#define MyAppVersion "1.1"
 #define MyAppPublisher "syuan"
 #define MyAppURL "https://github.com/syuan7/y-serialplot"
 #define MyAppExeName "Y-serialplot.exe"

@@ -286,6 +286,7 @@ void Widget::lineEdit_finish()
     QString num = keyli->objectName(); //对象名格式为 keyli0~keyli50
     num.remove(0,5);//删除keyli
     int n = num.toInt();//把剩下的字符转换为int型,获得对象名中的数字
+    keyCmd[n] = '*';
 
       bool errFlag = false;
       char cmd = keyli->text().toUtf8().data()[0];
@@ -310,8 +311,7 @@ void Widget::lineEdit_finish()
 
       //输入错误、自动重置为""
       if(errFlag == true){
-          cmd = keyCmd[n]; //将字符保存到对应的按键中
-          keyli->setText(QString(cmd)); //重新设置键值，避免出现小写
+          keyli->setText(QString('*')); //重新设置键值，避免出现小写
       }
        //更新值
       else {
@@ -531,7 +531,6 @@ void Widget::chartview_mouseMove(int key, QPointF nowPos)
     lastPos = nowPos;
 
     if(key == NOONE){   // 没有按键按下
-        lastPos = nowPos;
         plotShowDataFlag = true;  //显示图元
     }
     else {
@@ -539,7 +538,7 @@ void Widget::chartview_mouseMove(int key, QPointF nowPos)
         tooltip->hideChartPos();
     }
 
-    if(stopFlag == true && serialport.isOpen() == false){
+    if(stopFlag == true || serialport.isOpen() == false){
         plotShowDataFlag = false;
         QRect rect = ui->widget_title->geometry();
         QRect crect = ui->chartview->geometry();
