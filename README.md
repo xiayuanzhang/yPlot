@@ -320,3 +320,19 @@ void getdatas(void)
 + `ReleasePack` 是放打包好的发布版的目录
 + `STM32-DEMO` 是单片机的示例程序
 + `UI Designe` 是使用 Adobe XD 设计的界面，但是和最后的软件界面还是有一点出入，没有严格按照这个实践。
+
+## 建议的编译输出路径
+
+打开项目之后
+
+<img src="https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/2022-1-25/image-20220331172940860.png" alt="image-20220331172940860" style="zoom:67%;" />
+
+因为没有删除编译项的配置文件，所以会默认设置成我是用的编译环境，不一定适用于你的电脑，所以下面需要更换一下路径。
+
+![image-20220331173358175](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/2022-1-25/image-20220331173358175.png)
+
+![image-20220331173537234](https://mark-picture-1306701147.cos.ap-shanghai.myqcloud.com/2022-1-25/image-20220331173537234.png)
+
+然后编译即可。
+
+在开发环境搭建成功的情况下这是测试直接可以运行成功的。当然编译输出路径也可以根据自己喜好设置。
