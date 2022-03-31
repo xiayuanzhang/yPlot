@@ -1,4 +1,4 @@
-#ifndef DATAANALYSIS_H
+﻿#ifndef DATAANALYSIS_H
 #define DATAANALYSIS_H
 
 #include <QObject>

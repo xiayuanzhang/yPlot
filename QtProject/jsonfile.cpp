@@ -1,4 +1,4 @@
-#include "jsonfile.h"
+﻿#include "jsonfile.h"
 
 //将文件中的数据读取到m_cache中，操作完成之后将m_cache写入到文件
 //但是这样的话，内容会不会重复？没有重复，具体原因还不知道。

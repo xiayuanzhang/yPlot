@@ -1,3 +1,4 @@
+﻿
 #ifndef OUTPUTDATA_H
 #define OUTPUTDATA_H
 #include <QObject>

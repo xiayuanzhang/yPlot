@@ -1,11 +1,16 @@
-#ifndef DRAWPLOT_H
+﻿#ifndef DRAWPLOT_H
 #define DRAWPLOT_H
+
 
 #include <QObject>
 #include <QVector>
 #include <QtCharts>
 #include "mychartview.h"
 using namespace QtCharts;
+
+
+
+
 
 class drawplot : public QObject
 {

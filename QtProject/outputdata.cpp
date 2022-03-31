@@ -1,3 +1,4 @@
+﻿
 #include "outputdata.h"
 #include <QFileDialog>
 

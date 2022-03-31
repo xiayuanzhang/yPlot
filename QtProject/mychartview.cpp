@@ -1,4 +1,4 @@
-#include "mychartview.h"
+﻿#include "mychartview.h"
 #include <QDebug>
 
 myChartView::myChartView(QWidget *parent) :

@@ -1,4 +1,4 @@
-#ifndef MYCHARTVIEW_H
+﻿#ifndef MYCHARTVIEW_H
 #define MYCHARTVIEW_H
 #include <QtCharts/QChartView>
 #include <QtWidgets/QRubberBand>

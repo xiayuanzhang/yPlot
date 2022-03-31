@@ -1,4 +1,4 @@
-#ifndef JSONFILE_H
+﻿#ifndef JSONFILE_H
 #define JSONFILE_H
 
 #include <QObject>
