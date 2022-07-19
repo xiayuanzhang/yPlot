@@ -2,7 +2,6 @@
 #define WIDGET_H
 
 #include <QWidget>
-#include <QtCharts>
 #include <QtSerialPort>
 #include <QSerialPortInfo>
 
@@ -12,9 +11,8 @@
 
 #include "qframelesswidget.h"
 
-using namespace QtCharts;
+#include "qcustomplot.h"
 
-class Callout;
 
 namespace Ui {
 class Widget;
@@ -102,7 +100,6 @@ private:
     //数据解析对象
     dataAnalysis analysis;
     setup *setupPage;
-    Callout *tooltip;
 
     bool plotShowDataFlag = true;
 

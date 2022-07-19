@@ -220,7 +220,7 @@ Makefile: ../Y-serialplot.pro D:/Qt/Qt5.9.8/5.9.8/mingw53_32/mkspecs/win32-g++/q
 		D:/Qt/Qt5.9.8/5.9.8/mingw53_32/mkspecs/features/lex.prf \
 		../Y-serialplot.pro \
 		D:/Qt/Qt5.9.8/5.9.8/mingw53_32/lib/qtmaind.prl \
-		D:/Qt/Qt5.9.8/5.9.8/mingw53_32/lib/Qt5Charts.prl \
+		D:/Qt/Qt5.9.8/5.9.8/mingw53_32/lib/Qt5PrintSupport.prl \
 		D:/Qt/Qt5.9.8/5.9.8/mingw53_32/lib/Qt5Widgets.prl \
 		D:/Qt/Qt5.9.8/5.9.8/mingw53_32/lib/Qt5Gui.prl \
 		D:/Qt/Qt5.9.8/5.9.8/mingw53_32/lib/Qt5SerialPort.prl \
@@ -385,7 +385,7 @@ D:/Qt/Qt5.9.8/5.9.8/mingw53_32/mkspecs/features/yacc.prf:
 D:/Qt/Qt5.9.8/5.9.8/mingw53_32/mkspecs/features/lex.prf:
 ../Y-serialplot.pro:
 D:/Qt/Qt5.9.8/5.9.8/mingw53_32/lib/qtmaind.prl:
-D:/Qt/Qt5.9.8/5.9.8/mingw53_32/lib/Qt5Charts.prl:
+D:/Qt/Qt5.9.8/5.9.8/mingw53_32/lib/Qt5PrintSupport.prl:
 D:/Qt/Qt5.9.8/5.9.8/mingw53_32/lib/Qt5Widgets.prl:
 D:/Qt/Qt5.9.8/5.9.8/mingw53_32/lib/Qt5Gui.prl:
 D:/Qt/Qt5.9.8/5.9.8/mingw53_32/lib/Qt5SerialPort.prl:

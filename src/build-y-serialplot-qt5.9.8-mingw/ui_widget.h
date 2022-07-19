@@ -25,7 +25,7 @@
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
-#include "mychartview.h"
+#include "qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -59,7 +59,7 @@ public:
     QPushButton *pushButton_close;
     QSpacerItem *horizontalSpacer_13;
     QSplitter *splitter;
-    myChartView *chartview;
+    QCustomPlot *widget;
     QWidget *layoutWidget;
     QHBoxLayout *horizontalLayout_5;
     QVBoxLayout *verticalLayout_2;
@@ -446,7 +446,7 @@ public:
         sizePolicy2.setHeightForWidth(pushButton_clear->sizePolicy().hasHeightForWidth());
         pushButton_clear->setSizePolicy(sizePolicy2);
         pushButton_clear->setMinimumSize(QSize(0, 0));
-        pushButton_clear->setMaximumSize(QSize(28, 28));
+        pushButton_clear->setMaximumSize(QSize(30, 30));
         pushButton_clear->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayout_4->addWidget(pushButton_clear);
@@ -516,19 +516,12 @@ public:
 
         splitter = new QSplitter(Widget);
         splitter->setObjectName(QStringLiteral("splitter"));
-        splitter->setCursor(QCursor(Qt::ArrowCursor));
-        splitter->setInputMethodHints(Qt::ImhNone);
-        splitter->setFrameShape(QFrame::NoFrame);
         splitter->setLineWidth(1);
         splitter->setOrientation(Qt::Vertical);
-        splitter->setOpaqueResize(false);
-        splitter->setHandleWidth(10);
-        splitter->setChildrenCollapsible(false);
-        chartview = new myChartView(splitter);
-        chartview->setObjectName(QStringLiteral("chartview"));
-        chartview->setMinimumSize(QSize(0, 420));
-        chartview->setCursor(QCursor(Qt::ArrowCursor));
-        splitter->addWidget(chartview);
+        splitter->setHandleWidth(20);
+        widget = new QCustomPlot(splitter);
+        widget->setObjectName(QStringLiteral("widget"));
+        splitter->addWidget(widget);
         layoutWidget = new QWidget(splitter);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
         horizontalLayout_5 = new QHBoxLayout(layoutWidget);
@@ -641,7 +634,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 1032, 223));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 1032, 481));
         scrollArea->setWidget(scrollAreaWidgetContents);
 
         verticalLayout_4->addWidget(scrollArea);

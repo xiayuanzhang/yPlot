@@ -5,7 +5,7 @@ INPUT(
 ./release\dataanalysis.o
 ./release\setup.o
 ./release\outputdata.o
-./release\callout.o
+./release\qcustomplot.o
 ./release\qframelessdialog.o
 ./release\qframelesshelper.o
 ./release\qframelessmainwindow.o
@@ -16,6 +16,7 @@ INPUT(
 ./release\moc_widget.o
 ./release\moc_dataanalysis.o
 ./release\moc_setup.o
+./release\moc_qcustomplot.o
 ./release\moc_qframelessdialog.o
 ./release\moc_qframelesshelper.o
 ./release\moc_qframelessmainwindow.o

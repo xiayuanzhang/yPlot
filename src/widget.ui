@@ -649,8 +649,8 @@ height: 0px;
         </property>
         <property name="maximumSize">
          <size>
-          <width>28</width>
-          <height>28</height>
+          <width>30</width>
+          <height>30</height>
          </size>
         </property>
         <property name="cursor">
@@ -830,41 +830,16 @@ height: 0px;
    </item>
    <item>
     <widget class="QSplitter" name="splitter">
-     <property name="cursor">
-      <cursorShape>ArrowCursor</cursorShape>
-     </property>
-     <property name="inputMethodHints">
-      <set>Qt::ImhNone</set>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
      <property name="lineWidth">
       <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="opaqueResize">
-      <bool>false</bool>
-     </property>
      <property name="handleWidth">
-      <number>10</number>
+      <number>20</number>
      </property>
-     <property name="childrenCollapsible">
-      <bool>false</bool>
-     </property>
-     <widget class="myChartView" name="chartview" native="true">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>420</height>
-       </size>
-      </property>
-      <property name="cursor">
-       <cursorShape>ArrowCursor</cursorShape>
-      </property>
-     </widget>
+     <widget class="QCustomPlot" name="widget" native="true"/>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <property name="spacing">
@@ -1152,7 +1127,7 @@ height: 0px;
               <x>0</x>
               <y>0</y>
               <width>1032</width>
-              <height>223</height>
+              <height>481</height>
              </rect>
             </property>
            </widget>
@@ -1201,9 +1176,9 @@ height: 0px;
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>myChartView</class>
+   <class>QCustomPlot</class>
    <extends>QWidget</extends>
-   <header>mychartview.h</header>
+   <header>qcustomplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

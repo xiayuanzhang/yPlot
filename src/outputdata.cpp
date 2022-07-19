@@ -1,9 +1,10 @@
 ﻿
 #include "outputdata.h"
 #include <QFileDialog>
-
+#include <QStandardPaths>
+#include <QMessageBox>
 #include <QDebug>
-outputData::outputData(QVector<QLineSeries*> ser)
+outputData::outputData(QVector<int*> ser)
 {
     QString location = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
 
@@ -30,7 +31,7 @@ outputData::outputData(QVector<QLineSeries*> ser)
     //根据文件类型创建文件
     if(type == ".csv"){
         for(int i=0;i<ser.size();i++){
-            outputCsv(path+ser.at(i)->name()+type,ser.at(i)->points());
+           // outputCsv(path+ser.at(i)->name()+type,ser.at(i)->points());
         }
     }
 }

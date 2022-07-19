@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui serialport charts
+QT       += core gui serialport printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Y-serialplot
@@ -32,7 +32,7 @@ SOURCES += \
     dataanalysis.cpp \
     setup.cpp \
     outputdata.cpp \
-    callout.cpp
+    qcustomplot.cpp
 
 HEADERS += \
         widget.h \
@@ -40,7 +40,7 @@ HEADERS += \
     dataanalysis.h \
     setup.h \
     outputdata.h \
-    callout.h
+    qcustomplot.h
 
 FORMS += \
         widget.ui \

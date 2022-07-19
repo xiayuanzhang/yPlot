@@ -5,7 +5,7 @@ INPUT(
 ./debug\dataanalysis.o
 ./debug\setup.o
 ./debug\outputdata.o
-./debug\callout.o
+./debug\qcustomplot.o
 ./debug\qframelessdialog.o
 ./debug\qframelesshelper.o
 ./debug\qframelessmainwindow.o
@@ -16,6 +16,7 @@ INPUT(
 ./debug\moc_widget.o
 ./debug\moc_dataanalysis.o
 ./debug\moc_setup.o
+./debug\moc_qcustomplot.o
 ./debug\moc_qframelessdialog.o
 ./debug\moc_qframelesshelper.o
 ./debug\moc_qframelessmainwindow.o
