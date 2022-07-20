@@ -24,7 +24,7 @@
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
-#include "qcustomplot.h"
+#include "drawplot.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -58,7 +58,7 @@ public:
     QPushButton *pushButton_close;
     QSpacerItem *horizontalSpacer_13;
     QSplitter *splitter;
-    QCustomPlot *widget;
+    drawPlot *plotView;
     QWidget *layoutWidget;
     QHBoxLayout *horizontalLayout_5;
     QVBoxLayout *verticalLayout_2;
@@ -512,9 +512,9 @@ public:
         splitter->setLineWidth(1);
         splitter->setOrientation(Qt::Vertical);
         splitter->setHandleWidth(20);
-        widget = new QCustomPlot(splitter);
-        widget->setObjectName(QStringLiteral("widget"));
-        splitter->addWidget(widget);
+        plotView = new drawPlot(splitter);
+        plotView->setObjectName(QStringLiteral("plotView"));
+        splitter->addWidget(plotView);
         layoutWidget = new QWidget(splitter);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
         horizontalLayout_5 = new QHBoxLayout(layoutWidget);

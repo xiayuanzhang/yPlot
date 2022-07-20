@@ -7,7 +7,6 @@ INPUT(
 ./debug\outputdata.o
 ./debug\qcustomplot.o
 ./debug\drawplot.o
-./debug\mycustomplot.o
 ./debug\qframelessdialog.o
 ./debug\qframelesshelper.o
 ./debug\qframelessmainwindow.o
@@ -19,7 +18,7 @@ INPUT(
 ./debug\moc_dataanalysis.o
 ./debug\moc_setup.o
 ./debug\moc_qcustomplot.o
-./debug\moc_mycustomplot.o
+./debug\moc_drawplot.o
 ./debug\moc_qframelessdialog.o
 ./debug\moc_qframelesshelper.o
 ./debug\moc_qframelessmainwindow.o

@@ -93,8 +93,6 @@ private:
 
     //数据解析对象
     dataAnalysis *analysis;
-    //图标处理
-    drawPlot *plotsView;
 
     setup *setupPage;
 

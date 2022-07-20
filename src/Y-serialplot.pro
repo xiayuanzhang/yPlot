@@ -33,8 +33,7 @@ SOURCES += \
     setup.cpp \
     outputdata.cpp \
     qcustomplot.cpp \
-    drawplot.cpp \
-    mycustomplot.cpp
+    drawplot.cpp
 
 HEADERS += \
         widget.h \
@@ -43,8 +42,7 @@ HEADERS += \
     setup.h \
     outputdata.h \
     qcustomplot.h \
-    drawplot.h \
-    mycustomplot.h
+    drawplot.h
 
 FORMS += \
         widget.ui \

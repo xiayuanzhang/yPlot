@@ -84,8 +84,6 @@ Widget::Widget(bool resizeEnable,
     if(baud == "")  //软件第一次运行会没有初始值
         baud = "115200";
     ui->comboBox_baud->setCurrentText(baud);
-
-    plotsView = new drawPlot(30,60,ui->widget);
 }
 
 Widget::~Widget()
@@ -394,7 +392,7 @@ void Widget::haveNewPoint_drawPlot(QVector<double>  newdata)
 {
 
     //qDebug()<<newdata;
-    plotsView->addPoint(newdata); //添加新的波形
+    ui->plotView->addPoint(newdata); //添加新的波形
 }
 
 //数据的名称出现了变化
