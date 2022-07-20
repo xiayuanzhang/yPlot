@@ -85,7 +85,7 @@ Widget::Widget(bool resizeEnable,
         baud = "115200";
     ui->comboBox_baud->setCurrentText(baud);
 
-    plotsView = new drawPlot(20000,10000,ui->widget);
+    plotsView = new drawPlot(30,60,ui->widget);
 }
 
 Widget::~Widget()
@@ -393,7 +393,7 @@ void Widget::on_pushButton_resetCmd_clicked()
 void Widget::haveNewPoint_drawPlot(QVector<double>  newdata)
 {
 
-    qDebug()<<newdata;
+    //qDebug()<<newdata;
     plotsView->addPoint(newdata); //添加新的波形
 }
 

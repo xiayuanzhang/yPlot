@@ -9528,7 +9528,7 @@ void QCPAxis::mousePressEvent(QMouseEvent *event, const QVariant &details)
     return;
   }
   
-  if (event->buttons() & Qt::LeftButton)
+  if (event->buttons() == Qt::RightButton)
   {
     mDragging = true;
     // initialize antialiasing backup in case we start dragging:
@@ -11768,6 +11768,11 @@ void QCPAbstractPlottable::rescaleValueAxis(bool onlyEnlarge, bool inKeyRange) c
   
   bool foundRange;
   QCPRange newRange = getValueRange(foundRange, signDomain, inKeyRange ? keyAxis->range() : QCPRange());
+  //---------yuan
+//  qDebug()<<"start"<<newRange.lower<<" "<<newRange.upper;
+  newRange.lower -=fabs(newRange.lower/20.0);
+  newRange.upper +=fabs(newRange.upper/20.0);
+//  qDebug()<<"end"<<newRange.lower<<" "<<newRange.upper;
   if (foundRange)
   {
     if (onlyEnlarge)
@@ -15561,7 +15566,7 @@ void QCustomPlot::mousePressEvent(QMouseEvent *event)
   mMouseHasMoved = false;
   mMousePressPos = event->pos();
   
-  if (mSelectionRect && mSelectionRectMode != QCP::srmNone)
+  if ((event->button() & Qt::LeftButton) && mSelectionRect && mSelectionRectMode != QCP::srmNone)
   {
     if (mSelectionRectMode != QCP::srmZoom || qobject_cast<QCPAxisRect*>(axisRectAt(mMousePressPos))) // in zoom mode only activate selection rect if on an axis rect
       mSelectionRect->startSelection(event);
@@ -15588,6 +15593,7 @@ void QCustomPlot::mousePressEvent(QMouseEvent *event)
       }
     }
   }
+
   
   event->accept(); // in case QCPLayerable reimplementation manipulates event accepted state. In QWidget event system, QCustomPlot wants to accept the event.
 }
@@ -18524,7 +18530,7 @@ void QCPAxisRect::layoutChanged()
 void QCPAxisRect::mousePressEvent(QMouseEvent *event, const QVariant &details)
 {
   Q_UNUSED(details)
-  if (event->buttons() & Qt::LeftButton)
+  if (event->buttons() & Qt::RightButton)
   {
     mDragging = true;
     // initialize antialiasing backup in case we start dragging:
@@ -33955,7 +33961,7 @@ QColor QCPPolarAxisAngular::getLabelColor() const
 void QCPPolarAxisAngular::mousePressEvent(QMouseEvent *event, const QVariant &details)
 {
   Q_UNUSED(details)
-  if (event->buttons() & Qt::LeftButton)
+  if (event->buttons() & Qt::RightButton)
   {
     mDragging = true;
     // initialize antialiasing backup in case we start dragging:

@@ -7,6 +7,7 @@ INPUT(
 ./release\outputdata.o
 ./release\qcustomplot.o
 ./release\drawplot.o
+./release\mycustomplot.o
 ./release\qframelessdialog.o
 ./release\qframelesshelper.o
 ./release\qframelessmainwindow.o
@@ -18,6 +19,7 @@ INPUT(
 ./release\moc_dataanalysis.o
 ./release\moc_setup.o
 ./release\moc_qcustomplot.o
+./release\moc_mycustomplot.o
 ./release\moc_qframelessdialog.o
 ./release\moc_qframelesshelper.o
 ./release\moc_qframelessmainwindow.o

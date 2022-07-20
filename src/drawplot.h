@@ -8,41 +8,37 @@
 class drawPlot
 {
 public:
-    drawPlot(int queuesize,int windsize,QCustomPlot *cp);
+    drawPlot(int bufftime ,int windtime ,QCustomPlot *cp);
 
-    void resizeMem(int chs);
+    void resetPlot(int chs);
     void addPoint(QVector<double> newdata);
-    void setQueueSize(int size);
-    void setWindSize(int size);
-    int getWindSize();
-    int getQueueSize();
+    void setPlotData(QVector<double> newdata);
+    //是否允许Y轴自动调整
+    void enableAutoY(bool flag = false);
+    void enableMoveX(bool flag = false);
 
-    void setWindHeadToHead(int distance);  //设置窗口头部距离数据头部的距离
-    int getWindHeadToHead();
-    QVector<QVector<double> > &getAllData();
-    int getWindHead();
-
-    void setPlotData();
+    void setBuffTime(int t);
+    void setWindTime(int t);
+    void setIntervalTime(int t);
 
 private:
-    void queueCursorMove();  //计算光标的循环位置
-    void windCursorMove();  //可视窗口
+
 
 private:
     bool _intiFlag = 0; //表示未完成初始化，需要等有第一个数据输入，完成了初始化之后才能开始工作
 
-    int _queueSize = 0;  //数据缓存区大小
-    int _windSize = 0; //可视区域大小
-
-    QVector<QVector<double>> _dataQueue; //数据缓存二维数组
-    QVector<QVector<double>> _dataWind; //要显示的数据二维数组
+    int _buffTime = 120;  //数据缓存区时间跨度,单位s
+    int _windTime = 60; //可视区域时间跨度，单位s
+    int _intervalTime = 0; //可视区域和最新时间的间隔，控制视窗移动
+    QTime *nowTime;
 
     QCustomPlot *_customPlot;//绘图窗口
     QVector<QCPGraph *>_plot;
 
-    int _head = -1; //环形缓存队列插入数据的游标,_head 指向最新更新的数据下标
-    int _windHeadtoHead = 0;//可视窗口头,距离数据游标的头
-    int _safeLen =  5; //可视窗口尾部 _windEnd 和 _Head 间隔的最小距离
+
+    bool autoY = false; //false 为不允许
+    bool moveX = false;
+
 
 };
 
