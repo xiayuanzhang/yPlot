@@ -12,7 +12,7 @@
 #include "qframelesswidget.h"
 
 #include "qcustomplot.h"
-
+#include "drawplot.h"
 
 namespace Ui {
 class Widget;
@@ -56,18 +56,12 @@ private slots:
     void on_checkBox_stop_clicked(bool checked);
 
 
-    void on_spinBox_channel_valueChanged(int arg1);
-
-    void on_comboBox_datatype_currentTextChanged(const QString &arg1);
-
-
-
 
     void on_pushButton_resetKey_clicked();
 
     void on_pushButton_resetCmd_clicked();
 
-    void haveNewPoint_drawPlot(QVector<QVector<double>> newdata);
+    void haveNewPoint_drawPlot(QVector<double> newdata);
     void haveNewName_drawPlot(QVector<QString> name);
 
 
@@ -87,7 +81,7 @@ private:
     QPoint m_startMovePoint;
     bool m_startMoveFlag;
 
-    QSerialPort serialport;//串口对象
+    QSerialPort *serialport;//串口对象
     QTimer *findPortTimer; // 定时器，用于定时搜索串口
     QList<QSerialPortInfo> portlist;
 
@@ -98,10 +92,11 @@ private:
     char keyCmd[55];
 
     //数据解析对象
-    dataAnalysis analysis;
-    setup *setupPage;
+    dataAnalysis *analysis;
+    //图标处理
+    drawPlot *plotsView;
 
-    bool plotShowDataFlag = true;
+    setup *setupPage;
 
 };
 

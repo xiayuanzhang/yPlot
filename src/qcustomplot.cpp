@@ -35494,3 +35494,29 @@ QVector<QPointF> QCPPolarGraph::dataToLines(const QVector<QCPGraphData> &data) c
 /* end of 'src/polar/polargraph.cpp' */
 
 
+
+void QCPGraph::mySetData(const QVector<double> &queue, int head,int windSize,int queueSize,int dis,bool alreadySorted)
+{
+  mDataContainer->clear();
+
+  QVector<QCPGraphData> tempData(windSize); //数据缓存区
+  QVector<QCPGraphData>::iterator it = tempData.begin();
+  const QVector<QCPGraphData>::iterator itEnd = tempData.end();
+  int end = head-windSize;
+  if(end < 0) end += queueSize;
+  double k1 = queueSize - windSize - dis;
+//  qDebug()<<end<<" "<<k1;
+  while (it != itEnd)
+  {
+    it->key = k1;
+    it->value = queue[end];
+    ++it;
+    ++end;
+    if(end >= queueSize)
+        end -= queueSize;
+    ++k1;
+  }
+//  qDebug()<<end<<" "<<k1;
+  mDataContainer->add(tempData, alreadySorted); // don't modify tempData beyond this to prevent copy on write
+}
+

@@ -20,23 +20,28 @@ Widget::Widget(bool resizeEnable,
     ui->setupUi(this);
 
     this->initForm(); //设置无标题窗口栏
-
-    //串口相关内容初始化
+//成员初始化
     findPortTimer = new QTimer(this);
+    serialport = new QSerialPort(this);
+    analysis = new dataAnalysis();
+
+    //串口相关内容初始化    
     findPortTimer->start(100);//周期100ms启动定时器
     connect(this->findPortTimer,SIGNAL(timeout()),
             this,SLOT(findPortTimer_timeout()));//连接定时器溢出信号和槽函数
-    connect(&this->serialport,SIGNAL(readyRead()),
+    connect(serialport,SIGNAL(readyRead()),
             this,SLOT(serialport_readyread()));
 
-    //获取配置数据
-        //打开配置文件
+    //数据更新信号连接
+    connect(analysis,SIGNAL(haveNewData(QVector<double>)),
+            this,SLOT(haveNewPoint_drawPlot(QVector<double>)));
+    connect(analysis,SIGNAL(haveNewName(QVector<QString>)),
+            this,SLOT(haveNewName_drawPlot(QVector<QString>)));
+
+    //打开配置文件
     configFile.open(QCoreApplication::applicationDirPath());//获取程序当前路径
-         //通道数
-    int channels = configFile.readInt("channel");
-    if(channels < 1)
-        channels = 1;
-        //按键指令
+
+    //设置按键指令
     memcpy(keyCmd,configFile.readString("keyCmd").toUtf8().data()
            ,sizeof(char)*50);
     for(uint i = 0;i<sizeof(keyCmd);i++)
@@ -44,21 +49,8 @@ Widget::Widget(bool resizeEnable,
         if(!(keyCmd[i] >= 65 && keyCmd[i] <= 90))
             keyCmd[i] = '*';
     }
-        //数据类型
-    QString type = configFile.readString("dataType");
-    //qDebug()<<type;
-    if(type != "uint8" &&
-            type != "uint16" &&
-            type != "uint32" &&
-            type != "int8" &&
-            type != "int16" &&
-            type != "int32" &&
-            type != "float" &&
-            type != "double"
-            )
-        type = "float";
 
-     //设置页面数据读取
+     //设置页面的 数据读取
     int watchsize = configFile.readInt("watchSize");
     if(watchsize < 10) watchsize = 10;
     if(watchsize > 10000) watchsize = 10000;
@@ -76,12 +68,7 @@ Widget::Widget(bool resizeEnable,
 
     //创建命令输入窗口
     createCmd();
-
     //控制命令填充填充
-    ui->spinBox_channel->setValue(channels);
-    ui->comboBox_datatype->setCurrentText(type);
-    ui->comboBox_baud->setCurrentText(configFile.readString("baud"));
-
     for (int i = 0;i < 50;i++) {
         QString name = "cmdli"+QString::number(i);
         QLineEdit *cmdli = ui->scrollArea->widget()->findChild<QLineEdit*>(name);
@@ -92,66 +79,19 @@ Widget::Widget(bool resizeEnable,
         keyli->setText(QString(keyCmd[i]));
     }
 
+    //设置波特率
+    QString baud = configFile.readString("baud");
+    if(baud == "")  //软件第一次运行会没有初始值
+        baud = "115200";
+    ui->comboBox_baud->setCurrentText(baud);
 
-    //数据解析类初始化
-    analysis.setDataType(type);
-    analysis.setChannelNum(channels);
-
-
-    // 给widget绘图控件，设置个别名，方便书写
-       QCustomPlot *customPlot = ui->widget;
-
-       // 设置坐标轴标签名称
-//       customPlot->xAxis->setLabel("x");
-//       customPlot->yAxis->setLabel("y");
-
-       // 设置坐标轴显示范围，不设置时默认范围为 0~5
-       customPlot->xAxis->setRange(-10, 10);
-       customPlot->yAxis->setRange(-100, 100);
-
-       /// 添加曲线有两种方法
-       /// 第一种直接插入，使用控件的曲线数组 graph()。但要注意：曲线从 graph(0)开始递增的，超出添加的个数使用会报错。不推荐这种方式，容易搞错。
-       // 添加一条绘图曲线
-       customPlot->addGraph();
-       // 设置曲线颜色
-       customPlot->graph(0)->setPen(QPen(QColor(255, 0, 0)));
-       // 曲线的坐标数据，计算x和y的坐标
-       QVector<double> x(201), y(201);
-       for (int i = 0; i < 201; ++i)
-       {
-           x[i] = -10 + 0.1f *i;
-           y[i] = sin(x[i])*50;  // y = 50sinx
-       }
-       // 设置曲线的坐标数据
-       customPlot->graph(0)->setData(x, y);
-
-
-       /// 第二种使用返回的指针，推荐使用这种方式，不容易出错。
-       // 添加一条绘图曲线
-       QCPGraph *pGraph2 = customPlot->addGraph();/// 这行代码等同于 customPlot->addGraph(); QCPGraph *pGraph2 = customPlot->graph(1);
-       // 设置曲线颜色
-       pGraph2->setPen(QPen(QColor(0, 0, 255)));
-       // 曲线的坐标数据，计算x和y的坐标
-       QVector<double> x1(201), y1(201);
-       for (int i = 0; i < 201; ++i)
-       {
-           x1[i] = -10 + 0.1f *i;
-           y1[i] = cos(x1[i])*50;  // y = 50cosx
-       }
-       // 设置曲线的坐标数据
-       pGraph2->setData(x1, y1);
-       customPlot->setSelectionRectMode(QCP::SelectionRectMode::srmZoom);
-
-       customPlot->legend->setVisible(true);
-           customPlot->legend->setFont(QFont("Helvetica",9));
+    plotsView = new drawPlot(20000,10000,ui->widget);
 }
 
 Widget::~Widget()
 {
     //主页面数据保存
     configFile.write("baud",ui->comboBox_baud->currentText());
-    configFile.write("channel",ui->spinBox_channel->value());
-    configFile.write("dataType",ui->comboBox_datatype->currentText());
 
     for (int i = 0;i < 50;i++) {
         QString name = "keyli"+QString::number(i);
@@ -172,7 +112,7 @@ Widget::~Widget()
     configFile.write("buffSize",setupPage->getBuffSize());
 
     configFile.close();
-    serialport.close();
+    serialport->close();
     delete ui;
 }
 
@@ -284,7 +224,7 @@ void Widget::createCmd()
                [=]()
                {
                     //qDebug()<<cmdli->text();
-                    serialport.write(cmdli->text().toLocal8Bit());
+                    serialport->write(cmdli->text().toLocal8Bit());
                });
 
        connect(keyli,&QLineEdit::editingFinished, //完成可输入按键值
@@ -372,13 +312,13 @@ void Widget::on_checkBox_open_clicked(bool checked)
         QString name =
            portlist[ui->comboBox_port->currentIndex()].portName();//获取选中的串口的名字
         QString baud = ui->comboBox_baud->currentText();//获取下拉框中设置波特率
-        serialport.setPortName(name);//设置串口名字
-        serialport.setBaudRate(baud.toInt());//设置串口波特率
-        serialport.setDataBits(QSerialPort::Data8);//设置数据位
-        serialport.setStopBits(QSerialPort::OneStop);//设置停止位
-        serialport.setParity(QSerialPort::NoParity);//设置奇偶校验
-        serialport.setFlowControl(QSerialPort::NoFlowControl);//设置流控制
-        if(serialport.open(QIODevice::ReadWrite)){ //以可读可写的方式打开串口
+        serialport->setPortName(name);//设置串口名字
+        serialport->setBaudRate(baud.toInt());//设置串口波特率
+        serialport->setDataBits(QSerialPort::Data8);//设置数据位
+        serialport->setStopBits(QSerialPort::OneStop);//设置停止位
+        serialport->setParity(QSerialPort::NoParity);//设置奇偶校验
+        serialport->setFlowControl(QSerialPort::NoFlowControl);//设置流控制
+        if(serialport->open(QIODevice::ReadWrite)){ //以可读可写的方式打开串口
             ui->comboBox_baud->setDisabled(true);
             ui->comboBox_port->setDisabled(true);
         }
@@ -395,9 +335,9 @@ void Widget::on_checkBox_open_clicked(bool checked)
         ui->comboBox_port->setDisabled(false);
     }
     else{// 需要关闭串口
-        serialport.clear();
-        analysis.clearAnalysisBuff();
-        serialport.close();//关闭串口
+        serialport->clear();
+        analysis->clearAnalysisBuff();
+        serialport->close();//关闭串口
         ui->comboBox_baud->setDisabled(false);
         ui->comboBox_port->setDisabled(false);
     }
@@ -408,13 +348,13 @@ void Widget::on_checkBox_open_clicked(bool checked)
 void Widget::serialport_readyread()
 {
     if(stopFlag){//处于暂停状态中,直接读取数据不处理
-        serialport.clear();
-        analysis.clearAnalysisBuff();
+        serialport->clear();
+        analysis->clearAnalysisBuff();
         return;
     }
     //接收状态下，需要解析数据
-    QByteArray data_byte = serialport.readAll();
-    analysis.inputDataStream(data_byte); //输入到数据解析类中去
+    QByteArray data_byte = serialport->readAll();
+    analysis->inputDataStream(data_byte); //输入到数据解析类中去
 
    // QString data_str = QString::fromLocal8Bit(data_byte);
 }
@@ -425,23 +365,6 @@ void Widget::on_checkBox_stop_clicked(bool checked)
     stopFlag = checked; //true 为暂停状态
 }
 
-
-//改变通道数
-void Widget::on_spinBox_channel_valueChanged(int arg1)
-{
-    if(arg1 < 1)
-    {
-        arg1 = 1;
-        ui->spinBox_channel->setValue(1);
-    }
-    analysis.setChannelNum(arg1);
-}
-
-//设置曲线类型
-void Widget::on_comboBox_datatype_currentTextChanged(const QString &arg1)
-{
-    analysis.setDataType(arg1);
-}
 
 
 //按键快捷键复位
@@ -467,14 +390,17 @@ void Widget::on_pushButton_resetCmd_clicked()
 
 
 //有新的数据出现，需要绘制
-void Widget::haveNewPoint_drawPlot(QVector<QVector<double> > newdata)
+void Widget::haveNewPoint_drawPlot(QVector<double>  newdata)
 {
 
+    qDebug()<<newdata;
+    plotsView->addPoint(newdata); //添加新的波形
 }
 
 //数据的名称出现了变化
 void Widget::haveNewName_drawPlot(QVector<QString> name)
 {
+    qDebug()<<name;
       //plot.setChannelsName(name);
 }
 

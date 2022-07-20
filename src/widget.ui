@@ -649,8 +649,8 @@ height: 0px;
         </property>
         <property name="maximumSize">
          <size>
-          <width>30</width>
-          <height>30</height>
+          <width>28</width>
+          <height>28</height>
          </size>
         </property>
         <property name="cursor">
@@ -890,142 +890,6 @@ height: 0px;
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_2">
-                <property name="spacing">
-                 <number>10</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_datatype">
-                  <property name="minimumSize">
-                   <size>
-                    <width>70</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>70</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>类型</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="comboBox_datatype">
-                  <property name="minimumSize">
-                   <size>
-                    <width>100</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>100</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>uint8</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>uint16</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>uint32</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>int8</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>int16</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>int32</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>float</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>double</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout">
-                <property name="spacing">
-                 <number>10</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_channel">
-                  <property name="minimumSize">
-                   <size>
-                    <width>70</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>70</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>通道</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="spinBox_channel">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>100</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
                <widget class="QPushButton" name="pushButton_resetKey">
                 <property name="minimumSize">
                  <size>
@@ -1127,7 +991,7 @@ height: 0px;
               <x>0</x>
               <y>0</y>
               <width>1032</width>
-              <height>481</height>
+              <height>576</height>
              </rect>
             </property>
            </widget>

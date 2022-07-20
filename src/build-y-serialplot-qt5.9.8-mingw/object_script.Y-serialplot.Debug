@@ -6,6 +6,7 @@ INPUT(
 ./debug\setup.o
 ./debug\outputdata.o
 ./debug\qcustomplot.o
+./debug\drawplot.o
 ./debug\qframelessdialog.o
 ./debug\qframelesshelper.o
 ./debug\qframelessmainwindow.o

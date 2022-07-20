@@ -20,40 +20,38 @@ class dataAnalysis : public QObject
 public:
     dataAnalysis();
 
-      //设置数据格式
-    void setDataType(QString type);
-    //设置数据通道数量
-    void setChannelNum(int num);
+
+    //获取数据通道数量
+    int getChannelNum();
     //输入数据流
     void inputDataStream(QByteArray stream);
-
     void clearAnalysisBuff();
-
 private:
-    int dataTypeSize();
     //解析数据名
-    void analysisDataName();
+    void analysisDataName(QByteArray stream);
      //解析数据帧
-    void analysisData();
-    double dataChange(char *p);
+    void analysisData(QByteArray stream);
+
+//    QString dataType;
+//    int dataTypeSize();
+//    double dataChange(char *p);
 
 signals:
-    void haveNewData(QVector<QVector<double>> newdata);
+    void haveNewData(QVector<double> newdata);
     void haveNewName(QVector<QString> name);
 
 private:
-    int channels;
-    QString dataType;
-    QVector<QVector<double>> newDataList;
-    QVector<QString> newName;
 
     const QByteArray frameNameHead = "AABBCC";
     const QByteArray frameNameEnd = "CCBBAA";
     const QByteArray frameDataHead = "DDEEFF";
     const QByteArray frameDataEnd = "FFEEDD";
+    const int inputDataBuffSize = 1024*10; //最大10k缓存
+
+
+    int channels;
+    QVector<QString> lastName;
     QByteArray inputDataBuff;
-    QVector<QByteArray> dataNameBuff;
-    QVector<QByteArray> dataBuff;
 };
 
 #endif // DATAANALYSIS_H

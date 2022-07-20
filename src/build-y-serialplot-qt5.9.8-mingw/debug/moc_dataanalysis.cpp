@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_dataAnalysis_t {
     QByteArrayData data[8];
-    char stringdata0[94];
+    char stringdata0[84];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,16 +35,16 @@ static const qt_meta_stringdata_dataAnalysis_t qt_meta_stringdata_dataAnalysis =
 QT_MOC_LITERAL(0, 0, 12), // "dataAnalysis"
 QT_MOC_LITERAL(1, 13, 11), // "haveNewData"
 QT_MOC_LITERAL(2, 25, 0), // ""
-QT_MOC_LITERAL(3, 26, 25), // "QVector<QVector<double> >"
-QT_MOC_LITERAL(4, 52, 7), // "newdata"
-QT_MOC_LITERAL(5, 60, 11), // "haveNewName"
-QT_MOC_LITERAL(6, 72, 16), // "QVector<QString>"
-QT_MOC_LITERAL(7, 89, 4) // "name"
+QT_MOC_LITERAL(3, 26, 15), // "QVector<double>"
+QT_MOC_LITERAL(4, 42, 7), // "newdata"
+QT_MOC_LITERAL(5, 50, 11), // "haveNewName"
+QT_MOC_LITERAL(6, 62, 16), // "QVector<QString>"
+QT_MOC_LITERAL(7, 79, 4) // "name"
 
     },
-    "dataAnalysis\0haveNewData\0\0"
-    "QVector<QVector<double> >\0newdata\0"
-    "haveNewName\0QVector<QString>\0name"
+    "dataAnalysis\0haveNewData\0\0QVector<double>\0"
+    "newdata\0haveNewName\0QVector<QString>\0"
+    "name"
 };
 #undef QT_MOC_LITERAL
 
@@ -78,7 +78,7 @@ void dataAnalysis::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         dataAnalysis *_t = static_cast<dataAnalysis *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->haveNewData((*reinterpret_cast< QVector<QVector<double> >(*)>(_a[1]))); break;
+        case 0: _t->haveNewData((*reinterpret_cast< QVector<double>(*)>(_a[1]))); break;
         case 1: _t->haveNewName((*reinterpret_cast< QVector<QString>(*)>(_a[1]))); break;
         default: ;
         }
@@ -89,7 +89,7 @@ void dataAnalysis::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 0:
-                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QVector<QVector<double> > >(); break;
+                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QVector<double> >(); break;
             }
             break;
         case 1:
@@ -103,7 +103,7 @@ void dataAnalysis::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            typedef void (dataAnalysis::*_t)(QVector<QVector<double>> );
+            typedef void (dataAnalysis::*_t)(QVector<double> );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&dataAnalysis::haveNewData)) {
                 *result = 0;
                 return;
@@ -156,7 +156,7 @@ int dataAnalysis::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void dataAnalysis::haveNewData(QVector<QVector<double>> _t1)
+void dataAnalysis::haveNewData(QVector<double> _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

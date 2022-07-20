@@ -21,7 +21,6 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QSpacerItem>
-#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -67,12 +66,6 @@ public:
     QSpacerItem *horizontalSpacer_14;
     QWidget *widget_tools;
     QVBoxLayout *verticalLayout;
-    QHBoxLayout *horizontalLayout_2;
-    QLabel *label_datatype;
-    QComboBox *comboBox_datatype;
-    QHBoxLayout *horizontalLayout;
-    QLabel *label_channel;
-    QSpinBox *spinBox_channel;
     QPushButton *pushButton_resetKey;
     QPushButton *pushButton_resetCmd;
     QSpacerItem *horizontalSpacer_15;
@@ -446,7 +439,7 @@ public:
         sizePolicy2.setHeightForWidth(pushButton_clear->sizePolicy().hasHeightForWidth());
         pushButton_clear->setSizePolicy(sizePolicy2);
         pushButton_clear->setMinimumSize(QSize(0, 0));
-        pushButton_clear->setMaximumSize(QSize(30, 30));
+        pushButton_clear->setMaximumSize(QSize(28, 28));
         pushButton_clear->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayout_4->addWidget(pushButton_clear);
@@ -548,50 +541,6 @@ public:
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        horizontalLayout_2 = new QHBoxLayout();
-        horizontalLayout_2->setSpacing(10);
-        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        label_datatype = new QLabel(widget_tools);
-        label_datatype->setObjectName(QStringLiteral("label_datatype"));
-        label_datatype->setMinimumSize(QSize(70, 40));
-        label_datatype->setMaximumSize(QSize(70, 40));
-        label_datatype->setAlignment(Qt::AlignCenter);
-
-        horizontalLayout_2->addWidget(label_datatype);
-
-        comboBox_datatype = new QComboBox(widget_tools);
-        comboBox_datatype->setObjectName(QStringLiteral("comboBox_datatype"));
-        comboBox_datatype->setMinimumSize(QSize(100, 40));
-        comboBox_datatype->setMaximumSize(QSize(100, 40));
-        comboBox_datatype->setCursor(QCursor(Qt::PointingHandCursor));
-
-        horizontalLayout_2->addWidget(comboBox_datatype);
-
-
-        verticalLayout->addLayout(horizontalLayout_2);
-
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(10);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        label_channel = new QLabel(widget_tools);
-        label_channel->setObjectName(QStringLiteral("label_channel"));
-        label_channel->setMinimumSize(QSize(70, 40));
-        label_channel->setMaximumSize(QSize(70, 40));
-        label_channel->setAlignment(Qt::AlignCenter);
-
-        horizontalLayout->addWidget(label_channel);
-
-        spinBox_channel = new QSpinBox(widget_tools);
-        spinBox_channel->setObjectName(QStringLiteral("spinBox_channel"));
-        spinBox_channel->setMinimumSize(QSize(0, 40));
-        spinBox_channel->setMaximumSize(QSize(100, 40));
-        spinBox_channel->setCursor(QCursor(Qt::PointingHandCursor));
-
-        horizontalLayout->addWidget(spinBox_channel);
-
-
-        verticalLayout->addLayout(horizontalLayout);
-
         pushButton_resetKey = new QPushButton(widget_tools);
         pushButton_resetKey->setObjectName(QStringLiteral("pushButton_resetKey"));
         pushButton_resetKey->setMinimumSize(QSize(180, 40));
@@ -634,7 +583,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 1032, 481));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 1032, 576));
         scrollArea->setWidget(scrollAreaWidgetContents);
 
         verticalLayout_4->addWidget(scrollArea);
@@ -702,19 +651,6 @@ public:
         pushButton_close->setWhatsThis(QApplication::translate("Widget", "good", Q_NULLPTR));
 #endif // QT_NO_WHATSTHIS
         pushButton_close->setText(QString());
-        label_datatype->setText(QApplication::translate("Widget", "\347\261\273\345\236\213", Q_NULLPTR));
-        comboBox_datatype->clear();
-        comboBox_datatype->insertItems(0, QStringList()
-         << QApplication::translate("Widget", "uint8", Q_NULLPTR)
-         << QApplication::translate("Widget", "uint16", Q_NULLPTR)
-         << QApplication::translate("Widget", "uint32", Q_NULLPTR)
-         << QApplication::translate("Widget", "int8", Q_NULLPTR)
-         << QApplication::translate("Widget", "int16", Q_NULLPTR)
-         << QApplication::translate("Widget", "int32", Q_NULLPTR)
-         << QApplication::translate("Widget", "float", Q_NULLPTR)
-         << QApplication::translate("Widget", "double", Q_NULLPTR)
-        );
-        label_channel->setText(QApplication::translate("Widget", "\351\200\232\351\201\223", Q_NULLPTR));
         pushButton_resetKey->setText(QApplication::translate("Widget", "\346\214\211\351\224\256\351\207\215\347\275\256", Q_NULLPTR));
         pushButton_resetCmd->setText(QApplication::translate("Widget", "\346\214\207\344\273\244\351\207\215\347\275\256", Q_NULLPTR));
     } // retranslateUi
