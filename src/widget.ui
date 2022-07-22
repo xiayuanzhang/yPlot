@@ -839,7 +839,7 @@ height: 0px;
      <property name="handleWidth">
       <number>20</number>
      </property>
-     <widget class="QCustomPlot" name="widget" native="true"/>
+     <widget class="drawPlot" name="plotView" native="true"/>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <property name="spacing">
@@ -1040,9 +1040,9 @@ height: 0px;
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QCustomPlot</class>
+   <class>drawPlot</class>
    <extends>QWidget</extends>
-   <header>qcustomplot.h</header>
+   <header>drawplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

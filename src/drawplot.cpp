@@ -38,18 +38,31 @@ drawPlot::drawPlot(QWidget *parent) :
     this->setSelectionRectMode(QCP::SelectionRectMode::srmZoom);
 
 
-    this->setInteractions( QCP::iSelectPlottables| QCP::iSelectLegend);
+    //曲线可选，图例可选，可多选
+    this->setInteractions( QCP::iSelectPlottables| QCP::iSelectLegend| QCP::iMultiSelect|QCP::iSelectItems);
+    this->setMultiSelectModifier(Qt::ControlModifier);// 使用ctrl键来多选
     //图例设置
     this->legend->setVisible(true);
-    this->legend->setFont(QFont("Helvetica",9));
+    this->legend->setFont(QFont("Helvetica",11,QFont::Bold));
     this->axisRect()->insetLayout()->setInsetAlignment(0,Qt::AlignTop|Qt::AlignLeft);
     this->legend->setBrush(QColor(255, 255, 255, 150)); //背景透明
+    this->legend->setRowSpacing(5);
 
-    //设置legend只能选择图例
-    this->legend->setSelectableParts(QCPLegend::spItems);
-    connect(this, SIGNAL(selectionChangedByUser()), this, SLOT(selectionChanged()));
+    this->legend->setSelectableParts(QCPLegend::spItems); //设置legend只能选择图例
+    this->legend->setSelectedFont(QFont("Helvetica",11,QFont::Bold)); //设置选中的字体样式
+    this->legend->setBorderPen(Qt::NoPen); //不要图例框的边框
+    connect(this, SIGNAL(selectionChangedByUser()), this, SLOT(selectionChanged())); //连接信号
+
+    connect(this,SIGNAL(legendClick(QCPLegend*,QCPAbstractLegendItem*,QMouseEvent*)),
+            this,SLOT(onLegendClick (QCPLegend*, QCPAbstractLegendItem*, QMouseEvent*)));
+    connect(this,SIGNAL(legendDoubleClick(QCPLegend*,QCPAbstractLegendItem*,QMouseEvent*)),
+            this,SLOT(onLegendDoubleClick (QCPLegend*, QCPAbstractLegendItem*, QMouseEvent*)));
 
 
+    connect(this,SIGNAL(plottableClick(QCPAbstractPlottable*,int,QMouseEvent*)),
+            this,SLOT(onPlottableClick (QCPAbstractPlottable*, int, QMouseEvent*)));
+    connect(this,SIGNAL(plottableDoubleClick(QCPAbstractPlottable*,int,QMouseEvent*)),
+            this,SLOT(onPlottableDoubleClick  (QCPAbstractPlottable*, int, QMouseEvent*)));
 
 
     //默认启用自适应Y
@@ -57,70 +70,241 @@ drawPlot::drawPlot(QWidget *parent) :
     //默认启用x轴运动
     enableMoveX(1);
 
+    //初始化颜色
+    initColor(1);
+
+
+}
+
+//颜色获取网站
+//  https://mokole.com/palette.html
+void drawPlot::initColor(int i)
+{
+    if(i == 0){
+        plotColor.append(0x2f4f4f); //darkslategray
+        plotColor.append(0x8b0000); // darkred
+        plotColor.append(0x808000); // olive
+        plotColor.append(0x3cb371); //mediumseagreen
+        plotColor.append(0x00008b); // darkblue
+        plotColor.append(0xb03060); //maroon3
+        plotColor.append(0xff0000); //red
+        plotColor.append(0xff8c00); //darkorange
+        plotColor.append(0xffd700); //gold
+        plotColor.append(0x00ff7f); //springgreen
+        plotColor.append(0x4169e1); //royalblue
+        plotColor.append(0x00ffff); //aqua
+        plotColor.append(0x00bfff); //deepskyblue
+        plotColor.append(0x0000ff); //greenyellow
+        plotColor.append(0xadff2f); //blue
+        plotColor.append(0xda70d6); //orchid
+        plotColor.append(0xd8bfd8); //thistle
+        plotColor.append(0xff00ff); //fuchsia
+        plotColor.append(0xeee8aa); //palegoldenrod
+        plotColor.append(0xffa07a); //lightsalmon
+    }
+    else if(i == 1){
+        plotColor.append(0x000001); //black
+        plotColor.append(0x2e8b57); // maroon
+        plotColor.append(0x800000); //olive
+        plotColor.append(0x808000); // purple2
+        plotColor.append(0x7f007f); //maroon3
+        plotColor.append(0xff0000); //red
+        plotColor.append(0x0000cd); //mediumblue
+        plotColor.append(0xffd700); //gold
+        plotColor.append(0x00ff00); //lime
+        plotColor.append(0x00fa9a); //mediumspringgreen
+        plotColor.append(0x4169e1); //royalblue
+        plotColor.append(0x00ffff); //aqua
+        plotColor.append(0x00bfff); //deepskyblue
+        plotColor.append(0xf08080); //lightcoral
+        plotColor.append(0xff00ff); //fuchsia
+        plotColor.append(0xeee8aa); //palegoldenrod
+        plotColor.append(0xffff54); //laserlemon
+        plotColor.append(0xdda0dd); //plum
+        plotColor.append(0xff1493); //deeppink
+        plotColor.append(0x696969); // seagreen
+    }
+}
+
+QColor drawPlot::getColor(int i)
+{
+    if(i>=plotColor.size()){
+        i = i-plotColor.size();
+    }
+    return plotColor.at(i);
 }
 
 void drawPlot::selectionChanged()
 {
-  // make top and bottom axes be selected synchronously, and handle axis and tick labels as one selectable object:
-  if (this->xAxis->selectedParts().testFlag(QCPAxis::spAxis) || this->xAxis->selectedParts().testFlag(QCPAxis::spTickLabels) ||
-      this->xAxis2->selectedParts().testFlag(QCPAxis::spAxis) || this->xAxis2->selectedParts().testFlag(QCPAxis::spTickLabels))
-  {
-    this->xAxis2->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
-    this->xAxis->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
-  }
-  // make left and right axes be selected synchronously, and handle axis and tick labels as one selectable object:
-  if (this->yAxis->selectedParts().testFlag(QCPAxis::spAxis) || this->yAxis->selectedParts().testFlag(QCPAxis::spTickLabels) ||
-      this->yAxis2->selectedParts().testFlag(QCPAxis::spAxis) || this->yAxis2->selectedParts().testFlag(QCPAxis::spTickLabels))
-  {
-    this->yAxis2->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
-    this->yAxis->setSelectedParts(QCPAxis::spAxis|QCPAxis::spTickLabels);
-  }
-
   // 将图形的选择与相应图例项的选择同步
+  //
   for (int i=0; i<this->graphCount(); ++i)
   {
     QCPGraph *graph = this->graph(i);
     QCPPlottableLegendItem *item = this->legend->itemWithPlottable(graph);
-    if (item->selected() || graph->selected())
-    {
-      item->setSelected(true);
-      //注意：这句需要Qcustomplot2.0系列版本
-      graph->setSelection(QCPDataSelection(graph->data()->dataRange()));
-      if(graph->visible() == true){
-          graph->setVisible(false);
-      }
-      else {
-          graph->setVisible(true);
-      }
-      //这句1.0系列版本即可
-      //graph->setSelected(true);
+
+    if(dataEllipses.at(i)->selected() || dataTexts.at(i)->selected() || graph -> selected()){
+        dataEllipses.at(i)->setSelected(false); //变为不选中
+        dataTexts.at(i)->setSelected(false);
+
+        QPen pen = graph->pen();
+        pen.setWidthF(pen.widthF()+1.5);
+        graph ->  selectionDecorator() -> setPen(pen);
+        graph -> setSelection(QCPDataSelection(graph -> data() -> dataRange()));
+
+        item->setSelectedTextColor(pen.color()); //选中的颜色也和线条一样，相当于不变化
+        item->setSelected(true);
     }
+    else if(!(graph -> selected())){
+      item->setSelected(false);
+    }
+
+
   }
+
+}
+
+void drawPlot::onLegendClick(QCPLegend *legend, QCPAbstractLegendItem *item, QMouseEvent *event)
+{
+    Q_UNUSED(event)
+    Q_UNUSED(legend)
+    for (int i = 0;i<this->graphCount();i++) {
+        QCPGraph *graph = this->graph(i);
+        QCPPlottableLegendItem *mitem = this->legend->itemWithPlottable(graph);
+        if(mitem == item){
+            item->setSelected(false);  //复位选中，不将选中表现出来
+            if(graph->visible() == true){
+                graph->setVisible(false);//设置为不可见
+                item->setTextColor(QColor(0xDDDDDD)); //图例文字颜色变灰，表示隐藏了
+            }
+            else {
+                graph->setVisible(true);//设置为可见
+                item->setTextColor(graph->pen().color()); //恢复颜色
+            }
+            break;
+        }
+    }
+
 }
 
 
-void drawPlot::resetPlot(int chs)
+void drawPlot::onLegendDoubleClick(QCPLegend *legend, QCPAbstractLegendItem *item, QMouseEvent *event)
 {
-    _plot.clear();
-    this->clearGraphs();
+    Q_UNUSED(event)
+    Q_UNUSED(legend)
+    item->setSelected(false);  //复位选中，不将选中表现出来
+}
+
+//
+void drawPlot::onPlottableClick(QCPAbstractPlottable *plottable, int dataIndex, QMouseEvent *event)
+{
+    qDebug()<<"adadad";
+    Q_UNUSED(event)
+    Q_UNUSED(plottable)
+    Q_UNUSED(dataIndex)
+}
+
+void drawPlot::onPlottableDoubleClick(QCPAbstractPlottable *plottable, int dataIndex, QMouseEvent *event)
+{
+    Q_UNUSED(event)
+    Q_UNUSED(plottable)
+    Q_UNUSED(dataIndex)
+}
+
+
+void drawPlot::initPlots(int chs)
+{
+    QCPPlottableLegendItem *item;
+    _plot.clear();         //清除句柄保存
+    dataTexts.clear();    //清空句柄
+    dataEllipses.clear(); //清空句柄
+    this->clearGraphs();   //清空视图
+    this->clearItems(); //清空图元
+
+    //浮标
+    dataLine = new QCPItemStraightLine(this);
+    QPen pen1 = dataLine->pen();
+    pen1.setColor(Qt::black);
+    pen1.setStyle(Qt::DotLine);
+    //pen1.setWidth(1);
+    dataLine->setPen(pen1);
+    dataLine->setSelectable(false); //禁用选中
+    //显示X值的图元
+    dataKey = new QCPItemText(this);
+    dataKey->setFont(QFont("Helvetica",7));
+    dataKey->setColor(Qt::black);
+    dataKey->position->setAxes(this->xAxis,this->yAxis);
+    dataKey->setSelectable(false);
+    //创建数据通道
     for(int i = 0;i<chs;i++){
-        _plot.append(this->addGraph());
-        _plot[i]->setPen(QPen(QColor((i*30)%255, (i*30)%255, (i*30)%255)));
+        _plot.append(this->addGraph()); //初始化空间
+        _name.append("ch"+QString::number(i)); //初始化空间
+
+        _plot.at(i)->setPen(QPen(getColor(i)));
+        _plot.at(i)->pen().setWidth(i);
+
+        QCPItemText* itext = new  QCPItemText(this);
+        QCPItemEllipse* iellipes = new  QCPItemEllipse(this);
+        //初始化图元并添加，后面就只需要设置位置即可
+        itext->setFont(QFont("Helvetica",8));
+        itext->setColor(Qt::black);
+        itext->position->setAxes(this->xAxis,this->yAxis);
+        itext->setPositionAlignment(Qt::AlignVCenter);
+        itext->setSelectable(false);
+
+        iellipes->topLeft->setAxes(this->xAxis,this->yAxis);
+        iellipes->bottomRight->setAxes(this->xAxis,this->yAxis);
+        QBrush brush;
+        brush.setStyle(Qt::SolidPattern);
+        brush.setColor(getColor(i));
+        QPen pen;
+        pen.setColor(getColor(i));
+        iellipes->setPen(pen);
+        iellipes->setBrush(brush);
+        iellipes->setSelectable(false);
+
+//        //保存句柄
+        dataTexts.append(itext);
+        dataEllipses.append(iellipes);
+
     }
+
+    //名称和数据长度同步
+    while(_name.size() > _plot.size()){
+        _name.removeLast();
+    }
+    while(_name.size() < _plot.size()){
+        _name.append("chx");
+    }
+
+    //添加名称
+    for(int i = 0;i<chs;i++){
+        _plot.at(i)->setName(_name.at(i));
+        item = this->legend->itemWithPlottable(_plot.at(i));
+        item->setTextColor(_plot.at(i)->pen().color());
+    }
+    setPlotWidth(1);
+}
+
+void drawPlot::clearAllPlot()
+{
+    this->clearGraphs();   //清空曲线
+    this->clearItems(); //清空图元
 }
 
 void drawPlot::addPoint(QVector<double> newdata)
 {
     //软件第一次启动需要进行初始化
     if(!_intiFlag){
-        resetPlot(newdata.size());
+        initPlots(newdata.size());
         //已经完成初始化
         _intiFlag = 1;
     }
     //数据通道出现变化
     if(_plot.size() != newdata.size()){
-        resetPlot(newdata.size());
+        initPlots(newdata.size());
     }
+
 
     setPlotData(newdata); //绘制数据
 
@@ -155,8 +339,29 @@ void drawPlot::setPlotData(QVector<double> newdata)
 
     if(moveX){
         this->xAxis->setRange(key-_windTime-_intervalTime,key-_intervalTime);
+        setDataLineX();
     }
     this->replot(QCustomPlot::rpQueuedReplot);
+}
+
+void drawPlot::setPlotName(QVector<QString> name)
+{
+    QCPPlottableLegendItem *item;
+    _name = name; //将名字保存起来
+    if(_plot.size() >= 1){  //如果没有数据就不更新，有数据就直接更新
+        while(_name.size() > _plot.size()){
+            _name.removeLast();
+        }
+        while(_name.size() < _plot.size()){
+            _name.append("chx");
+        }
+
+        for(int i = 0;i<_name.size();i++){
+            _plot.at(i)->setName(_name.at(i));
+            item = this->legend->itemWithPlottable(_plot.at(i));
+            item->setTextColor(_plot.at(i)->pen().color());
+        }
+    }
 }
 
 void drawPlot::enableAutoY(bool flag,Qt::Orientations orientations)
@@ -204,6 +409,15 @@ void drawPlot::setIntervalTime(double t)
         _intervalTime = _buffTime - _windTime;
 }
 
+void drawPlot::setPlotWidth(int i)
+{
+    for(int j = 0;j<_plot.size();j++){
+        QPen pen= _plot.at(j)->pen();
+        pen.setWidth(i);
+        _plot.at(j)->setPen(pen);
+    }
+}
+
 void drawPlot::mousePressEvent(QMouseEvent *event)
 {
     //右键按下，菜单，或者拖动
@@ -234,31 +448,33 @@ void drawPlot::mouseMoveEvent(QMouseEvent *event)
         // 限定坐标轴
         double nowMouse = this->xAxis->pixelToCoord(event->x()); //获取鼠标当前位置
         double len =-(nowMouse - mouseMoveLast); //方向变一下
-        qDebug()<<len;
+        //qDebug()<<len;
         //出现了超过20ms的误差才处理一次
         if(this->xAxis->range().upper+len >= rightPressTime){
             hamper = 1;
-            qDebug()<<"mouseMove:"<<this->xAxis->range().upper<<" ";
+            //qDebug()<<"mouseMove:"<<this->xAxis->range().upper<<" ";
         }
         else if(this->xAxis->range().lower+len <= rightPressTime - _buffTime){
             hamper = 1;
-            qDebug()<<"mouseMove:"<<this->xAxis->range().lower+len<<" "<< rightPressTime - _buffTime;
+            //qDebug()<<"mouseMove:"<<this->xAxis->range().lower+len<<" "<< rightPressTime - _buffTime;
         }
         //其他时候就传递信号过去，自己就动了
         mouseMoveLast = nowMouse;//更新信号值
     }
 
     //----------------------------------------------------------------------
-    if(leftPress == 1 && abs(event->pos().x() - leftPressX) > 50){//出现了15个像素点的偏移，证明是拖动事件
+    if(leftPress == 1 && abs(event->pos().x() - leftPressX) > 20){//出现了15个像素点的偏移，证明是拖动事件
         //停止坐标轴运动，并且设置拖拽和放大为全方向
         enableMoveX(0,Qt::Horizontal|Qt::Vertical);
         enableAutoY(0,Qt::Horizontal|Qt::Vertical);
         leftMove = 1;
     }
-    else if(leftPress == 1 && abs(event->pos().x() - leftPressX) < 10){//出现了15个像素点的偏移，证明是拖动事件
+    else if(leftPress == 1){
        hamper = 1;
     }
-
+//------------------------------------浮标
+    //获取坐标,窗体鼠标的位置，不是曲线x轴的值
+    setDataLineX(event->x());
 
     if(hamper) return;
     QCustomPlot::mouseMoveEvent(event);
@@ -320,6 +536,104 @@ void drawPlot::mouseReleaseEvent(QMouseEvent *event)
     QCustomPlot::mouseReleaseEvent(event);
 }
 
+void drawPlot::mouseDoubleClick(QMouseEvent *event)
+{
+    Q_UNUSED(event)
+    //拦截掉双击信号
+}
+
+void drawPlot::setDataLineX(double x)
+{
+    QVector<double> visibleValue;
+    QVector<double> visibleYPixel;
+    if(this->graphCount()<1 || _intiFlag == false) return; //没有数据不能执行
+
+    if(x  > 1)  //如果输入了X就覆盖原来的值，如果没有输入X的值就不改变
+        dataLineX = x;
+
+    //重新划线
+    dataLine->point1->setPixelPosition(QPointF(dataLineX,1));
+    dataLine->point2->setPixelPosition(QPointF(dataLineX,2));
+
+
+
+    //获取数据点的索引,所有线条的数据点数一样多，所以可以只用一条线来找
+    double sortkey = this->xAxis->pixelToCoord(dataLineX);
+
+    //更新X,时间的显示
+    QString time = QTime::fromMSecsSinceStartOfDay(int(sortkey*1000)).toString("hh:mm:ss-zzz");
+    dataKey->setText(time);//time.toString("hh:mm:ss-zzz")
+    double y = this->yAxis->coordToPixel(this->yAxis->range().lower);
+    dataKey->position->setPixelPosition(QPointF(dataLineX,y-8));
+
+    //更新点和数据
+    int index = this->graph(0)->findEnd(sortkey); //获取索引
+    int penWidth= this->graph(0)->pen().width()/2+3;  //小圆圈始终比线宽大4个像素点
+    for(int i = 0;i<this->graphCount();i++){
+        if(this->graph(i)->visible() == false) {
+            dataEllipses.at(i)->setVisible(false); //不显示
+        }else {
+            double value = this->graph(i)->data()->at(index)->value;
+            double yPixel = this->yAxis->coordToPixel(value); //y轴刻度会变化，所以转变为像素点更方便控制原型的大小
+            //记录y ，value,为显示文本做准备
+            visibleValue.append(value);
+            visibleYPixel.append(yPixel);
+            //更新小圆圈的显示
+            dataEllipses.at(i)->topLeft->setPixelPosition(
+                        QPointF(dataLineX-penWidth,yPixel-penWidth));
+            dataEllipses.at(i)->bottomRight->setPixelPosition(
+                        QPointF(dataLineX+penWidth,yPixel+penWidth));
+            dataEllipses.at(i)->setVisible(true);//显示
+        }
+    }
+    // 冒泡排序
+    for (int i = 0; i < visibleValue.size(); ++i)
+    {
+        for (int j = 0; j < visibleValue.size() - 1 - i; ++j)
+        {
+            if (visibleValue[j] < visibleValue[j + 1])  // 从大排到小
+            {
+                double temp1 = visibleValue[j];
+                double temp2 = visibleYPixel[j];
+                visibleValue[j] = visibleValue[j + 1];
+                visibleValue[j + 1] = temp1;
+                visibleYPixel[j] = visibleYPixel[j + 1];
+                visibleYPixel[j + 1] = temp2;
+            }
+        }
+    }
+//    qDebug()<<visibleValue;
+//    qDebug()<<visibleYPixel;
+    //显示文本
+    double itemHeight = dataTexts.at(0)->bottomLeft->pixelPosition().y()
+                -dataTexts.at(0)->topLeft->pixelPosition().y();
+    for(int i = 0;i<this->dataTexts.size();i++){
+        if(i < visibleValue.size()){  //显示图例
+            dataTexts.at(i)->setVisible(true);
+            dataTexts.at(i)->setText(QString::number(visibleValue[i]));
+            dataTexts.at(i)->position->setPixelPosition(
+                        QPointF(dataLineX+penWidth+2,visibleYPixel[i]));//向右偏移
+            if(i>=1){
+                if(dataTexts.at(i-1)->bottomLeft->pixelPosition().y()
+                        > dataTexts.at(i)->topLeft->pixelPosition().y()){ //出现重合现象
+                    dataTexts.at(i)->position->setPixelPosition(  //设置当前点紧贴上一个点
+                                QPointF(dataLineX+penWidth+2
+                                        ,dataTexts.at(i-1)->left->pixelPosition().y()+itemHeight));
+                }
+            }
+        }
+        else {  //不显示
+            dataTexts.at(i)->setVisible(false);
+        }
+
+
+
+    }
+
+    this->replot(QCustomPlot::rpQueuedReplot);
+
+}
+
 
 
 void drawPlot::OnResetAction()
@@ -332,8 +646,14 @@ void drawPlot::OnResetAction()
 
 void drawPlot::OnShowAllAction()
 {
-
+    for(int i = 0;i<this->graphCount();i++){
+        this->graph(i)->setVisible(true);
+        QCPPlottableLegendItem *mitem = this->legend->itemWithPlottable(this->graph(i));
+        mitem->setSelected(false);
+        mitem->setTextColor(this->graph(i)->pen().color()); //恢复颜色
+    }
 }
+
 
 void drawPlot::OnAutoYAction()
 {

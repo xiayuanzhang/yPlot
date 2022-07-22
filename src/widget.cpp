@@ -398,6 +398,7 @@ void Widget::haveNewPoint_drawPlot(QVector<double>  newdata)
 //数据的名称出现了变化
 void Widget::haveNewName_drawPlot(QVector<QString> name)
 {
+    ui->plotView->setPlotName(name);
     qDebug()<<name;
       //plot.setChannelsName(name);
 }
