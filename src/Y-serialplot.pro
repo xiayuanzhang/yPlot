@@ -30,7 +30,6 @@ SOURCES += \
         widget.cpp \
     jsonfile.cpp \
     dataanalysis.cpp \
-    setup.cpp \
     outputdata.cpp \
     qcustomplot.cpp \
     drawplot.cpp
@@ -39,14 +38,12 @@ HEADERS += \
         widget.h \
     jsonfile.h \
     dataanalysis.h \
-    setup.h \
     outputdata.h \
     qcustomplot.h \
     drawplot.h
 
 FORMS += \
         widget.ui \
-    setup.ui \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -69,7 +66,6 @@ DISTFILES += \
     img/stop-on.svg
 
 RESOURCES += \
-    Resource/img.qrc \
-    Resource/source.qrc
+    Resource/img.qrc
 
 

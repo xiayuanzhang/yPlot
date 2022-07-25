@@ -7,7 +7,6 @@
 
 #include "jsonfile.h"
 #include "dataanalysis.h"
-#include "setup.h"
 
 #include "qframelesswidget.h"
 
@@ -64,17 +63,27 @@ private slots:
     void haveNewPoint_drawPlot(QVector<double> newdata);
     void haveNewName_drawPlot(QVector<QString> name);
 
-
-    void setup_finish(int a);
-
-
-    void on_pushButton_setup_clicked();
-
     void on_pushButton_clear_clicked();
 
     void on_pushButton_output_clicked();
 
     void on_pushButton_help_clicked();
+
+    void on_checkBox_auto_clicked(bool checked);
+
+    void on_pushButton_reset_clicked();
+
+
+    void on_pushButton_showall_clicked();
+
+    void on_spinBox_buff_editingFinished();
+    void on_spinBox_wind_editingFinished();
+
+    void onIntervaChanged(int interva);
+
+
+
+    void on_scrollBar_pos_valueChanged(int value);
 
 private:
     Ui::Widget *ui;
@@ -93,8 +102,6 @@ private:
 
     //数据解析对象
     dataAnalysis *analysis;
-
-    setup *setupPage;
 
 };
 

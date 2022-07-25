@@ -8,7 +8,6 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QMessageBox>
-#pragma execution_character_set("utf-8")
 
 Widget::Widget(bool resizeEnable,
                bool shadowBorder,
@@ -50,21 +49,31 @@ Widget::Widget(bool resizeEnable,
             keyCmd[i] = '*';
     }
 
-     //设置页面的 数据读取
-    int watchsize = configFile.readInt("watchSize");
-    if(watchsize < 10) watchsize = 10;
-    if(watchsize > 10000) watchsize = 10000;
 
     int buffsize = configFile.readInt("buffSize");
-    if(buffsize < 1000) buffsize = 1000;
-    if(buffsize > 10000) buffsize = 10000;
+    if(buffsize < 30) buffsize = 30;
+    //设置页面的 数据读取
+   int watchsize = configFile.readInt("watchSize");
+   if(watchsize < 10) watchsize = 10; //单位s
+   if(buffsize < watchsize) watchsize = buffsize; //单位s
 
-    //设置页面初始化
-    setupPage = new setup(this);
-    connect(setupPage,&setup::finished,
-                    this,&Widget::setup_finish);
-    setupPage->setBuffSize(buffsize);
-    setupPage->setWatchSize(watchsize);
+    //视窗大小初始化
+    ui->plotView->setBuffSize(buffsize);
+    ui->plotView->setWindSize(watchsize);
+    ui->spinBox_buff->setValue(buffsize);
+    ui->spinBox_wind->setValue(watchsize);
+
+    //滑块初始化，
+    //滑动条总长度 = maximum() - minimum() + pageStep()
+    //滑块大小 = pageStep()
+    ui->scrollBar_pos->setRange(watchsize,buffsize);
+    ui->scrollBar_pos->setPageStep(watchsize);
+    ui->scrollBar_pos->setSingleStep(watchsize/10);
+    ui->scrollBar_pos->setValue(buffsize);
+//    ui->scrollBar_pos->setEnabled(false); //不允许拖动滑块。
+    connect(ui->plotView,SIGNAL(mouseEventIntervaChanged(int)),
+            this,SLOT(onIntervaChanged(int)));//连接定时器溢出信号和槽函数
+
 
     //创建命令输入窗口
     createCmd();
@@ -106,8 +115,8 @@ Widget::~Widget()
     }
 
     //设置页面数据保存
-    configFile.write("watchSize",setupPage->getWatchSize());
-    configFile.write("buffSize",setupPage->getBuffSize());
+    configFile.write("watchSize",ui->spinBox_wind->value());
+    configFile.write("buffSize",ui->spinBox_buff->value());
 
     configFile.close();
     serialport->close();
@@ -360,7 +369,7 @@ void Widget::serialport_readyread()
 //暂停接收按钮
 void Widget::on_checkBox_stop_clicked(bool checked)
 {
-    stopFlag = checked; //true 为暂停状态
+    ui->plotView->setStopShow(checked); //true 为暂停状态
 }
 
 
@@ -404,28 +413,10 @@ void Widget::haveNewName_drawPlot(QVector<QString> name)
 }
 
 
-//设置完成信号
-void Widget::setup_finish(int a)
-{
-    Q_UNUSED(a)
-    int buffsize;
-    int watchsize;
-    buffsize = setupPage->getBuffSize();
-    watchsize = setupPage->getWatchSize();
-
-}
-
-
-//显示设置页面
-void Widget::on_pushButton_setup_clicked()
-{
-    setupPage->show();
-}
-
 //清除数据
 void Widget::on_pushButton_clear_clicked()
 {
-
+    ui->plotView->clearAllPlot();
 }
 //数据导出
 void Widget::on_pushButton_output_clicked()
@@ -439,5 +430,63 @@ void Widget::on_pushButton_output_clicked()
 //帮助按钮
 void Widget::on_pushButton_help_clicked()
 {
+    const QUrl regUrl(QLatin1String("https://www.wolai.com/vAUJe54uHdfKRDs9tpy88b"));
+    QDesktopServices::openUrl(regUrl);
+}
 
+//是否自适应Y值
+void Widget::on_checkBox_auto_clicked(bool checked)
+{
+    ui->plotView->enableAutoY(!checked);
+}
+
+void Widget::on_pushButton_reset_clicked()
+{
+    ui->plotView->resetPlotView();
+    ui->checkBox_auto->setChecked(false);
+}
+
+
+void Widget::on_pushButton_showall_clicked()
+{
+    ui->plotView->showAllAction();
+}
+
+void Widget::on_spinBox_buff_editingFinished()
+{
+    int arg1 = ui->spinBox_buff->value();
+    if(arg1<30)
+        arg1 = 30;
+    ui->spinBox_buff->setValue(arg1);
+    ui->plotView->setBuffSize(arg1);
+
+    ui->scrollBar_pos->setRange(ui->plotView->getWindSize()
+                                ,ui->plotView->getBuffSize());
+    ui->scrollBar_pos->setPageStep(ui->plotView->getWindSize());
+}
+
+void Widget::on_spinBox_wind_editingFinished()
+{
+    int arg1 = ui->spinBox_buff->value();
+    if(arg1<10)
+        arg1 = 10;
+     ui->spinBox_wind->setValue(arg1);
+    ui->plotView->setWindSize(arg1);
+
+    ui->scrollBar_pos->setRange(ui->plotView->getWindSize()
+                                ,ui->plotView->getBuffSize());
+    ui->scrollBar_pos->setPageStep(ui->plotView->getWindSize());
+}
+
+
+void Widget::onIntervaChanged(int interva)
+{
+    ui->scrollBar_pos->setValue(ui->scrollBar_pos->maximum()-interva);
+}
+
+
+
+void Widget::on_scrollBar_pos_valueChanged(int value)
+{
+    ui->plotView->setIntervalSize(ui->plotView->getBuffSize()-value);
 }

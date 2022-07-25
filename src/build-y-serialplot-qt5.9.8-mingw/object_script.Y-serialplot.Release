@@ -3,7 +3,6 @@ INPUT(
 ./release\widget.o
 ./release\jsonfile.o
 ./release\dataanalysis.o
-./release\setup.o
 ./release\outputdata.o
 ./release\qcustomplot.o
 ./release\drawplot.o
@@ -13,10 +12,8 @@ INPUT(
 ./release\qframelesswidget.o
 ./release\qshadowhelper.o
 ./release\qrc_img.o
-./release\qrc_source.o
 ./release\moc_widget.o
 ./release\moc_dataanalysis.o
-./release\moc_setup.o
 ./release\moc_qcustomplot.o
 ./release\moc_drawplot.o
 ./release\moc_qframelessdialog.o

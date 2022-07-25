@@ -1,23 +1,27 @@
 <RCC>
-  <qresource prefix="/">
-    <file>img/Icon.svg</file>
-    <file>img/down.svg</file>
-    <file>img/up.svg</file>
-    <file>img/logo.png</file>
-    <file>img/clear.svg</file>
-    <file>img/V.svg</file>
-    <file>img/close.svg</file>
-    <file>img/help.svg</file>
-    <file>img/little.svg</file>
-    <file>img/logo.svg</file>
-    <file>img/open-off.svg</file>
-    <file>img/open-on.svg</file>
-    <file>img/output.svg</file>
-    <file>img/send.svg</file>
-    <file>img/setup.svg</file>
-    <file>img/size-1.svg</file>
-    <file>img/size-2.svg</file>
-    <file>img/stop-off.svg</file>
-    <file>img/stop-on.svg</file>
-  </qresource>
+    <qresource prefix="/">
+        <file>img/Icon.svg</file>
+        <file>img/down.svg</file>
+        <file>img/up.svg</file>
+        <file>img/logo.png</file>
+        <file>img/clear.svg</file>
+        <file>img/V.svg</file>
+        <file>img/close.svg</file>
+        <file>img/help.svg</file>
+        <file>img/little.svg</file>
+        <file>img/logo.svg</file>
+        <file>img/open-off.svg</file>
+        <file>img/open-on.svg</file>
+        <file>img/output.svg</file>
+        <file>img/send.svg</file>
+        <file>img/setup.svg</file>
+        <file>img/size-1.svg</file>
+        <file>img/size-2.svg</file>
+        <file>img/stop-off.svg</file>
+        <file>img/stop-on.svg</file>
+        <file>img/y-auto.png</file>
+        <file>img/y-manual.png</file>
+        <file>img/reset.png</file>
+        <file>img/showall.png</file>
+    </qresource>
 </RCC>

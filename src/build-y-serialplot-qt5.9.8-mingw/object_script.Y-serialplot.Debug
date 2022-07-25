@@ -3,7 +3,6 @@ INPUT(
 ./debug\widget.o
 ./debug\jsonfile.o
 ./debug\dataanalysis.o
-./debug\setup.o
 ./debug\outputdata.o
 ./debug\qcustomplot.o
 ./debug\drawplot.o
@@ -13,10 +12,8 @@ INPUT(
 ./debug\qframelesswidget.o
 ./debug\qshadowhelper.o
 ./debug\qrc_img.o
-./debug\qrc_source.o
 ./debug\moc_widget.o
 ./debug\moc_dataanalysis.o
-./debug\moc_setup.o
 ./debug\moc_qcustomplot.o
 ./debug\moc_drawplot.o
 ./debug\moc_qframelessdialog.o
