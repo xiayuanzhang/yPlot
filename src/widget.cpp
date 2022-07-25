@@ -430,7 +430,7 @@ void Widget::on_pushButton_output_clicked()
 //帮助按钮
 void Widget::on_pushButton_help_clicked()
 {
-    const QUrl regUrl(QLatin1String("https://www.wolai.com/vAUJe54uHdfKRDs9tpy88b"));
+    const QUrl regUrl(QLatin1String("https://blog.csdn.net/xia3976/article/details/122690888"));
     QDesktopServices::openUrl(regUrl);
 }
 
@@ -467,10 +467,10 @@ void Widget::on_spinBox_buff_editingFinished()
 
 void Widget::on_spinBox_wind_editingFinished()
 {
-    int arg1 = ui->spinBox_buff->value();
+    int arg1 = ui->spinBox_wind->value();
     if(arg1<10)
         arg1 = 10;
-     ui->spinBox_wind->setValue(arg1);
+    ui->spinBox_wind->setValue(arg1);
     ui->plotView->setWindSize(arg1);
 
     ui->scrollBar_pos->setRange(ui->plotView->getWindSize()

@@ -432,9 +432,10 @@ public:
 "      background: none;\n"
 "  }"));
         verticalLayout_5 = new QVBoxLayout(Widget);
-        verticalLayout_5->setSpacing(6);
+        verticalLayout_5->setSpacing(0);
         verticalLayout_5->setContentsMargins(11, 11, 11, 11);
         verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
+        verticalLayout_5->setContentsMargins(0, 0, 0, 0);
         widget_title = new QWidget(Widget);
         widget_title->setObjectName(QStringLiteral("widget_title"));
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -562,7 +563,7 @@ public:
         sizePolicy2.setHeightForWidth(pushButton_clear->sizePolicy().hasHeightForWidth());
         pushButton_clear->setSizePolicy(sizePolicy2);
         pushButton_clear->setMinimumSize(QSize(0, 0));
-        pushButton_clear->setMaximumSize(QSize(28, 28));
+        pushButton_clear->setMaximumSize(QSize(30, 30));
         pushButton_clear->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayout_4->addWidget(pushButton_clear);
@@ -621,8 +622,9 @@ public:
 
         splitter = new QSplitter(Widget);
         splitter->setObjectName(QStringLiteral("splitter"));
-        splitter->setLineWidth(5);
+        splitter->setLineWidth(1);
         splitter->setOrientation(Qt::Vertical);
+        splitter->setHandleWidth(15);
         layoutWidget = new QWidget(splitter);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
         verticalLayout_3 = new QVBoxLayout(layoutWidget);
@@ -639,6 +641,8 @@ public:
 
         plotView = new drawPlot(layoutWidget);
         plotView->setObjectName(QStringLiteral("plotView"));
+        sizePolicy2.setHeightForWidth(plotView->sizePolicy().hasHeightForWidth());
+        plotView->setSizePolicy(sizePolicy2);
         plotView->setMinimumSize(QSize(0, 700));
 
         verticalLayout_3->addWidget(plotView);
@@ -675,7 +679,7 @@ public:
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
         label_3 = new QLabel(widget_tools);
         label_3->setObjectName(QStringLiteral("label_3"));
-        label_3->setMinimumSize(QSize(40, 40));
+        label_3->setMinimumSize(QSize(70, 40));
         label_3->setMaximumSize(QSize(70, 40));
         label_3->setAlignment(Qt::AlignCenter);
 
@@ -700,7 +704,7 @@ public:
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         label = new QLabel(widget_tools);
         label->setObjectName(QStringLiteral("label"));
-        label->setMinimumSize(QSize(40, 40));
+        label->setMinimumSize(QSize(70, 40));
         label->setMaximumSize(QSize(70, 40));
         label->setAlignment(Qt::AlignCenter);
 
@@ -746,7 +750,7 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout_3);
 
-        verticalSpacer = new QSpacerItem(10, 20, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
 
         verticalLayout_2->addItem(verticalSpacer);
 
@@ -758,16 +762,23 @@ public:
         verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
         scrollArea = new QScrollArea(layoutWidget1);
         scrollArea->setObjectName(QStringLiteral("scrollArea"));
+        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(scrollArea->sizePolicy().hasHeightForWidth());
+        scrollArea->setSizePolicy(sizePolicy3);
+        scrollArea->setMinimumSize(QSize(210, 210));
+        scrollArea->setMaximumSize(QSize(16777215, 210));
         scrollArea->setFrameShape(QFrame::NoFrame);
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 1276, 212));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 1288, 210));
         scrollArea->setWidget(scrollAreaWidgetContents);
 
         verticalLayout_4->addWidget(scrollArea);
 
-        verticalSpacer_2 = new QSpacerItem(10, 20, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer_2 = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
 
         verticalLayout_4->addItem(verticalSpacer_2);
 

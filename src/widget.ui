@@ -351,6 +351,21 @@ subcontrol-origin: margin;
   }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QWidget" name="widget_title" native="true">
      <property name="sizePolicy">
@@ -788,8 +803,8 @@ subcontrol-origin: margin;
         </property>
         <property name="maximumSize">
          <size>
-          <width>28</width>
-          <height>28</height>
+          <width>30</width>
+          <height>30</height>
          </size>
         </property>
         <property name="cursor">
@@ -953,10 +968,13 @@ subcontrol-origin: margin;
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="lineWidth">
-      <number>5</number>
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
+     </property>
+     <property name="handleWidth">
+      <number>15</number>
      </property>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -975,6 +993,12 @@ subcontrol-origin: margin;
        </item>
        <item>
         <widget class="drawPlot" name="plotView" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -1040,7 +1064,7 @@ subcontrol-origin: margin;
                  <widget class="QLabel" name="label_3">
                   <property name="minimumSize">
                    <size>
-                    <width>40</width>
+                    <width>70</width>
                     <height>40</height>
                    </size>
                   </property>
@@ -1094,7 +1118,7 @@ subcontrol-origin: margin;
                  <widget class="QLabel" name="label">
                   <property name="minimumSize">
                    <size>
-                    <width>40</width>
+                    <width>70</width>
                     <height>40</height>
                    </size>
                   </property>
@@ -1227,7 +1251,7 @@ subcontrol-origin: margin;
            <property name="sizeHint" stdset="0">
             <size>
              <width>10</width>
-             <height>20</height>
+             <height>10</height>
             </size>
            </property>
           </spacer>
@@ -1241,6 +1265,24 @@ subcontrol-origin: margin;
          </property>
          <item>
           <widget class="QScrollArea" name="scrollArea">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>210</width>
+             <height>210</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>210</height>
+            </size>
+           </property>
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
            </property>
@@ -1252,8 +1294,8 @@ subcontrol-origin: margin;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>1276</width>
-              <height>212</height>
+              <width>1288</width>
+              <height>210</height>
              </rect>
             </property>
            </widget>
@@ -1270,7 +1312,7 @@ subcontrol-origin: margin;
            <property name="sizeHint" stdset="0">
             <size>
              <width>10</width>
-             <height>20</height>
+             <height>10</height>
             </size>
            </property>
           </spacer>
