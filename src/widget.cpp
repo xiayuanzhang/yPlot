@@ -71,8 +71,10 @@ Widget::Widget(bool resizeEnable,
     ui->scrollBar_pos->setSingleStep(watchsize/10);
     ui->scrollBar_pos->setValue(buffsize);
 //    ui->scrollBar_pos->setEnabled(false); //不允许拖动滑块。
-    connect(ui->plotView,SIGNAL(mouseEventIntervaChanged(int)),
+    connect(ui->plotView,SIGNAL(intervaChanged(int)),
             this,SLOT(onIntervaChanged(int)));//连接定时器溢出信号和槽函数
+    connect(ui->plotView,SIGNAL(stopStatusChanged(bool)),
+            this,SLOT(onStopStatusChanged(bool)));//连接定时器溢出信号和槽函数
 
 
     //创建命令输入窗口
@@ -93,6 +95,8 @@ Widget::Widget(bool resizeEnable,
     if(baud == "")  //软件第一次运行会没有初始值
         baud = "115200";
     ui->comboBox_baud->setCurrentText(baud);
+
+    //ui->comboBox_port->setCurrentText("COM2");
 }
 
 Widget::~Widget()
@@ -300,6 +304,8 @@ void Widget::lineEdit_return()
 // 自动搜索并添加设备的定时器槽函数
 void Widget::findPortTimer_timeout()
 {
+    if(ui->checkBox_open->checkState())  //串口开启状态下不更新列表
+        return;
     static int listsize = portlist.size();
     portlist = QSerialPortInfo::availablePorts();
     if(listsize != portlist.size()){//判断是否改变了设备数量
@@ -354,15 +360,9 @@ void Widget::on_checkBox_open_clicked(bool checked)
 //串口接收函数
 void Widget::serialport_readyread()
 {
-    if(stopFlag){//处于暂停状态中,直接读取数据不处理
-        serialport->clear();
-        analysis->clearAnalysisBuff();
-        return;
-    }
     //接收状态下，需要解析数据
     QByteArray data_byte = serialport->readAll();
     analysis->inputDataStream(data_byte); //输入到数据解析类中去
-
    // QString data_str = QString::fromLocal8Bit(data_byte);
 }
 
@@ -370,6 +370,11 @@ void Widget::serialport_readyread()
 void Widget::on_checkBox_stop_clicked(bool checked)
 {
     ui->plotView->setStopShow(checked); //true 为暂停状态
+}
+
+void Widget::onStopStatusChanged(bool stop)
+{
+    ui->checkBox_stop->setChecked(stop);
 }
 
 
@@ -399,17 +404,13 @@ void Widget::on_pushButton_resetCmd_clicked()
 //有新的数据出现，需要绘制
 void Widget::haveNewPoint_drawPlot(QVector<double>  newdata)
 {
-
-    //qDebug()<<newdata;
-    ui->plotView->addPoint(newdata); //添加新的波形
+    ui->plotView->plotDataChanged(newdata); //添加新的波形
 }
 
 //数据的名称出现了变化
 void Widget::haveNewName_drawPlot(QVector<QString> name)
 {
-    ui->plotView->setPlotName(name);
-    qDebug()<<name;
-      //plot.setChannelsName(name);
+    ui->plotView->plotNameChanged(name);
 }
 
 
@@ -421,9 +422,9 @@ void Widget::on_pushButton_clear_clicked()
 //数据导出
 void Widget::on_pushButton_output_clicked()
 {
-    stopFlag = true;
+//    stopFlag = true;
     //outputData output(plot.series);
-    stopFlag = false;
+//    stopFlag = false;
 }
 
 
@@ -449,7 +450,7 @@ void Widget::on_pushButton_reset_clicked()
 
 void Widget::on_pushButton_showall_clicked()
 {
-    ui->plotView->showAllAction();
+    ui->plotView->showAllPlot();
 }
 
 void Widget::on_spinBox_buff_editingFinished()
@@ -457,12 +458,17 @@ void Widget::on_spinBox_buff_editingFinished()
     int arg1 = ui->spinBox_buff->value();
     if(arg1<30)
         arg1 = 30;
+    if(ui->plotView->getBuffSize() == arg1)
+        return;
     ui->spinBox_buff->setValue(arg1);
     ui->plotView->setBuffSize(arg1);
 
     ui->scrollBar_pos->setRange(ui->plotView->getWindSize()
                                 ,ui->plotView->getBuffSize());
     ui->scrollBar_pos->setPageStep(ui->plotView->getWindSize());
+
+    ui->plotView->setIntervalSize(0); //复位X轴的移动
+
 }
 
 void Widget::on_spinBox_wind_editingFinished()
@@ -470,23 +476,36 @@ void Widget::on_spinBox_wind_editingFinished()
     int arg1 = ui->spinBox_wind->value();
     if(arg1<10)
         arg1 = 10;
+
+    if(ui->plotView->getWindSize() == arg1)
+        return;
     ui->spinBox_wind->setValue(arg1);
     ui->plotView->setWindSize(arg1);
 
     ui->scrollBar_pos->setRange(ui->plotView->getWindSize()
                                 ,ui->plotView->getBuffSize());
     ui->scrollBar_pos->setPageStep(ui->plotView->getWindSize());
+
+    ui->plotView->setIntervalSize(0); //复位X轴的移动
 }
 
 
+
+//滑块跟随视窗运动
 void Widget::onIntervaChanged(int interva)
 {
     ui->scrollBar_pos->setValue(ui->scrollBar_pos->maximum()-interva);
 }
 
 
-
+//视窗跟随滑块运动
 void Widget::on_scrollBar_pos_valueChanged(int value)
 {
     ui->plotView->setIntervalSize(ui->plotView->getBuffSize()-value);
+    qDebug()<<"the scollbar valueChanged";
+}
+
+void Widget::on_pushButton_hideall_clicked()
+{
+    ui->plotView->hideAllPlot();
 }

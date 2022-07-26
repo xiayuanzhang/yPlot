@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_drawPlot_t {
     QByteArrayData data[19];
-    char stringdata0[262];
+    char stringdata0[255];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,25 +35,25 @@ QT_MOC_LITERAL(0, 0, 8), // "drawPlot"
 QT_MOC_LITERAL(1, 9, 14), // "intervaChanged"
 QT_MOC_LITERAL(2, 24, 0), // ""
 QT_MOC_LITERAL(3, 25, 13), // "interval_size"
-QT_MOC_LITERAL(4, 39, 24), // "mouseEventIntervaChanged"
-QT_MOC_LITERAL(5, 64, 16), // "selectionChanged"
-QT_MOC_LITERAL(6, 81, 13), // "onLegendClick"
-QT_MOC_LITERAL(7, 95, 10), // "QCPLegend*"
-QT_MOC_LITERAL(8, 106, 6), // "legend"
-QT_MOC_LITERAL(9, 113, 22), // "QCPAbstractLegendItem*"
-QT_MOC_LITERAL(10, 136, 4), // "item"
-QT_MOC_LITERAL(11, 141, 12), // "QMouseEvent*"
-QT_MOC_LITERAL(12, 154, 5), // "event"
-QT_MOC_LITERAL(13, 160, 19), // "onLegendDoubleClick"
-QT_MOC_LITERAL(14, 180, 16), // "onPlottableClick"
-QT_MOC_LITERAL(15, 197, 21), // "QCPAbstractPlottable*"
-QT_MOC_LITERAL(16, 219, 9), // "plottable"
-QT_MOC_LITERAL(17, 229, 9), // "dataIndex"
-QT_MOC_LITERAL(18, 239, 22) // "onPlottableDoubleClick"
+QT_MOC_LITERAL(4, 39, 17), // "stopStatusChanged"
+QT_MOC_LITERAL(5, 57, 16), // "selectionChanged"
+QT_MOC_LITERAL(6, 74, 13), // "onLegendClick"
+QT_MOC_LITERAL(7, 88, 10), // "QCPLegend*"
+QT_MOC_LITERAL(8, 99, 6), // "legend"
+QT_MOC_LITERAL(9, 106, 22), // "QCPAbstractLegendItem*"
+QT_MOC_LITERAL(10, 129, 4), // "item"
+QT_MOC_LITERAL(11, 134, 12), // "QMouseEvent*"
+QT_MOC_LITERAL(12, 147, 5), // "event"
+QT_MOC_LITERAL(13, 153, 19), // "onLegendDoubleClick"
+QT_MOC_LITERAL(14, 173, 16), // "onPlottableClick"
+QT_MOC_LITERAL(15, 190, 21), // "QCPAbstractPlottable*"
+QT_MOC_LITERAL(16, 212, 9), // "plottable"
+QT_MOC_LITERAL(17, 222, 9), // "dataIndex"
+QT_MOC_LITERAL(18, 232, 22) // "onPlottableDoubleClick"
 
     },
     "drawPlot\0intervaChanged\0\0interval_size\0"
-    "mouseEventIntervaChanged\0selectionChanged\0"
+    "stopStatusChanged\0selectionChanged\0"
     "onLegendClick\0QCPLegend*\0legend\0"
     "QCPAbstractLegendItem*\0item\0QMouseEvent*\0"
     "event\0onLegendDoubleClick\0onPlottableClick\0"
@@ -88,7 +88,7 @@ static const uint qt_meta_data_drawPlot[] = {
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int,    3,
-    QMetaType::Void, QMetaType::Int,    3,
+    QMetaType::Void, QMetaType::Bool,    2,
 
  // slots: parameters
     QMetaType::Void,
@@ -107,7 +107,7 @@ void drawPlot::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->intervaChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: _t->mouseEventIntervaChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: _t->stopStatusChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 2: _t->selectionChanged(); break;
         case 3: _t->onLegendClick((*reinterpret_cast< QCPLegend*(*)>(_a[1])),(*reinterpret_cast< QCPAbstractLegendItem*(*)>(_a[2])),(*reinterpret_cast< QMouseEvent*(*)>(_a[3]))); break;
         case 4: _t->onLegendDoubleClick((*reinterpret_cast< QCPLegend*(*)>(_a[1])),(*reinterpret_cast< QCPAbstractLegendItem*(*)>(_a[2])),(*reinterpret_cast< QMouseEvent*(*)>(_a[3]))); break;
@@ -161,8 +161,8 @@ void drawPlot::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
             }
         }
         {
-            typedef void (drawPlot::*_t)(int );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&drawPlot::mouseEventIntervaChanged)) {
+            typedef void (drawPlot::*_t)(bool );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&drawPlot::stopStatusChanged)) {
                 *result = 1;
                 return;
             }
@@ -214,7 +214,7 @@ void drawPlot::intervaChanged(int _t1)
 }
 
 // SIGNAL 1
-void drawPlot::mouseEventIntervaChanged(int _t1)
+void drawPlot::stopStatusChanged(bool _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);

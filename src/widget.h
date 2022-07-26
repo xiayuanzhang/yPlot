@@ -53,7 +53,7 @@ private slots:
     void serialport_readyread();
 
     void on_checkBox_stop_clicked(bool checked);
-
+    void onStopStatusChanged(bool stop);
 
 
     void on_pushButton_resetKey_clicked();
@@ -85,6 +85,10 @@ private slots:
 
     void on_scrollBar_pos_valueChanged(int value);
 
+
+
+    void on_pushButton_hideall_clicked();
+
 private:
     Ui::Widget *ui;
     QPoint m_startMovePoint;
@@ -97,7 +101,6 @@ private:
     //配置文件
     jsonFile configFile;
     //设置参数
-    bool stopFlag = false; //控制暂停和继续的变量 true = 目前处于暂停状态
     char keyCmd[55];
 
     //数据解析对象

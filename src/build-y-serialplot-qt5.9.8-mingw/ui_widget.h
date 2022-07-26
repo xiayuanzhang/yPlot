@@ -52,6 +52,8 @@ public:
     QPushButton *pushButton_reset;
     QSpacerItem *horizontalSpacer_20;
     QPushButton *pushButton_showall;
+    QSpacerItem *horizontalSpacer_21;
+    QPushButton *pushButton_hideall;
     QSpacerItem *horizontalSpacer;
     QPushButton *pushButton_clear;
     QSpacerItem *horizontalSpacer_12;
@@ -184,6 +186,14 @@ public:
 "	max-width:28px;\n"
 "}\n"
 "\n"
+"\n"
+"QPushButton#pushButton_hideall\n"
+"{\n"
+"	border-image:url(:/img/hideall.png);\n"
+"	max-height:28px;\n"
+"	max-width:28px;\n"
+"}\n"
+"\n"
 "QPushButton#pushButton_reset\n"
 "{\n"
 "	border-image:url(:/img/reset.png);\n"
@@ -193,15 +203,15 @@ public:
 "\n"
 "QPushButton#pushButton_help\n"
 "{\n"
-"	border-image:url(:/img/help.svg);\n"
+"	border-image:u"
+                        "rl(:/img/help.svg);\n"
 "	max-height:28px;\n"
 "	max-width:28px;\n"
 "}\n"
 "\n"
 "QPushButton#pushButton_output\n"
 "{\n"
-"	border-image:url(:/img/"
-                        "output.svg);\n"
+"	border-image:url(:/img/output.svg);\n"
 "	max-height:28px;\n"
 "	max-width:28px;\n"
 "}\n"
@@ -240,10 +250,10 @@ public:
 "	max-height: 28px;\n"
 "}\n"
 "\n"
-"/*\345\215\225\351\200\211\346\241\206\346\234\252\351\200\211\344\270\255\346\240\267\345\274\217*/\n"
+"/*\345\215\225"
+                        "\351\200\211\346\241\206\346\234\252\351\200\211\344\270\255\346\240\267\345\274\217*/\n"
 "QCheckBox#checkBox_stop::indicator::unchecked {\n"
-""
-                        "	image:url(:/img/stop-off.svg);\n"
+"	image:url(:/img/stop-off.svg);\n"
 "}\n"
 "/*\345\215\225\351\200\211\346\241\206\351\200\211\344\270\255\346\240\267\345\274\217*/\n"
 "QCheckBox#checkBox_stop::indicator::checked { \n"
@@ -272,15 +282,15 @@ public:
 "	width: 28px;\n"
 "	height: 28px;\n"
 "}\n"
-"QCheckBox#checkBox_auto{ \n"
+"QCheckBo"
+                        "x#checkBox_auto{ \n"
 "	max-width: 28px;\n"
 "	max-height: 28px;\n"
 "}\n"
 "\n"
 "\n"
 "\n"
-"/**************************tools***********************"
-                        "***/\n"
+"/**************************tools**************************/\n"
 "QWidget#widget_tools\n"
 "{\n"
 "	background-color:#F7FBFD;\n"
@@ -322,10 +332,10 @@ public:
 "\n"
 "\n"
 "/* \345\220\221\344\270\213\346\214\211\351\222\256 */\n"
-"QSpinBox::down-button {\n"
+"QSpinBox:"
+                        ":down-button {\n"
 "bottom:6px;\n"
-"right:10px;/*\346\216\247\345\210\266\347\256\255\345\244\264\345\267\246\345\217\263\345\201\217\347\247\273"
-                        "*/\n"
+"right:10px;/*\346\216\247\345\210\266\347\256\255\345\244\264\345\267\246\345\217\263\345\201\217\347\247\273*/\n"
 "	width:10px;\n"
 "	height: 10px;   \n"
 "	border-image:url(:/img/down.svg);\n"
@@ -366,14 +376,14 @@ public:
 "}\n"
 "QScrollBar::handle:vertical {\n"
 "background: Gainsboro;\n"
-"min-height: 20px;\n"
+""
+                        "min-height: 20px;\n"
 "border-radius: 5px;\n"
 "border: none;\n"
 "}\n"
 "QScrollBar::add-line:vertical {\n"
 "border: 0px solid grey;\n"
-"backgroun"
-                        "d: #818080;\n"
+"background: #818080;\n"
 "height: 0px;\n"
 "subcontrol-position: bottom;\n"
 "subcontrol-origin: margin;\n"
@@ -410,14 +420,14 @@ public:
 "background: #818080;\n"
 "height: 0px;\n"
 "subcontrol-position: bottom;\n"
-"subcontrol-origin: margin;\n"
+"subco"
+                        "ntrol-origin: margin;\n"
 "  }\n"
 "\n"
 "  QScrollBar::sub-line:horizontal {\n"
 "	border: 0px solid grey;\n"
 "background: #818080;\n"
-"height: 0p"
-                        "x;\n"
+"height: 0px;\n"
 "subcontrol-position: bottom;\n"
 "subcontrol-origin: margin;\n"
 "  }\n"
@@ -551,6 +561,17 @@ public:
 
         horizontalLayout_4->addWidget(pushButton_showall);
 
+        horizontalSpacer_21 = new QSpacerItem(30, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_4->addItem(horizontalSpacer_21);
+
+        pushButton_hideall = new QPushButton(widget_title);
+        pushButton_hideall->setObjectName(QStringLiteral("pushButton_hideall"));
+        pushButton_hideall->setCursor(QCursor(Qt::PointingHandCursor));
+        pushButton_hideall->setContextMenuPolicy(Qt::DefaultContextMenu);
+
+        horizontalLayout_4->addWidget(pushButton_hideall);
+
         horizontalSpacer = new QSpacerItem(358, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_4->addItem(horizontalSpacer);
@@ -563,7 +584,7 @@ public:
         sizePolicy2.setHeightForWidth(pushButton_clear->sizePolicy().hasHeightForWidth());
         pushButton_clear->setSizePolicy(sizePolicy2);
         pushButton_clear->setMinimumSize(QSize(0, 0));
-        pushButton_clear->setMaximumSize(QSize(30, 30));
+        pushButton_clear->setMaximumSize(QSize(28, 28));
         pushButton_clear->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayout_4->addWidget(pushButton_clear);
@@ -857,6 +878,10 @@ public:
         pushButton_showall->setToolTip(QApplication::translate("Widget", "  \346\230\276\347\244\272\345\205\250\351\203\250\346\225\260\346\215\256", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         pushButton_showall->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        pushButton_hideall->setToolTip(QApplication::translate("Widget", "  \351\232\220\350\227\217\345\205\250\351\203\250\346\225\260\346\215\256", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        pushButton_hideall->setText(QString());
 #ifndef QT_NO_TOOLTIP
         pushButton_clear->setToolTip(QApplication::translate("Widget", "  \346\270\205\347\251\272\350\247\206\347\252\227", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

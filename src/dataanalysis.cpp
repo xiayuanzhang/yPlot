@@ -45,8 +45,8 @@ void dataAnalysis::inputDataStream(QByteArray stream)
         channels  = data.size() / 4;
 
         //进行解析
-        analysisDataName(name);
         analysisData(data);
+        analysisDataName(name);
 
         //清除已解析数据
 //        qDebug()<<"all   --   "<<inputDataBuff.mid(0,de+frameNameEnd.size());
@@ -203,6 +203,8 @@ void dataAnalysis::analysisDataName(QByteArray stream)
     if(newName != lastName){   //名字出现了变化再更新
         lastName = newName;
         emit haveNewName(newName);
+        qDebug()<<"emit haveNewName: should updata channels";
+        qDebug()<<newName;
     }
 
 }

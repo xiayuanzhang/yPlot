@@ -63,7 +63,8 @@ DISTFILES += \
     img/size-1.svg \
     img/size-2.svg \
     img/stop-off.svg \
-    img/stop-on.svg
+    img/stop-on.svg \
+    Resource/img/hideall.png
 
 RESOURCES += \
     Resource/img.qrc

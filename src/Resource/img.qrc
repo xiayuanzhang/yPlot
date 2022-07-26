@@ -23,5 +23,6 @@
         <file>img/y-manual.png</file>
         <file>img/reset.png</file>
         <file>img/showall.png</file>
+        <file>img/hideall.png</file>
     </qresource>
 </RCC>

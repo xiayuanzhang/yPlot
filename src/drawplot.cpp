@@ -130,9 +130,9 @@ void drawPlot::selectionChanged()
 {
   // 将图形的选择与相应图例项的选择同步
   //
-  for (int i=0; i<this->graphCount(); ++i)
+  for (int i=0; i<_plot.size(); ++i)
   {
-    QCPGraph *graph = this->graph(i);
+    QCPGraph *graph = _plot.at(i);
     QCPPlottableLegendItem *item = this->legend->itemWithPlottable(graph);
 
     if(dataEllipses.at(i)->selected() || dataTexts.at(i)->selected() || graph -> selected()){
@@ -160,8 +160,8 @@ void drawPlot::onLegendClick(QCPLegend *legend, QCPAbstractLegendItem *item, QMo
 {
     Q_UNUSED(event)
     Q_UNUSED(legend)
-    for (int i = 0;i<this->graphCount();i++) {
-        QCPGraph *graph = this->graph(i);
+    for (int i = 0;i<_plot.size();i++) {
+        QCPGraph *graph = _plot.at(i);
         QCPPlottableLegendItem *mitem = this->legend->itemWithPlottable(graph);
         if(mitem == item){
             item->setSelected(false);  //复位选中，不将选中表现出来
@@ -210,11 +210,11 @@ void drawPlot::initPlots(int chs)
     _plot.clear();         //清除句柄保存
     dataTexts.clear();    //清空句柄
     dataEllipses.clear(); //清空句柄
-    dataCount = 0;
+    dataCount = 0;        //控制X轴运动的变量
     this->clearGraphs();   //清空视图
     this->clearItems(); //清空图元
 
-    //浮标
+    //浮动竖线
     dataLine = new QCPItemStraightLine(this);
     QPen pen1 = dataLine->pen();
     pen1.setColor(Qt::black);
@@ -228,13 +228,10 @@ void drawPlot::initPlots(int chs)
     dataKey->setColor(Qt::black);
     dataKey->position->setAxes(this->xAxis,this->yAxis);
     dataKey->setSelectable(false);
-    //创建数据通道
+    //创建数据通道，和对应的，图元
     for(int i = 0;i<chs;i++){
         _plot.append(this->addGraph()); //初始化空间
-        _name.append("ch"+QString::number(i)); //初始化空间
-
         _plot.at(i)->setPen(QPen(getColor(i)));
-        _plot.at(i)->pen().setWidth(i);
 
         QCPItemText* itext = new  QCPItemText(this);
         QCPItemEllipse* iellipes = new  QCPItemEllipse(this);
@@ -260,56 +257,38 @@ void drawPlot::initPlots(int chs)
         dataTexts.append(itext);
         dataEllipses.append(iellipes);
 
-    }
-
-    //名称和数据长度同步
-    while(_name.size() > _plot.size()){
-        _name.removeLast();
-    }
-    while(_name.size() < _plot.size()){
-        _name.append("chx");
-    }
-
-    //添加名称
-    for(int i = 0;i<chs;i++){
-        _plot.at(i)->setName(_name.at(i));
+        //初始化线条显示名称的文本颜色
         item = this->legend->itemWithPlottable(_plot.at(i));
         item->setTextColor(_plot.at(i)->pen().color());
     }
+    //设置线条粗细
     setPlotWidth(1);
 }
 
 void drawPlot::clearAllPlot()
 {
-    initPlots(this->graphCount());
+    QVector<QString> namebuff;
+    for(int i = 0;i<_plot.size();i++){
+        namebuff.append(_plot.at(i)->name());
+    }
+    initPlots(_plot.size());
+    for(int i = 0;i<_plot.size();i++){
+        _plot.at(i)->setName(namebuff.at(i));
+    }
 }
 
-void drawPlot::addPoint(QVector<double> newdata)
+void drawPlot::plotDataChanged(QVector<double> newdata)
 {
-    //软件第一次启动需要进行初始化
-    if(!_intiFlag){
-        initPlots(newdata.size());
-        //已经完成初始化
-        _intiFlag = 1;
-    }
-    //数据通道出现变化
+
+   //数据通道出现变化，就先重置线条，然后再添加数据，否则就直接添加
     if(_plot.size() != newdata.size()){
         initPlots(newdata.size());
     }
 
-
-    setPlotData(newdata); //绘制数据
-
-}
-
-
-
-void drawPlot::setPlotData(QVector<double> newdata)
-{
     //从1开始计数
     dataCount++;
     if(dataCount >= (2147483647-1)){
-        initPlots(this->graphCount());
+        initPlots(_plot.size());
     }
 
     QVector<QCPGraph *> visiblePlot;
@@ -325,10 +304,10 @@ void drawPlot::setPlotData(QVector<double> newdata)
     }
     //自动调节Y轴
     if(autoY){
-        this->yAxis->setRange(-1,1);
-        for(int i = 0;i<visiblePlot.size();i++){
-            visiblePlot.at(i)->rescaleValueAxis(true,true);//带true，只放大，不缩小
-        }
+        //this->yAxis->setRange(-1,1);
+        //this->rescaleAxes()
+        this->yAxis->rescale(true);
+
     }
 
     if(moveX && stopFlag==false){
@@ -337,26 +316,26 @@ void drawPlot::setPlotData(QVector<double> newdata)
         setDataLineX();
     }
     this->replot(QCustomPlot::rpQueuedReplot);
-
 }
 
-void drawPlot::setPlotName(QVector<QString> name)
+void drawPlot::plotNameChanged(QVector<QString> name)
 {
-    QCPPlottableLegendItem *item;
-    _name = name; //将名字保存起来
-    if(_plot.size() >= 1){  //如果没有数据就不更新，有数据就直接更新
-        while(_name.size() > _plot.size()){
-            _name.removeLast();
-        }
-        while(_name.size() < _plot.size()){
-            _name.append("chx");
-        }
+    //数据通道出现变化，就先重置线条，然后再设置名字，否则就直接设置
+    if(_plot.size() != name.size()){
+        initPlots(name.size());
+    }
 
-        for(int i = 0;i<_name.size();i++){
-            _plot.at(i)->setName(_name.at(i));
-            item = this->legend->itemWithPlottable(_plot.at(i));
+    QCPPlottableLegendItem *item;
+    for(int i = 0;i<_plot.size();i++){
+        _plot.at(i)->setName(name.at(i));
+        item = this->legend->itemWithPlottable(_plot.at(i));
+        if(_plot.at(i)->visible()){
             item->setTextColor(_plot.at(i)->pen().color());
         }
+        else{
+            item->setTextColor(QColor(0xDDDDDD)); //图例文字颜色变灰，表示隐藏了
+        }
+
     }
 }
 
@@ -398,11 +377,12 @@ void drawPlot::setWindSize(int t)
 
 void drawPlot::setIntervalSize(int t)
 {
-    if(t<1) t = 0;
+    if(t<0) t = 0;
 
     _intervalSize = t;
     if(_intervalSize + _windSize > _buffSize)
         _intervalSize = _buffSize - _windSize;
+
     intervaChanged(_intervalSize); //发送变化信号
 }
 
@@ -457,7 +437,7 @@ void drawPlot::mouseMoveEvent(QMouseEvent *event)
             int start = dataCount+_buffSize;
             int wind = static_cast<int>(this->xAxis->range().upper);
             setIntervalSize(start - wind); //始终是正的
-            mouseEventIntervaChanged(start - wind); //发送变化信号
+            //mouseEventIntervaChanged(start - wind); //发送变化信号
         }
 
 
@@ -528,7 +508,7 @@ void drawPlot::setDataLineX(double x)
 {
     QVector<double> visibleValue;
     QVector<double> visibleYPixel;
-    if(this->graphCount()<1 || _intiFlag == false) return; //没有数据不能执行
+    if(_plot.size()<1) return; //没有数据不能执行
 
     if(x  > 1)  //如果输入了X就覆盖原来的值，如果没有输入X的值就不改变
         dataLineX = x;
@@ -546,14 +526,14 @@ void drawPlot::setDataLineX(double x)
     dataKey->position->setPixelPosition(QPointF(dataLineX,y-8));
 
     //更新点和数据
-    int index = this->graph(0)->findEnd(sortkey); //获取索引
-    int penWidth= this->graph(0)->pen().width()/2+3;  //小圆圈始终比线宽大4个像素点
-    for(int i = 0;i<this->graphCount();i++){
-        if(this->graph(i)->visible() == false) {
+    int index = _plot.at(0)->findEnd(sortkey); //获取索引
+    int penWidth= _plot.at(0)->pen().width()/2+3;  //小圆圈始终比线宽大4个像素点
+    for(int i = 0;i<_plot.size();i++){
+        if(_plot.at(i)->visible() == false) {
             dataEllipses.at(i)->setVisible(false); //不显示
         }
         else {
-            double value = this->graph(i)->data()->at(index)->value;
+            double value = _plot.at(i)->data()->at(index)->value;
             double yPixel = this->yAxis->coordToPixel(value); //y轴刻度会变化，所以转变为像素点更方便控制原型的大小
             //记录y ，value,为显示文本做准备
             visibleValue.append(value);
@@ -628,18 +608,30 @@ void drawPlot::resetPlotView()
 {
     this->xAxis->setRange(_buffSize-_windSize,_buffSize);
     isZoom = 0;
+    setStopShow(0);
     enableAutoY(1);
     setIntervalSize(0);
     enableMoveX(1);
+
 }
 
-void drawPlot::showAllAction()
+void drawPlot::showAllPlot()
 {
-    for(int i = 0;i<this->graphCount();i++){
-        this->graph(i)->setVisible(true);
-        QCPPlottableLegendItem *mitem = this->legend->itemWithPlottable(this->graph(i));
+    for(int i = 0;i<_plot.size();i++){
+        _plot.at(i)->setVisible(true);
+        QCPPlottableLegendItem *mitem = this->legend->itemWithPlottable(_plot.at(i));
         mitem->setSelected(false);
-        mitem->setTextColor(this->graph(i)->pen().color()); //恢复颜色
+        mitem->setTextColor(_plot.at(i)->pen().color()); //恢复颜色
+    }
+}
+
+void drawPlot::hideAllPlot()
+{
+    for(int i = 0;i<_plot.size();i++){
+        _plot.at(i)->setVisible(false);
+        QCPPlottableLegendItem *mitem = this->legend->itemWithPlottable(_plot.at(i));
+        mitem->setSelected(false);
+        mitem->setTextColor(QColor(0xDDDDDD)); //恢复颜色
     }
 }
 

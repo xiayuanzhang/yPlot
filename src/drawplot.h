@@ -16,9 +16,9 @@ public:
 
     void initPlots(int chs);
     void clearAllPlot();
-    void addPoint(QVector<double> newdata);
+    void plotDataChanged(QVector<double> newdata);
     void setPlotData(QVector<double> newdata);
-    void setPlotName(QVector<QString> name);
+    void plotNameChanged(QVector<QString> name);
     //是否允许Y轴自动调整
     void enableAutoY(bool flag = false,Qt::Orientations orientations = Qt::Vertical);
     void enableMoveX(bool flag = false ,Qt::Orientations orientations = Qt::Horizontal);
@@ -35,9 +35,11 @@ public:
 
     void setPlotWidth(int i);
 
+
      void resetPlotView();
-     void showAllAction();
-     void setStopShow(bool stop){stopFlag = stop;}
+     void showAllPlot();
+     void hideAllPlot();
+     void setStopShow(bool stop){stopFlag = stop; emit stopStatusChanged(stopFlag);}
 
 protected:
      void mousePressEvent(QMouseEvent *event) ;
@@ -60,7 +62,7 @@ private slots:
 
 signals:
     void intervaChanged(int interval_size);
-    void mouseEventIntervaChanged(int interval_size);
+    void stopStatusChanged(bool);
 
 private:
     int dataCount = 0;
