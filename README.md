@@ -27,8 +27,8 @@
 **项目开源仓库链接**
 
 *   github：[https://github.com/syuan7/y-serialplot](https://github.com/syuan7/y-serialplot "https://github.com/syuan7/y-serialplot")
-* 
-* **下载安装包**
+
+**下载安装包**
 * 在上面了连接中选择这里![在这里插入图片描述](https://img-blog.csdnimg.cn/a6722c8e8f5d40e5965c952c27e8edca.png)
 
 <center><img src="https://img-blog.csdnimg.cn/5e8bdec865cc4be9aba0dfeeeb617c98.png" width="60%"></center>
