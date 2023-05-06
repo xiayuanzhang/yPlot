@@ -190,7 +190,6 @@ void drawPlot::onLegendDoubleClick(QCPLegend *legend, QCPAbstractLegendItem *ite
 //
 void drawPlot::onPlottableClick(QCPAbstractPlottable *plottable, int dataIndex, QMouseEvent *event)
 {
-    qDebug()<<"adadad";
     Q_UNUSED(event)
     Q_UNUSED(plottable)
     Q_UNUSED(dataIndex)

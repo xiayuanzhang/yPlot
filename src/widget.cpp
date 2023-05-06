@@ -24,7 +24,7 @@ Widget::Widget(bool resizeEnable,
     serialport = new QSerialPort(this);
     analysis = new dataAnalysis();
 
-    //串口相关内容初始化    
+    //串口相关内容初始化
     findPortTimer->start(100);//周期100ms启动定时器
     connect(this->findPortTimer,SIGNAL(timeout()),
             this,SLOT(findPortTimer_timeout()));//连接定时器溢出信号和槽函数
@@ -349,7 +349,6 @@ void Widget::on_checkBox_open_clicked(bool checked)
     }
     else{// 需要关闭串口
         serialport->clear();
-        analysis->clearAnalysisBuff();
         serialport->close();//关闭串口
         ui->comboBox_baud->setDisabled(false);
         ui->comboBox_port->setDisabled(false);
@@ -357,14 +356,17 @@ void Widget::on_checkBox_open_clicked(bool checked)
 }
 
 
-//串口接收函数
 void Widget::serialport_readyread()
 {
     //接收状态下，需要解析数据
     QByteArray data_byte = serialport->readAll();
     analysis->inputDataStream(data_byte); //输入到数据解析类中去
+
    // QString data_str = QString::fromLocal8Bit(data_byte);
 }
+
+
+
 
 //暂停接收按钮
 void Widget::on_checkBox_stop_clicked(bool checked)
@@ -502,10 +504,13 @@ void Widget::onIntervaChanged(int interva)
 void Widget::on_scrollBar_pos_valueChanged(int value)
 {
     ui->plotView->setIntervalSize(ui->plotView->getBuffSize()-value);
-    qDebug()<<"the scollbar valueChanged";
+    //qDebug()<<"the scollbar valueChanged";
 }
 
 void Widget::on_pushButton_hideall_clicked()
 {
     ui->plotView->hideAllPlot();
 }
+
+
+

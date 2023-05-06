@@ -40,7 +40,39 @@ HEADERS += \
     dataanalysis.h \
     outputdata.h \
     qcustomplot.h \
-    drawplot.h
+    drawplot.h \
+    mavlink_cpp/protocol.h \
+    mavlink_cpp/checksum.h \
+    mavlink_cpp/mavlink_conversions.h \
+    mavlink_cpp/mavlink_get_info.h \
+    mavlink_cpp/mavlink_helpers.h \
+    mavlink_cpp/mavlink_sha256.h \
+    mavlink_cpp/mavlink_types.h \
+    mavlink_cpp/message.hpp \
+    mavlink_cpp/msgmap.hpp \
+    mavlink_cpp/protocol.h \
+    mavlink_cpp/test/gtestsuite.hpp \
+    mavlink_cpp/test/mavlink.h \
+    mavlink_cpp/test/mavlink_msg_test_types.h \
+    mavlink_cpp/test/mavlink_msg_test_types.hpp \
+    mavlink_cpp/test/test.h \
+    mavlink_cpp/test/test.hpp \
+    mavlink_cpp/test/testsuite.h \
+    mavlink_cpp/test/version.h \
+    mavlink_cpp/yplot/gtestsuite.hpp \
+    mavlink_cpp/yplot/mavlink.h \
+    mavlink_cpp/yplot/mavlink_msg_pid.h \
+    mavlink_cpp/yplot/mavlink_msg_pid.hpp \
+    mavlink_cpp/yplot/mavlink_msg_plot.h \
+    mavlink_cpp/yplot/mavlink_msg_plot.hpp \
+    mavlink_cpp/yplot/mavlink_msg_plotname.h \
+    mavlink_cpp/yplot/mavlink_msg_plotname.hpp \
+    mavlink_cpp/yplot/mavlink_msg_user.h \
+    mavlink_cpp/yplot/mavlink_msg_user.hpp \
+    mavlink_cpp/yplot/testsuite.h \
+    mavlink_cpp/yplot/version.h \
+    mavlink_cpp/yplot/yplot.h \
+    mavlink_cpp/yplot/yplot.hpp
 
 FORMS += \
         widget.ui \

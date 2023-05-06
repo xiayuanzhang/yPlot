@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QVector>
 #include <QDebug>
+#include "mavlink_cpp/yplot/mavlink.h"
 
 
 //数据名帧头：AABBCC
@@ -14,12 +15,15 @@
 //数据：类型*通道
 //数据帧尾 FFEEDD
 
+#define PLOT_NUM_MAX 12
+#define PLOT_NAME_MAXLEN 15
+
 class dataAnalysis : public QObject
 {
     Q_OBJECT
 public:
     dataAnalysis();
-
+    ~dataAnalysis();
 
     //获取数据通道数量
     int getChannelNum();
@@ -27,31 +31,16 @@ public:
     void inputDataStream(QByteArray stream);
     void clearAnalysisBuff();
 private:
-    //解析数据名
-    void analysisDataName(QByteArray stream);
-     //解析数据帧
-    void analysisData(QByteArray stream);
-
-//    QString dataType;
-//    int dataTypeSize();
-//    double dataChange(char *p);
 
 signals:
     void haveNewData(QVector<double> newdata);
     void haveNewName(QVector<QString> name);
 
 private:
-
-    const QByteArray frameNameHead = "AABBCC";
-    const QByteArray frameNameEnd = "CCBBAA";
-    const QByteArray frameDataHead = "DDEEFF";
-    const QByteArray frameDataEnd = "FFEEDD";
-    const int inputDataBuffSize = 1024*10; //最大10k缓存
-
-
     int channels;
-    QVector<QString> lastName;
-    QByteArray inputDataBuff;
+
+    mavlink_message_t msg;
+    mavlink_status_t status;
 };
 
 #endif // DATAANALYSIS_H

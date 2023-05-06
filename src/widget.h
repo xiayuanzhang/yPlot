@@ -25,7 +25,7 @@ public:
     explicit Widget(bool resizeEnable = true,
                     bool shadowBorder = true,
                     bool winNativeEvent = true,
-                    QWidget *parent = 0);
+                    QWidget *parent = nullptr);
     ~Widget();
 
 private:
