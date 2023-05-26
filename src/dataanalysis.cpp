@@ -39,7 +39,7 @@ void dataAnalysis::inputDataStream(QByteArray stream)
     Qpart1 = litmp.QuadPart; //开始计时
    #endif
 
-    //qDebug()<<stream.size();
+    qDebug()<<stream.size();
     for(int i = 0;i<stream.size();i++)
     {
         if(mavlink_parse_char(MAVLINK_COMM_0, static_cast<uint8_t>(stream.at(i)), &msg, &status))

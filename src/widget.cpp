@@ -98,8 +98,8 @@ Widget::Widget(bool resizeEnable,
 
     // ui->comboBox_port->setCurrentText("COM2");
 
-    QCPGraph* graph_tmp = ui->plotView->addGraph();
-    graph_tmp->setAdaptiveSampling(true);
+//    QCPGraph* graph_tmp = ui->plotView->addGraph();
+//    graph_tmp->setAdaptiveSampling(true);
 }
 
 Widget::~Widget()
