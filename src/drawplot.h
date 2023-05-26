@@ -16,7 +16,7 @@ public:
 
     void initPlots(int chs);
     void clearAllPlot();
-    void plotDataChanged(QVector<double> newdata);
+    void plotDataChanged(QVector<QVector<double>> newdata);
     void setPlotData(QVector<double> newdata);
     void plotNameChanged(QVector<QString> name);
     //是否允许Y轴自动调整
@@ -65,7 +65,8 @@ signals:
     void stopStatusChanged(bool);
 
 private:
-    int dataCount = 0;
+    double m_xStart = 0; //数据个数 = X轴最新值
+    int m_plotNum = 0; //曲线数量
 
     bool _intiFlag = 0; //表示未完成初始化，需要等有第一个数据输入，完成了初始化之后才能开始工作
     bool stopFlag = 0;

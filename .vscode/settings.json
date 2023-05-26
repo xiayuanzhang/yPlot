@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.c": "c",
+        "qobject": "cpp",
+        "chrono": "cpp",
+        "xhash": "cpp",
+        "xtree": "cpp",
+        "xutility": "cpp"
+    }
+}

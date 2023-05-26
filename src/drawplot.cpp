@@ -20,7 +20,7 @@ drawPlot::drawPlot(QWidget *parent) :
 
     this->yAxis->setPadding(10);
     this->yAxis->setTickLabelFont(QFont("Helvetica",9));
-    this->yAxis->setRange(-1, 1);
+    this->yAxis->setRange(-10, 10);
     this->yAxis->ticker()->setTickCount(8);//主刻度
     this->yAxis->ticker()->setTickStepStrategy(QCPAxisTicker::tssReadability);//可读性优于设置
 
@@ -209,7 +209,7 @@ void drawPlot::initPlots(int chs)
     _plot.clear();         //清除句柄保存
     dataTexts.clear();    //清空句柄
     dataEllipses.clear(); //清空句柄
-    dataCount = 0;        //控制X轴运动的变量
+    m_xStart = 0;        //控制X轴运动的变量
     this->clearGraphs();   //清空视图
     this->clearItems(); //清空图元
 
@@ -276,26 +276,52 @@ void drawPlot::clearAllPlot()
     }
 }
 
-void drawPlot::plotDataChanged(QVector<double> newdata)
+#include <QDebug>
+#include <windows.h>
+
+//QVector<QVector<double>> newdata
+//通道<数据帧<double>> newdata
+void drawPlot::plotDataChanged(QVector<QVector<double>> newdata)
 {
+#if 1
+    LARGE_INTEGER litmp;
+    LONGLONG Qpart1,Qpart2,Useingtime;
+    double dfMinus,dfFreq,dfTime;
+
+
+    //获得CPU计时器的时钟频率
+    QueryPerformanceFrequency(&litmp);//取得高精度运行计数器的频率f,单位是每秒多少次（n/s），
+    dfFreq = (double)litmp.QuadPart;
+
+    QueryPerformanceCounter(&litmp);//取得高精度运行计数器的数值
+    Qpart1 = litmp.QuadPart; //开始计时
+   #endif
+
 
    //数据通道出现变化，就先重置线条，然后再添加数据，否则就直接添加
     if(_plot.size() != newdata.size()){
         initPlots(newdata.size());
     }
 
-    //从1开始计数
-    dataCount++;
-    if(dataCount >= (2147483647-1)){
-        initPlots(_plot.size());
-    }
+    m_plotNum = newdata.size();  //获取数据通道数量
 
     QVector<QCPGraph *> visiblePlot;
-    //加载数据
-    int count = dataCount+_buffSize;
+
+    QVector<double> xNow;  
+    //有几帧数据,就生成几个x值
+    for(int i = 0;i<newdata[0].size();i++){
+        m_xStart++;
+        if(m_xStart >= (1.79769e+308-1)){
+            m_xStart = 0;
+            initPlots(_plot.size());
+        }
+        xNow.append(m_xStart+_buffSize);
+        
+    }
+    //qDebug()<<"xNow:"<<xNow;
     for(int i = 0;i<_plot.size();i++){
-        _plot.at(i)->addData(count,newdata[i]);
-        _plot.at(i)->data()->removeBefore(dataCount);
+        _plot.at(i)->addData(xNow,newdata[i]);
+        _plot.at(i)->data()->removeBefore(m_xStart);
 
         //将可见波形拿出来
         if(_plot.at(i)->visible())
@@ -303,18 +329,31 @@ void drawPlot::plotDataChanged(QVector<double> newdata)
     }
     //自动调节Y轴
     if(autoY){
-        //this->yAxis->setRange(-1,1);
-        //this->rescaleAxes()
-        this->yAxis->rescale(true);
+//        this->yAxis->setRange(-10,10);
+//        this->rescaleAxes();  //如果频繁调用将会严重影响绘图效率
+//        this->yAxis->rescale(true); //如果频繁调用将会严重影响绘图效率
 
     }
 
     if(moveX && stopFlag==false){
-        this->xAxis->setRange(dataCount+_buffSize-_windSize-_intervalSize
-                              ,dataCount+_buffSize-_intervalSize);
+        this->xAxis->setRange(m_xStart+_buffSize-_windSize-_intervalSize
+                              ,m_xStart+_buffSize-_intervalSize);
         setDataLineX();
     }
     this->replot(QCustomPlot::rpQueuedReplot);
+
+
+#if 1
+    QueryPerformanceCounter(&litmp);//取得高精度运行计数器的数值
+    Qpart2 = litmp.QuadPart; //终止计时
+
+    dfMinus = (double)(Qpart2 - Qpart1);//计算计数器值
+    dfTime = dfMinus / dfFreq;//获得对应时间，单位为秒,可以乘1000000精确到微秒级（us）
+    Useingtime = dfTime*1000000;
+
+    qDebug()<<dfTime<<"s";
+#endif
+
 }
 
 void drawPlot::plotNameChanged(QVector<QString> name)
@@ -418,7 +457,7 @@ void drawPlot::mouseMoveEvent(QMouseEvent *event)
         if(moveX) enableMoveX(0); //开始拖拽了，禁止自动移动
         //记录按下时的时间,作为窗口头
         if(rightPressCount <1) {
-            rightPressCount = dataCount+_buffSize;
+            rightPressCount = m_xStart+_buffSize;
             mouseMoveLast =  this->xAxis->pixelToCoord(event->x());
         }
         // 限定坐标轴
@@ -433,7 +472,7 @@ void drawPlot::mouseMoveEvent(QMouseEvent *event)
             //qDebug()<<"mouseMove:"<<this->xAxis->range().lower+len<<" "<< rightPressCount - _buffSize;
         }
         if(hamper == 0){
-            int start = dataCount+_buffSize;
+            int start = m_xStart+_buffSize;
             int wind = static_cast<int>(this->xAxis->range().upper);
             setIntervalSize(start - wind); //始终是正的
             //mouseEventIntervaChanged(start - wind); //发送变化信号
@@ -505,6 +544,7 @@ void drawPlot::mouseDoubleClick(QMouseEvent *event)
 
 void drawPlot::setDataLineX(double x)
 {
+
     QVector<double> visibleValue;
     QVector<double> visibleYPixel;
     if(_plot.size()<1) return; //没有数据不能执行
@@ -520,7 +560,7 @@ void drawPlot::setDataLineX(double x)
     double sortkey = this->xAxis->pixelToCoord(dataLineX);
 
     //更新X,时间的显示
-    dataKey->setText(QString::number(sortkey-dataCount));
+    dataKey->setText(QString::number(sortkey-m_xStart));
     double y = this->yAxis->coordToPixel(this->yAxis->range().lower);
     dataKey->position->setPixelPosition(QPointF(dataLineX,y-8));
 

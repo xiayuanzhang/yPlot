@@ -33,11 +33,16 @@ public:
 private:
 
 signals:
-    void haveNewData(QVector<double> newdata);
+    void haveNewData(QVector<QVector<double>> newdata);
     void haveNewName(QVector<QString> name);
 
 private:
-    int channels;
+    int m_plotNum; //数据通道数量
+    int plotFps;  //波形帧率
+    int dataFps;  //所有数据帧率
+    int dataLost; //所有数据丢包率
+    QVector<QVector<double>> plotBuff; //有多帧数据,所有帧数据都要缓存
+    QVector<QString> plotNameBuff; //有多帧名字, 只取最后一帧
 
     mavlink_message_t msg;
     mavlink_status_t status;

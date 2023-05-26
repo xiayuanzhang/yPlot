@@ -60,7 +60,7 @@ private slots:
 
     void on_pushButton_resetCmd_clicked();
 
-    void haveNewPoint_drawPlot(QVector<double> newdata);
+    void haveNewPoint_drawPlot(QVector<QVector<double>> newdata);
     void haveNewName_drawPlot(QVector<QString> name);
 
     void on_pushButton_clear_clicked();
