@@ -330,7 +330,7 @@ void drawPlot::plotDataChanged(QVector<QVector<double>> newdata)
     //自动调节Y轴
     if(autoY){
         this->yAxis->setRange(-10,10);
-//        this->rescaleAxes();  //如果频繁调用将会严重影响绘图效率
+        this->rescaleAxes();  //如果频繁调用将会严重影响绘图效率
 //        this->yAxis->rescale(true); //如果频繁调用将会严重影响绘图效率
 
     }
@@ -629,7 +629,7 @@ void drawPlot::setDataLineX(double x)
 
     }
 
-    this->replot(QCustomPlot::rpQueuedReplot);
+    //this->replot(QCustomPlot::rpQueuedReplot);
 
 }
 

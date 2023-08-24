@@ -97,9 +97,6 @@ Widget::Widget(bool resizeEnable,
     ui->comboBox_baud->setCurrentText(baud);
 
     // ui->comboBox_port->setCurrentText("COM2");
-
-//    QCPGraph* graph_tmp = ui->plotView->addGraph();
-//    graph_tmp->setAdaptiveSampling(true);
 }
 
 Widget::~Widget()
@@ -342,6 +339,8 @@ void Widget::on_checkBox_open_clicked(bool checked)
         serialport->setStopBits(QSerialPort::OneStop);              // 设置停止位
         serialport->setParity(QSerialPort::NoParity);               // 设置奇偶校验
         serialport->setFlowControl(QSerialPort::NoFlowControl);     // 设置流控制
+        qDebug()<<name;
+
         if (serialport->open(QIODevice::ReadWrite))
         { // 以可读可写的方式打开串口
             ui->comboBox_baud->setDisabled(true);

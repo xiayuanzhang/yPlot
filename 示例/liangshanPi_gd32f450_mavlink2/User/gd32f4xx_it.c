@@ -136,8 +136,8 @@ void PendSV_Handler(void)
     \param[in]  none
     \param[out] none
     \retval     none
-*/
-void SysTick_Handler(void)
-{
-    delay_decrement();
-}
+//*/
+//void SysTick_Handler(void)
+//{
+//    delay_decrement();
+//}

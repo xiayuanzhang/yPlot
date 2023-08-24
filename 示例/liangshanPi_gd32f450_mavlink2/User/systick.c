@@ -1,86 +1,81 @@
-/*!
-    \file    systick.c
-    \brief   the systick configuration file
-
-    \version 2016-08-15, V1.0.0, firmware for GD32F4xx
-    \version 2018-12-12, V2.0.0, firmware for GD32F4xx
-    \version 2020-09-30, V2.1.0, firmware for GD32F4xx
-    \version 2022-03-09, V3.0.0, firmware for GD32F4xx
-*/
-
-/*
-    Copyright (c) 2022, GigaDevice Semiconductor Inc.
-
-    Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
-
-    1. Redistributions of source code must retain the above copyright notice, this
-       list of conditions and the following disclaimer.
-    2. Redistributions in binary form must reproduce the above copyright notice,
-       this list of conditions and the following disclaimer in the documentation
-       and/or other materials provided with the distribution.
-    3. Neither the name of the copyright holder nor the names of its contributors
-       may be used to endorse or promote products derived from this software without
-       specific prior written permission.
-
-    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
-OF SUCH DAMAGE.
-*/
-
 #include "gd32f4xx.h"
 #include "systick.h"
 
-volatile static uint32_t delay;
+uint32_t locatime_us;
 
-/*!
-    \brief    configure systick
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
+
+static volatile uint32_t delayus; 
+static volatile uint32_t delayms; 
+
+
 void systick_config(void)
 {
-    /* setup systick timer for 1000Hz interrupts */
-    if(SysTick_Config(SystemCoreClock / 1000U)) {
-        /* capture error */
-        while(1) {
-        }
-    }
-    /* configure the systick handler priority */
-    NVIC_SetPriority(SysTick_IRQn, 0x00U);
+	/* setup systick timer for 1000Hz interrupts *///1ms  //1us延时
+	if (SysTick_Config(SystemCoreClock/1000000)){
+			/* capture error */
+			while (1){
+			}
+	}
+	/* configure the systick handler priority */
+	NVIC_SetPriority(SysTick_IRQn, 0x00U);
 }
 
-/*!
-    \brief    delay a time in milliseconds
-    \param[in]  count: count in milliseconds
-    \param[out] none
-    \retval     none
-*/
-void delay_1ms(uint32_t count)
+void delay_us(uint32_t us)
 {
-    delay = count;
+    delayus = us;
 
-    while(0U != delay) {
+    while(0U != delayus){
     }
 }
 
-/*!
-    \brief    delay decrement
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void delay_decrement(void)
+void delay_ms(uint32_t ms)
 {
-    if(0U != delay) {
-        delay--;
-    }
+	delay_us(1000*ms);
+}
+
+
+
+
+void SysTick_Handler(void)
+{
+	if(delayus > 0)
+		delayus--;
+	locatime_us++;
+}
+
+uint32_t systick_getms(void)
+{
+	return locatime_us/1000;
+}
+
+uint32_t systick_getus(void)
+{
+	return locatime_us;
+}
+
+/**
+ * @brief 非阻塞延时函数
+ * 
+ * @param timeBuff 时间缓存, 在调用该函数的地方, 使用 static int timeBuff = 0; 进行定义, &timeBuff 传入该函数
+ * @param delayms 要延时的周期,时间
+ * @return int 返回当前周期的剩余时间, 如果返回值为0,表示该周期完成,会进入到下一个周期
+ */
+int systick_delay(int *timeBuff, int delayms)
+{
+	//如果时间有所改变,就进行初始话时间
+	int time = 0;
+	if(*timeBuff == 0)
+	{
+		*timeBuff = systick_getms();
+	}
+	time = delayms - (systick_getms() - *timeBuff);
+	if(time <= 0)
+	{
+		*timeBuff = 0; //清空计时器
+		return 0; //返回值
+	}
+	else
+	{
+		return time;
+	}
 }

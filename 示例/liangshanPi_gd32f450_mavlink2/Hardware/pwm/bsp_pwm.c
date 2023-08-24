@@ -66,7 +66,7 @@ void pwm_breathing_lamp(void)
 			direct = 0;
 	}
 	timer_channel_output_pulse_value_config(BSP_PWM_TIMER,BSP_PWM_CHANNEL,value);
-	delay_1ms(50);
+	delay_ms(50);
 }
 
 

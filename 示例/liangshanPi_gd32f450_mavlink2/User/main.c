@@ -64,7 +64,7 @@ int main(void)
 	
 	led_gpio_config();  // led初始化
     key_gpio_config(); // key初始化
-	usart_gpio_config(256000);
+	usart_gpio_config(115200);
 
 	send_plotName();
     while(1) {
@@ -93,9 +93,16 @@ void send_plotName(void)
 	usart_send_ndata(buf,rlen);
 	
 }
+
+volatile uint32_t s_us = 0;
+volatile uint32_t m_us = 0;
+volatile uint32_t e_us = 0;
 void send_plot(void)
 {
 	static float x = 0.00f * 3.1415f;
+	static uint32_t run_us = 0;
+	
+	s_us = systick_getus();
 	
 	mavlink_plot_t mplot;
 	mavlink_message_t msg;
@@ -119,7 +126,12 @@ void send_plot(void)
 	mavlink_msg_plot_encode_chan (0,1,MAVLINK_COMM_0,&msg,&mplot);
 	uint8_t buf[512] = {0};
     uint16_t rlen = mavlink_msg_to_send_buffer(buf, &msg);
+	
+	m_us = systick_getus() - s_us;
+	
 	usart_send_ndata(buf,rlen);
+	
+	e_us = systick_getus() - s_us;
 }
 
 

@@ -42,9 +42,16 @@ OF SUCH DAMAGE.
 
 /* configure systick */
 void systick_config(void);
-/* delay a time in milliseconds */
-void delay_1ms(uint32_t count);
-/* delay decrement */
-void delay_decrement(void);
+
+void delay_us(uint32_t);
+
+void delay_ms(uint32_t);
+
+uint32_t systick_getms(void);
+
+uint32_t systick_getus(void);
+
+int systick_delay(int *timeBuff, int delayms);
+
 
 #endif /* SYS_TICK_H */
