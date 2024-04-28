@@ -5,11 +5,8 @@
 #include <QtSerialPort>
 #include <QSerialPortInfo>
 
-#include "jsonfile.h"
-#include "dataanalysis.h"
-
 #include "qframelesswidget.h"
-
+#include "serialinfo.h"
 #include "qcustomplot.h"
 #include "drawplot.h"
 
@@ -50,7 +47,7 @@ private slots:
     void on_checkBox_open_clicked(bool checked);
 
     void findPortTimer_timeout();
-    void serialport_readyread();
+    void onReadyRead();
 
     void on_checkBox_stop_clicked(bool checked);
     void onStopStatusChanged(bool stop);
@@ -95,17 +92,11 @@ private:
     bool m_startMoveFlag;
 
     QSerialPort *serialport;//串口对象
-    QTimer *findPortTimer; // 定时器，用于定时搜索串口
-    QList<QSerialPortInfo> portlist;
-
-    //配置文件
-    jsonFile configFile;
+    SerialInfo *serialInfo;//串口信息对象
     //设置参数
     char keyCmd[55];
 
-    //数据解析对象
-    dataAnalysis *analysis;
-
+    void portListChanged(const QList<QSerialPortInfo> &portlist);
 };
 
 #endif // WIDGET_H

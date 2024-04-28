@@ -26,19 +26,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    data/ringqueue.cpp \
+    data/yframe.cpp \
         main.cpp \
+    serialinfo.cpp \
         widget.cpp \
-    jsonfile.cpp \
-    dataanalysis.cpp \
-    outputdata.cpp \
     qcustomplot.cpp \
     drawplot.cpp
 
 HEADERS += \
+    data/ringqueue.h \
+    data/yframe.h \
+    serialinfo.h \
         widget.h \
-    jsonfile.h \
-    dataanalysis.h \
-    outputdata.h \
     qcustomplot.h \
     drawplot.h
 

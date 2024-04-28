@@ -1,9 +1,6 @@
 ﻿#include "widget.h"
 #include "ui_widget.h"
-#include "outputdata.h"
-
 #include <QtMath>
-
 #include <QLineEdit>
 #include <QPushButton>
 #include <QComboBox>
@@ -20,42 +17,26 @@ Widget::Widget(bool resizeEnable,
 
     this->initForm(); //设置无标题窗口栏
 //成员初始化
-    findPortTimer = new QTimer(this);
+
+    //串口相关内容初始化
     serialport = new QSerialPort(this);
-    analysis = new dataAnalysis();
+    serialInfo = new SerialInfo(this);
+    connect(serialInfo, &SerialInfo::portListChanged, this, &Widget::portListChanged);
+    connect(serialport,SIGNAL(readyRead()),this,SLOT(onReadyRead()));
 
-    //串口相关内容初始化    
-    findPortTimer->start(100);//周期100ms启动定时器
-    connect(this->findPortTimer,SIGNAL(timeout()),
-            this,SLOT(findPortTimer_timeout()));//连接定时器溢出信号和槽函数
-    connect(serialport,SIGNAL(readyRead()),
-            this,SLOT(serialport_readyread()));
-
-    //数据更新信号连接
-    connect(analysis,SIGNAL(haveNewData(QVector<double>)),
-            this,SLOT(haveNewPoint_drawPlot(QVector<double>)));
-    connect(analysis,SIGNAL(haveNewName(QVector<QString>)),
-            this,SLOT(haveNewName_drawPlot(QVector<QString>)));
-
-    //打开配置文件
-    configFile.open(QCoreApplication::applicationDirPath());//获取程序当前路径
-
-    //设置按键指令
-    memcpy(keyCmd,configFile.readString("keyCmd").toUtf8().data()
-           ,sizeof(char)*50);
-    for(uint i = 0;i<sizeof(keyCmd);i++)
-    {
-        if(!(keyCmd[i] >= 65 && keyCmd[i] <= 90))
-            keyCmd[i] = '*';
-    }
+    //数据解析
+    yframe = new YFrame(this);
+    yframe->startAutoParse(5);//5ms解析一次数据
+    connect(yframe,YFrame::frameReceived,this,onFrameReceived);
 
 
-    int buffsize = configFile.readInt("buffSize");
-    if(buffsize < 30) buffsize = 30;
-    //设置页面的 数据读取
-   int watchsize = configFile.readInt("watchSize");
-   if(watchsize < 10) watchsize = 10; //单位s
-   if(buffsize < watchsize) watchsize = buffsize; //单位s
+ //读取配置文件
+    settings = new QSettings(QCoreApplication::applicationDirPath()+"/config.ini",QSettings::IniFormat, this);
+
+    int buffsize = settings->value("buffsize",30).toInt();
+    int watchsize = settings->value("watchsize",10).toInt();
+   if(buffsize < watchsize)
+        watchsize = buffsize;
 
     //视窗大小初始化
     ui->plotView->setBuffSize(buffsize);
@@ -79,6 +60,11 @@ Widget::Widget(bool resizeEnable,
 
     //创建命令输入窗口
     createCmd();
+    settings->beginGroup("key");
+    for(int i = 0;i<50;i++){
+        cmdKey[i] = settings->value(QString::number(i),'*').toChar().toLatin1();
+    }
+    settings.endGroup();
     //控制命令填充填充
     for (int i = 0;i < 50;i++) {
         QString name = "cmdli"+QString::number(i);
@@ -87,30 +73,37 @@ Widget::Widget(bool resizeEnable,
 
         name = "keyli"+QString::number(i);
         QLineEdit *keyli = ui->scrollArea->widget()->findChild<QLineEdit*>(name);
-        keyli->setText(QString(keyCmd[i]));
+        keyli->setText(QString(cmdKey[i]));
     }
 
     //设置波特率
-    QString baud = configFile.readString("baud");
-    if(baud == "")  //软件第一次运行会没有初始值
-        baud = "115200";
+    QString baud = settings->value("baud","115200").toString();
     ui->comboBox_baud->setCurrentText(baud);
-
-    //ui->comboBox_port->setCurrentText("COM2");
 }
 
 Widget::~Widget()
 {
     //主页面数据保存
-    configFile.write("baud",ui->comboBox_baud->currentText());
-
-    for (int i = 0;i < 50;i++) {
-        QString name = "keyli"+QString::number(i);
-        QLineEdit *keyli = ui->scrollArea->widget()->findChild<QLineEdit*>(name);
-        keyCmd[i] = keyli->text().toUtf8().data()[0];
+    settings->beginGroup("key");
+    for(int i = 0;i<50;i++){
+        settings->setValue(QString::number(i),cmdKey[i]);
     }
+    settings->endGroup();
 
-    configFile.write("keyCmd",QString(keyCmd));
+    settings->beginGroup("cmdKey");
+    for(int i = 0;i<50;i++){
+        settings->setValue(QString::number(i),cmdKey[i]);
+    }
+    settings->endGroup();
+
+    settings->setValue("buffsize",ui->spinBox_buff->value());
+    settings->setValue("watchsize",ui->spinBox_wind->value());
+    settings->setValue("baud",ui->comboBox_baud->currentText());
+
+
+
+
+
 
     for (int i = 0;i < 50;i++) {
         QString name = "cmdli"+QString::number(i);
@@ -118,11 +111,6 @@ Widget::~Widget()
         configFile.write(name,cmdli->text());
     }
 
-    //设置页面数据保存
-    configFile.write("watchSize",ui->spinBox_wind->value());
-    configFile.write("buffSize",ui->spinBox_buff->value());
-
-    configFile.close();
     serialport->close();
     delete ui;
 }
@@ -131,7 +119,7 @@ void Widget::keyPressEvent(QKeyEvent *e)
 {
     if(e->key() >= 0x41 && e->key() <= 0x5a){ //0x41 = A  0x5a = Z 不区分大小写
         for(int i = 0;i<50;i++){
-            int cmdbuff = keyCmd[i];
+            int cmdbuff = cmdKey[i];
             if(cmdbuff >= 65 && cmdbuff <= 90){ //符合大写字母区间才进行判断
                 if(e->key() == cmdbuff){  //找一下有没有响应的指令，有的话就发送
                     QString name = "cmdbt"+QString::number(i);
@@ -254,7 +242,7 @@ void Widget::lineEdit_finish()
     QString num = keyli->objectName(); //对象名格式为 keyli0~keyli50
     num.remove(0,5);//删除keyli
     int n = num.toInt();//把剩下的字符转换为int型,获得对象名中的数字
-    keyCmd[n] = '*';
+    cmdKey[n] = '*';
 
       bool errFlag = false;
       char cmd = keyli->text().toUtf8().data()[0];
@@ -269,7 +257,7 @@ void Widget::lineEdit_finish()
       //判断是否重复
       if(errFlag == false){
           for(int j = 0;j<50;j++){
-              if(cmd == keyCmd[j])
+              if(cmd == cmdKey[j])
               {
                   errFlag = true;
               }
@@ -284,7 +272,7 @@ void Widget::lineEdit_finish()
        //更新值
       else {
           keyli->setText(QString(cmd)); //重新设置键值，避免出现小写
-          keyCmd[n] = cmd; //将字符保存到对应的按键中
+          cmdKey[n] = cmd; //将字符保存到对应的按键中
       }
 }
 
@@ -300,23 +288,6 @@ void Widget::lineEdit_return()
 
 
 
-
-// 自动搜索并添加设备的定时器槽函数
-void Widget::findPortTimer_timeout()
-{
-    if(ui->checkBox_open->checkState())  //串口开启状态下不更新列表
-        return;
-    static int listsize = portlist.size();
-    portlist = QSerialPortInfo::availablePorts();
-    if(listsize != portlist.size()){//判断是否改变了设备数量
-        ui->comboBox_port->clear(); //清除之前的显示
-        for(int i=0;i<portlist.size();i++){//添加更新后的设备信息
-            ui->comboBox_port->addItem(portlist[i].portName()
-                            +":"+portlist[i].description());
-        }
-    }
-    listsize = portlist.size(); // 记录设备数量，用以判断设备数量是否改变
-}
 
 //开启串口
 void Widget::on_checkBox_open_clicked(bool checked)
@@ -358,7 +329,7 @@ void Widget::on_checkBox_open_clicked(bool checked)
 
 
 //串口接收函数
-void Widget::serialport_readyread()
+void Widget::onReadyRead()
 {
     //接收状态下，需要解析数据
     QByteArray data_byte = serialport->readAll();
@@ -382,7 +353,7 @@ void Widget::onStopStatusChanged(bool stop)
 //按键快捷键复位
 void Widget::on_pushButton_resetKey_clicked()
 {
-    memset(keyCmd,0,sizeof (keyCmd));
+    memset(cmdKey,0,sizeof (cmdKey));
     for (int i = 0;i < 50;i++) {
         QString name = "keyli"+QString::number(i);
         QLineEdit *keyli = ui->scrollArea->widget()->findChild<QLineEdit*>(name);
@@ -400,18 +371,6 @@ void Widget::on_pushButton_resetCmd_clicked()
     }
 }
 
-
-//有新的数据出现，需要绘制
-void Widget::haveNewPoint_drawPlot(QVector<double>  newdata)
-{
-    ui->plotView->plotDataChanged(newdata); //添加新的波形
-}
-
-//数据的名称出现了变化
-void Widget::haveNewName_drawPlot(QVector<QString> name)
-{
-    ui->plotView->plotNameChanged(name);
-}
 
 
 //清除数据
@@ -505,7 +464,61 @@ void Widget::on_scrollBar_pos_valueChanged(int value)
     qDebug()<<"the scollbar valueChanged";
 }
 
+//隐藏全部
 void Widget::on_pushButton_hideall_clicked()
 {
     ui->plotView->hideAllPlot();
+}
+
+//更新串口列表
+void Widget::portListChanged(const QList<QSerialPortInfo> &portlist)
+{
+    //更新列表
+    ui->comboBox_port->clear(); //清除之前的显示
+    for(int i=0;i<portlist.size();i++){//添加更新后的设备信息
+        ui->comboBox_port->addItem(portlist[i].portName()
+                                   +":"+portlist[i].description());
+    }
+
+    if(ui->checkBox_open->checkState()){
+        bool have = false;
+        QString nowname = serialport->portName();
+        for(int i=0;i<portlist.size();i++){
+            if(portlist[i].portName() == nowname){
+                ui->comboBox_port->setCurrentIndex(i);
+                have = true;
+                break;
+            }
+        }
+        if(have == false){
+            ui->checkBox_open->setChecked(false);
+            QMessageBox::warning(this,"提示","设备已拔出",QMessageBox::Ok);
+            //可从新选择
+            ui->comboBox_baud->setDisabled(false);
+            ui->comboBox_port->setDisabled(false);
+        }
+    }
+}
+
+void Widget::onFrameReceived(QVector<YFrame_t> frame)
+{
+    QVector<QVector<float>> newData;
+    for(auto i:frame.length()){
+        auto m = frame.at(i);
+        switch(m.id){
+        case ID_NAME: //名称
+            QVector<QString> name = YFrame::byteArrayToQString(m.data);
+            ui->plotView->plotNameChanged(name);
+            break;
+        case ID_WAVE: //波形
+            QVector<float> data = YFrame::byteArrayToFloat(m.data);
+            newData.append(data);
+            break;
+        }
+    }
+
+    if(newData.length() > 0){
+        ui->plotView->plotDataChanged(newdata); //添加新的波形
+    }
+
 }
