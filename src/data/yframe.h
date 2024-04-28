@@ -3,7 +3,12 @@
 
 #include <QObject>
 #include <QVector>
+#include <QTimer>
 #include "ringqueue.h"
+
+#define ID_NAME 0x01
+#define ID_WAVE 0x02
+
 
 /**
  * @brief The YFrame class 数据格式为
@@ -29,14 +34,21 @@ public:
     } YFrame_t;
 
     explicit YFrame(QObject *parent = nullptr);
+    ~YFrame();
+    void startAutoParse(int interval_ms = 10);
+    void stopAutoParse();
 
-
+    void clear();
     QVector<YFrame_t> parseData();
     void parseDataWithSignal();
 
     QByteArray packData(const YFrame_t &frame);
     QByteArray packData(int id, const QByteArray &data = {});
 
+
+    static QVector<float> byteArrayToFloat(const QByteArray &data);
+    //以,分割的字符串转换为QVector<QString>
+    static QVector<QString> byteArrayToQString(const QByteArray &data);
 public slots:
     void receiveData(const QByteArray &data);
 
@@ -45,6 +57,7 @@ signals:
     void frameReceived(QVector<YFrame_t> frame);
 
 private:
+    QTimer *m_timer{nullptr};
     RingQueue<uint8_t> m_queue{1024*1024*10}; //10M缓存
 
 };

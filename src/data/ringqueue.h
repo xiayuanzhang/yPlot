@@ -20,6 +20,7 @@ public:
     int size() const;
     bool isEmpty() const;
     bool isFull() const;
+    void clear();
 
 
     //查询相对head+offset处的字符是什么, nums表示要查询多少个

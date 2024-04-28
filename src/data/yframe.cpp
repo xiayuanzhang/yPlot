@@ -3,12 +3,23 @@
 YFrame::YFrame(QObject *parent)
     : QObject{parent}
 {
+    m_timer = new QTimer(this);
+    connect(m_timer, &QTimer::timeout, this, &YFrame::parseDataWithSignal);
+}
+
+YFrame::~YFrame()
+{
 
 }
 
 void YFrame::startAutoParse(int interval_ms)
 {
+    m_timer->start(interval_ms);
+}
 
+void YFrame::stopAutoParse()
+{
+    m_timer->stop();
 }
 
 void YFrame::clear()

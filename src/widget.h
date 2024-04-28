@@ -4,11 +4,14 @@
 #include <QWidget>
 #include <QtSerialPort>
 #include <QSerialPortInfo>
+#include <QSettings>
 
 #include "qframelesswidget.h"
 #include "serialinfo.h"
 #include "qcustomplot.h"
 #include "drawplot.h"
+
+#include "data/yframe.h"
 
 namespace Ui {
 class Widget;
@@ -46,7 +49,6 @@ private slots:
 
     void on_checkBox_open_clicked(bool checked);
 
-    void findPortTimer_timeout();
     void onReadyRead();
 
     void on_checkBox_stop_clicked(bool checked);
@@ -56,9 +58,6 @@ private slots:
     void on_pushButton_resetKey_clicked();
 
     void on_pushButton_resetCmd_clicked();
-
-    void haveNewPoint_drawPlot(QVector<double> newdata);
-    void haveNewName_drawPlot(QVector<QString> name);
 
     void on_pushButton_clear_clicked();
 
@@ -86,6 +85,10 @@ private slots:
 
     void on_pushButton_hideall_clicked();
 
+    //串口列表出现改变
+    void portListChanged(const QList<QSerialPortInfo> &portlist);
+    //接收解析的帧数据
+    void onFrameReceived(QVector<YFrame_t> frame);
 private:
     Ui::Widget *ui;
     QPoint m_startMovePoint;
@@ -93,10 +96,13 @@ private:
 
     QSerialPort *serialport;//串口对象
     SerialInfo *serialInfo;//串口信息对象
-    //设置参数
-    char keyCmd[55];
 
-    void portListChanged(const QList<QSerialPortInfo> &portlist);
+//数据
+    YFrame *yframe;//数据解析对象
+//参数
+    QSettings *settings;
+
+
 };
 
 #endif // WIDGET_H
