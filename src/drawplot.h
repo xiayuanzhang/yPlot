@@ -4,6 +4,11 @@
 #include <QObject>
 #include <QVector>
 #include "qcustomplot.h"
+#include <QTimer>
+#include <QPoint>
+
+
+class MouseDrag;
 
 class drawPlot: public QCustomPlot
 {
@@ -12,44 +17,59 @@ public:
     drawPlot(QWidget *parent = 0);
 
     void initColor(int i);  //i控制使用几号方案
-    QColor getColor(int i);
+    QColor getColor(int i); //获取颜色方案中的颜色值
+    QString getName(int i);
+    double getXIndex();
+    double increaseXIndex();
+    void resetXIndex();
 
-    void initPlots(int chs);
-    void clearAllPlot();
-    void plotDataChanged(QVector<double> newdata);
-    void setPlotData(QVector<double> newdata);
-    void plotNameChanged(QVector<QString> name);
+    void resetXRange();
+    void resetYRange();
+    void resetXYRange(); //复位视图
+
+    void setAutoXRange(bool enable); //是否使能X轴自动调整
+    void autoXRange(void); //自动调整X轴范围
+    void setAutoYRange(bool enable); //是否使能Y轴自动调整
+    void autoYRange(void); //自动调整Y轴范围
+
+    void setRefreshInterval(int interval_ms); //设置刷新间隔
+
+    void adjustPlotNums(int chs); //调整Y轴数量
+
+    void clearAllPlot(); //清除曲线并复位视图
+
+    void addPoint(QVector<QVector<double>> newdata);
+
+    void setPlotName(QVector<QString> name);
     //是否允许Y轴自动调整
     void enableAutoY(bool flag = false,Qt::Orientations orientations = Qt::Vertical);
-    void enableMoveX(bool flag = false ,Qt::Orientations orientations = Qt::Horizontal);
-    bool getAutoYState(){return autoY;}
+    void enablem_autoMoveX(bool flag = false ,Qt::Orientations orientations = Qt::Horizontal);
+    bool getAutoYState(){return m_autoMoveY;}
 
     void setBuffSize(int t);
     void setWindSize(int t);
     void setIntervalSize(int t);
-    int getBuffSize(){return _buffSize;}
-    int getWindSize(){return _windSize;}
-    int getIntervalSize(){return _intervalSize;}
+    int getBuffSize(){return m_buffSize;}
+    int getWindSize(){return m_watchSize;}
 
 
 
     void setPlotWidth(int i);
 
 
-     void resetPlotView();
      void showAllPlot();
      void hideAllPlot();
-     void setStopShow(bool stop){stopFlag = stop; emit stopStatusChanged(stopFlag);}
+
+     void mouseDragStart(Qt::MouseButton but,QPoint point);
+     void mouseDragMove(Qt::MouseButton but,QPoint point);
+     void mouseDragEnd(Qt::MouseButton but,QPoint point);
+     void mouseClick(Qt::MouseButton but,QPoint point);
 
 protected:
      void mousePressEvent(QMouseEvent *event) ;
      void mouseMoveEvent(QMouseEvent *event) ;
      void mouseReleaseEvent(QMouseEvent *event) ;
-     void mouseDoubleClick(QMouseEvent *event) ;
-
-
-     void setDataLineX(double x = -1);
-     void hideDataLinex();
+     void wheelEvent(QWheelEvent *event);
 
 private slots:
 
@@ -60,48 +80,76 @@ private slots:
     void onPlottableClick (QCPAbstractPlottable *plottable, int dataIndex, QMouseEvent *event);
     void onPlottableDoubleClick (QCPAbstractPlottable *plottable, int dataIndex, QMouseEvent *event);
 
+    void refreshView();
+
 signals:
-    void intervaChanged(int interval_size);
-    void stopStatusChanged(bool);
-
+    //x的可见范围在buffer中的位置出现变化
+    void xVisibleRangeChanged(double lower, double upper);
 private:
-    int dataCount = 0;
+    //x轴索引值记录
+    double xIndexCount = 0;
 
-    bool _intiFlag = 0; //表示未完成初始化，需要等有第一个数据输入，完成了初始化之后才能开始工作
     bool stopFlag = 0;
-    int _buffSize = 120;  //数据缓存区时间跨度,单位
-    int _windSize = 30; //可视区域时间跨度，单位
-    int _intervalSize = 0; //可视区域和最新时间的间隔，控制视窗移动
-    QTime *nowTime;
+    int m_buffSize = 120;  //数据缓存区时间跨度,单位
+    int m_watchSize = 30; //可视区域时间跨度，单位
 
-    QVector<QCPGraph *>_plot;
-    QVector<QString> _name;
-    QVector<QColor> plotColor;
+    QVector<QCPGraph *>m_plot;
+    QVector<QString> m_name;
+    QVector<QColor> m_color;
 
 
-    bool autoY = false; //false 为不允许自动，允许手动
-    bool moveX = false; //false ，不能自动动
+    bool m_autoMoveX = false; //false ，不能自动动
+    bool m_autoMoveY = false; //false 为不允许自动，允许手动
 
-    //右键拖动相关状态量。
-    bool rightPress = 0 ; //true 按下   false 未按下
-    double rightPressCount = 0; //初始按下的时间
-    double mouseMoveLast = 0; //鼠标按下时上一次的值
-    int rightPressX = 0; //用于判断鼠标是否移动
+    MouseDrag *mouseDrag;
+    bool m_isDrag = false;  //x处于拖拽中
+    bool m_isRoom = false;  //是否处于放大缩小状态
 
-    //左键缩放
-    bool leftPress = 0 ; //true 按下   false 未按下
-    int leftPressX = 0; //用于判断鼠标是否移动
-    bool leftMove = 0; //是否进行了拖拽
-    bool isZoom = 0;
 
-    //浮标
-    QCPItemStraightLine *dataLine;
-    QCPItemText *dataKey;
+    //刷新显示的定时器
+    QTimer *refreshTimer;
+    double lastXAxisLower = 0;
+    double lastXAxisUpper = 0;
 
-    QVector<QCPItemText*> dataTexts;
-    QVector<QCPItemEllipse*> dataEllipses;
-    double dataLineX = 0;
 
+};
+
+
+
+
+
+//识别鼠标拖动事件
+class MouseDrag : public QObject
+{
+    Q_OBJECT
+public:
+    MouseDrag(QObject *parent = nullptr);
+    ~MouseDrag();
+    void press(QMouseEvent *event);
+    void move(QMouseEvent *event);
+    void release(QMouseEvent *event);
+
+signals:
+    void clicked(Qt::MouseButton but, QPoint point);
+    void startDrag(Qt::MouseButton but, QPoint point);
+    void endDrag(Qt::MouseButton but, QPoint point);
+    void drag(Qt::MouseButton but, QPoint point);
+private:
+    //左键
+    bool isPress = false;
+    bool isDrag = false;
+    QPoint pressPoint;
+    QPoint movePoint;
+    QPoint releasePoint;
+
+    //右键
+    bool isPressR = false;
+    bool isDragR = false;
+    QPoint pressPointR;
+    QPoint movePointR;
+    QPoint releasePointR;
+
+    const int checkDragDirectionPix = 5;
 };
 
 #endif // DRAWPLOT_H

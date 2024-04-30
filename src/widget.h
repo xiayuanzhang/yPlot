@@ -12,6 +12,7 @@
 #include "drawplot.h"
 
 #include "data/yframe.h"
+#include "plotdemo.h"
 
 namespace Ui {
 class Widget;
@@ -89,6 +90,8 @@ private slots:
     void portListChanged(const QList<QSerialPortInfo> &portlist);
     //接收解析的帧数据
     void onFrameReceived(QVector<YFrame_t> frame);
+    void on_pushButton_demo_clicked();
+
 private:
     Ui::Widget *ui;
     QPoint m_startMovePoint;
@@ -97,6 +100,9 @@ private:
     QSerialPort *serialport;//串口对象
     SerialInfo *serialInfo;//串口信息对象
 
+    QChar cmdKey[50];//命令
+
+    PlotDemo *plotdemo;
 //数据
     YFrame *yframe;//数据解析对象
 //参数

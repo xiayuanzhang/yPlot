@@ -3,13 +3,11 @@
         <file>img/Icon.svg</file>
         <file>img/down.svg</file>
         <file>img/up.svg</file>
-        <file>img/logo.png</file>
         <file>img/clear.svg</file>
         <file>img/V.svg</file>
         <file>img/close.svg</file>
         <file>img/help.svg</file>
         <file>img/little.svg</file>
-        <file>img/logo.svg</file>
         <file>img/open-off.svg</file>
         <file>img/open-on.svg</file>
         <file>img/output.svg</file>
@@ -23,6 +21,8 @@
         <file>img/y-manual.png</file>
         <file>img/reset.png</file>
         <file>img/showall.png</file>
-        <file>img/hideall.png</file>
+        <file>img/logo.png</file>
+        <file>img/hideall.svg</file>
+        <file>img/demo.svg</file>
     </qresource>
 </RCC>

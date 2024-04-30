@@ -4,11 +4,26 @@
 #include <QObject>
 #include <QVector>
 #include <QTimer>
-#include "ringqueue.h"
+#include "data/ringqueue.h"
 
 #define ID_NAME 0x01
 #define ID_WAVE 0x02
 
+
+typedef struct _YFrameType
+{
+    uint8_t id;
+    uint16_t len;
+    QByteArray data;
+
+    //构造函数
+    _YFrameType()
+        : id{0}
+        , len{0}
+    {
+
+    }
+} YFrame_t;
 
 /**
  * @brief The YFrame class 数据格式为
@@ -18,20 +33,7 @@ class YFrame : public QObject
 {
     Q_OBJECT
 public:
-    typedef struct _YFrameType
-    {
-        int id;
-        int len;
-        QByteArray data;
 
-        //构造函数
-        _YFrameType()
-            : id{0}
-            , len{0}
-        {
-
-        }
-    } YFrame_t;
 
     explicit YFrame(QObject *parent = nullptr);
     ~YFrame();
@@ -42,9 +44,9 @@ public:
     QVector<YFrame_t> parseData();
     void parseDataWithSignal();
 
-    QByteArray packData(const YFrame_t &frame);
-    QByteArray packData(int id, const QByteArray &data = {});
-
+    static QByteArray packData(const YFrame_t &frame);
+    static QByteArray packData(uint8_t id, const QByteArray &data = {});
+    static QByteArray packData(uint8_t id, uint8_t cmd);
 
     static QVector<float> byteArrayToFloat(const QByteArray &data);
     //以,分割的字符串转换为QVector<QString>

@@ -12,22 +12,103 @@ template<typename T>
 class RingQueue
 {
 public:
-    explicit RingQueue(int size = 4096);
-    ~RingQueue();
+    explicit RingQueue(int size = 4096)
+        : m_size{size}
+        , m_head{0}
+        , m_tail{0}
+        , m_data{new T[size]}
+    {
 
-    void push(const T &value);
-    T pop();
-    int size() const;
-    bool isEmpty() const;
-    bool isFull() const;
-    void clear();
+    }
+
+
+    ~RingQueue()
+    {
+        delete[] m_data;
+    }
+
+    void push(const T &value)
+    {
+        if(isFull())
+            return;
+
+        m_data[m_tail] = value;
+        m_tail = (m_tail + 1) % m_size;
+    }
+
+    T pop() //出队
+    {
+        if(isEmpty())
+            return T{};
+
+        T value = m_data[m_head];
+        m_head = (m_head + 1) % m_size;
+        return value;
+    }
+
+    int size() const
+    {
+        return (m_tail - m_head + m_size) % m_size;
+    }
+
+
+    bool isEmpty() const
+    {
+        return m_head == m_tail;
+    }
+
+    bool isFull() const
+    {
+        return (m_tail + 1) % m_size == m_head;
+    }
+
+    void clear()
+    {
+        m_head = m_tail = 0;
+    }
 
 
     //查询相对head+offset处的字符是什么, nums表示要查询多少个
-    bool query(int offset, T *buffer, int nums) const;
+    bool query(int offset, T *buffer, int nums) const
+    {
+        if(nums <= 0 || offset < 0)
+            return false;
+        if(offset + nums > size())
+            return false;
+
+        for(int i = 0; i < nums; ++i)
+        {
+            buffer[i] = m_data[(m_head + offset + i) % m_size];
+        }
+
+        return true;
+    }
 
     //从head+offset开始, 检索buffer处于队列中的位置, 返回的是相对head的位置
-    int index(int offset, T *buffer, int nums) const;
+    int index(int offset, T *buffer, int nums) const
+    {
+        if(nums <= 0 || offset < 0)
+            return -1;
+        if(offset + nums > size())
+            return -1;
+
+        //检索整个队列中 和buffer 完全一致的数据相对head的位置
+        for(int i = m_head + offset; i < size(); ++i) //m_head + offset开始,检索到队列末尾
+        {
+            bool isMatch = true;
+            for(int j = 0; j < nums; ++j) //连续检索buffer的数据, 长度为nums
+            {
+                if(m_data[(m_head + i + j) % m_size] != buffer[j])
+                {
+                    isMatch = false;
+                    break;
+                }
+            }
+            if(isMatch) //找到了
+                return i - m_head; //返回相对head的位置
+        }
+        return -1;
+    }
 
 
 private:

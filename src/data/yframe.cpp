@@ -36,15 +36,17 @@ void YFrame::receiveData(const QByteArray &data)
 }
 
 
-QVector<YFrame::YFrame_t> YFrame::parseData()
+QVector<YFrame_t> YFrame::parseData()
 {
-    QVector<YFrame_t> frames{};
+    QVector<YFrame_t> fff{};
+    QByteArray ad123;
+    ad123.resize(1024);
     while(m_queue.size() >= 4)
     {
-
+        m_queue.query(0,(uint8_t*)ad123.data(),1024);
         uint8_t head = 0;
         m_queue.query(0,&head,1);
-        if(head != 0x55)
+        if(head != 0xAA)
         {
             m_queue.pop();
             continue;
@@ -67,36 +69,44 @@ QVector<YFrame::YFrame_t> YFrame::parseData()
         {
             frame.data.append(m_queue.pop());
         }
-        frames.append(frame);
+        fff.append(frame);
     }
-    return frames;
+    return fff;
 }
 
 
 void YFrame::parseDataWithSignal()
 {
     QVector<YFrame_t> frames = parseData();
-    emit frameReceived(frames);
+    if(frames.size() > 0)
+        emit frameReceived(frames);
 }
 
 QByteArray YFrame::packData(const YFrame_t &frame)
 {
     QByteArray data;
-    data.append(0x55);
+    data.append(0xAA);
     data.append(frame.id);
-    data.append((frame.len >> 8) & 0xFF);
     data.append(frame.len & 0xFF);
+    data.append((frame.len >> 8) & 0xFF);
     data.append(frame.data);
     return data;
 }
 
-QByteArray YFrame::packData(int id, const QByteArray &data)
+QByteArray YFrame::packData(uint8_t id, const QByteArray &data)
 {
     YFrame_t frame;
     frame.id = id;
     frame.len = data.size();
     frame.data = data;
     return packData(frame);
+}
+
+QByteArray YFrame::packData(uint8_t id, uint8_t cmd)
+{
+    QByteArray data;
+    data.append(cmd);
+    return packData(id, data);
 }
 
 QVector<float> YFrame::byteArrayToFloat(const QByteArray &data)
@@ -114,8 +124,9 @@ QVector<float> YFrame::byteArrayToFloat(const QByteArray &data)
 QVector<QString> YFrame::byteArrayToQString(const QByteArray &data)
 {
     QVector<QString> result;
-    data.split(',').forEach([&result](const QByteArray &item){
-        result.append(QString::fromUtf8(item));
-    });
+    QByteArrayList dataList = data.split(',');
+    for(int i =0;i<dataList.size();++i){
+        result.append(QString::fromUtf8(dataList[i]));
+    }
     return result;
 }

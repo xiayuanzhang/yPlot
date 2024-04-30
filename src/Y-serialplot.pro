@@ -26,9 +26,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-    data/ringqueue.cpp \
     data/yframe.cpp \
         main.cpp \
+    plotdemo.cpp \
     serialinfo.cpp \
         widget.cpp \
     qcustomplot.cpp \
@@ -37,6 +37,7 @@ SOURCES += \
 HEADERS += \
     data/ringqueue.h \
     data/yframe.h \
+    plotdemo.h \
     serialinfo.h \
         widget.h \
     qcustomplot.h \
@@ -63,8 +64,7 @@ DISTFILES += \
     img/size-1.svg \
     img/size-2.svg \
     img/stop-off.svg \
-    img/stop-on.svg \
-    Resource/img/hideall.png
+    img/stop-on.svg
 
 RESOURCES += \
     Resource/img.qrc

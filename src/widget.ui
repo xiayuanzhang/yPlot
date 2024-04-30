@@ -111,7 +111,7 @@ QPushButton#pushButton_showall
 
 QPushButton#pushButton_hideall
 {
-	border-image:url(:/img/hideall.png);
+	border-image:url(:/img/hideall.svg);
 	max-height:28px;
 	max-width:28px;
 }
@@ -119,6 +119,13 @@ QPushButton#pushButton_hideall
 QPushButton#pushButton_reset
 {
 	border-image:url(:/img/reset.png);
+	max-height:28px;
+	max-width:28px;
+}
+
+QPushButton#pushButton_demo
+{
+	border-image:url(:/img/demo.svg);
 	max-height:28px;
 	max-width:28px;
 }
@@ -477,13 +484,13 @@ subcontrol-origin: margin;
         </property>
         <property name="minimumSize">
          <size>
-          <width>207</width>
+          <width>300</width>
           <height>28</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>207</width>
+          <width>300</width>
           <height>28</height>
          </size>
         </property>
@@ -891,6 +898,45 @@ subcontrol-origin: margin;
        </widget>
       </item>
       <item>
+       <spacer name="horizontalSpacer_11">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>30</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_demo">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="toolTip">
+         <string>示例波形</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="Resource/img.qrc">
+          <normaloff>:/img/demo.svg</normaloff>:/img/demo.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>28</width>
+          <height>28</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer_10">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -1034,15 +1080,15 @@ subcontrol-origin: margin;
        <item>
         <widget class="drawPlot" name="plotView" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
            <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
+           <verstretch>1</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>700</height>
+           <height>300</height>
           </size>
          </property>
         </widget>
@@ -1306,7 +1352,7 @@ subcontrol-origin: margin;
          <item>
           <widget class="QScrollArea" name="scrollArea">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1320,6 +1366,18 @@ subcontrol-origin: margin;
            <property name="maximumSize">
             <size>
              <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>210</width>
              <height>210</height>
             </size>
            </property>
@@ -1335,7 +1393,7 @@ subcontrol-origin: margin;
               <x>0</x>
               <y>0</y>
               <width>1288</width>
-              <height>210</height>
+              <height>214</height>
              </rect>
             </property>
            </widget>
@@ -1390,6 +1448,8 @@ subcontrol-origin: margin;
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="Resource/img.qrc"/>
+ </resources>
  <connections/>
 </ui>
