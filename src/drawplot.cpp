@@ -9,6 +9,7 @@ drawPlot::drawPlot(QWidget *parent) :
     refreshTimer = new QTimer(this);
     connect(refreshTimer,&QTimer::timeout,this,&drawPlot::refreshView);
     refreshTimer->start(17); //60Hz
+    qDebug()<<QThread::currentThread();
 
     //图表初始化
     //坐标轴初始化
@@ -33,7 +34,8 @@ drawPlot::drawPlot(QWidget *parent) :
     this->setSelectionRectMode(QCP::SelectionRectMode::srmZoom);
 
     //曲线可选，图例可选，可多选
-    this->setInteractions( QCP::iSelectPlottables| QCP::iSelectLegend| QCP::iMultiSelect|QCP::iSelectItems);
+    //取消曲线可选 QCP::iSelectPlottables|
+    this->setInteractions(  QCP::iSelectLegend| QCP::iMultiSelect|QCP::iSelectItems);
     this->setMultiSelectModifier(Qt::ControlModifier);// 使用ctrl键来多选
 
     //启用拖拽和缩放功能

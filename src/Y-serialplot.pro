@@ -28,6 +28,7 @@ CONFIG += c++11
 SOURCES += \
     data/yframe.cpp \
         main.cpp \
+    mytimer.cpp \
     plotdemo.cpp \
     serialinfo.cpp \
         widget.cpp \
@@ -37,6 +38,7 @@ SOURCES += \
 HEADERS += \
     data/ringqueue.h \
     data/yframe.h \
+    mytimer.h \
     plotdemo.h \
     serialinfo.h \
         widget.h \
