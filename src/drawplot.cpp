@@ -305,27 +305,25 @@ void drawPlot::onPlottableDoubleClick(QCPAbstractPlottable *plottable, int dataI
 //更新显示
 void drawPlot::refreshView()
 {
+    double min = 0;
+    //buff中最早点的x值
+    if(!m_plot.isEmpty()){
+        min = m_plot.at(0)->data().data()->at(0)->key;
+    }
+
+    double lower = this->xAxis->range().lower - min;
+    double upper = this->xAxis->range().upper - min;
+
     //发出当前X轴的范围
-    if(this->xAxis->range().lower != lastXAxisLower || this->xAxis->range().upper != lastXAxisUpper){
-        double min = (getXIndex() - m_buffSize);
-        if(min < 0)
-            min = 0;
-
-        double lower = this->xAxis->range().lower - min;
-        double upper = this->xAxis->range().upper - min;
-
-        if(lower < 0)
-            lower = 0;
-        if(upper > m_buffSize)
-            upper = m_buffSize;
+    if(lower != lastXAxisLower || upper != lastXAxisUpper){
+        //更新历史值
+        lastXAxisLower = lower;
+        lastXAxisUpper = upper;
 
         emit xVisibleRangeChanged(lower,upper);
     }
 
-    //更新历史值
-    lastXAxisLower = this->xAxis->range().lower;
-    lastXAxisUpper = this->xAxis->range().upper;
-
+    //刷新波形
     this->replot(QCustomPlot::rpQueuedReplot);
 }
 

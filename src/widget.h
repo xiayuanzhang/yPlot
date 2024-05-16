@@ -13,6 +13,7 @@
 
 #include "data/yframe.h"
 #include "plotdemo.h"
+#include "myscorllbar.h"
 
 namespace Ui {
 class Widget;
@@ -76,11 +77,11 @@ private slots:
     void on_spinBox_buff_editingFinished();
     void on_spinBox_wind_editingFinished();
 
-    void onIntervaChanged(int interva);
+    void slot_plotviewXRangeChanged(double low,double up);
 
 
 
-    void on_scrollBar_pos_valueChanged(int value);
+    void slot_scrollBarvalueChanged(int value);
 
 
 
@@ -108,6 +109,7 @@ private:
 //参数
     QSettings *settings;
 
+    MyScorllBar *scrollBar;
 
 };
 

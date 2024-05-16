@@ -52,16 +52,17 @@ Widget::Widget(bool resizeEnable,
     //滑块初始化，
     //滑动条总长度 = maximum() - minimum() + pageStep()
     //滑块大小 = pageStep()
-    ui->scrollBar_pos->setRange(watchsize,buffsize);
-    ui->scrollBar_pos->setPageStep(watchsize);
-    ui->scrollBar_pos->setSingleStep(watchsize/10);
-    ui->scrollBar_pos->setValue(buffsize);
+    scrollBar = new MyScorllBar(ui->scrollBar_pos,this);
+    scrollBar->setRange(0,buffsize);
+    scrollBar->setValueRange(0,watchsize);
+    connect(scrollBar,&MyScorllBar::valueChanged,this,&Widget::slot_scrollBarvalueChanged);
+
+
 //    ui->scrollBar_pos->setEnabled(false); //不允许拖动滑块。
-    connect(ui->plotView,SIGNAL(intervaChanged(int)),
-            this,SLOT(onIntervaChanged(int)));//连接定时器溢出信号和槽函数
+    connect(ui->plotView,SIGNAL(xVisibleRangeChanged(double,double)),
+            this,SLOT(slot_plotviewXRangeChanged(double,double)));//连接定时器溢出信号和槽函数
     connect(ui->plotView,SIGNAL(stopStatusChanged(bool)),
             this,SLOT(onStopStatusChanged(bool)));//连接定时器溢出信号和槽函数
-
 
     //创建命令输入窗口
     createCmd();
@@ -430,11 +431,9 @@ void Widget::on_spinBox_buff_editingFinished()
     ui->spinBox_buff->setValue(arg1);
     ui->plotView->setBuffSize(arg1);
 
-    ui->scrollBar_pos->setRange(ui->plotView->getWindSize()
-                                ,ui->plotView->getBuffSize());
-    ui->scrollBar_pos->setPageStep(ui->plotView->getWindSize());
-
-
+    //滑块范围为[0, buffSize]
+    scrollBar->setRange(0,ui->plotView->getBuffSize());
+    scrollBar->setValueRange(0,ui->plotView->getWindSize());
 }
 
 void Widget::on_spinBox_wind_editingFinished()
@@ -448,23 +447,23 @@ void Widget::on_spinBox_wind_editingFinished()
     ui->spinBox_wind->setValue(arg1);
     ui->plotView->setWindSize(arg1);
 
-    ui->scrollBar_pos->setRange(ui->plotView->getWindSize()
-                                ,ui->plotView->getBuffSize());
-    ui->scrollBar_pos->setPageStep(ui->plotView->getWindSize());
+    scrollBar->setRange(0,ui->plotView->getBuffSize());
+    scrollBar->setValueRange(0,ui->plotView->getWindSize());
 
 }
 
 
 
 //滑块跟随视窗运动
-void Widget::onIntervaChanged(int interva)
+void Widget::slot_plotviewXRangeChanged(double low,double up)
 {
-    ui->scrollBar_pos->setValue(ui->scrollBar_pos->maximum()-interva);
+    //阻止发出信号
+    scrollBar->setValueRange(low,up);
 }
 
 
 //视窗跟随滑块运动
-void Widget::on_scrollBar_pos_valueChanged(int value)
+void Widget::slot_scrollBarvalueChanged(int value)
 {
     qDebug()<<"the scollbar valueChanged";
 }
