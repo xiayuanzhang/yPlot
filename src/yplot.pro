@@ -7,7 +7,7 @@
 QT       += core gui serialport printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-TARGET = Y-serialplot
+TARGET = yplot
 TEMPLATE = app
 
 RC_ICONS = Icon.ico
@@ -27,25 +27,29 @@ CONFIG += c++11
 
 SOURCES += \
     data/yframe.cpp \
-        main.cpp \
+    main.cpp \
     myscorllbar.cpp \
     mytimer.cpp \
-    plotdemo.cpp \
+    plot/mybuoy.cpp \
+    plot/plotdemo.cpp \
     serialinfo.cpp \
-        widget.cpp \
-    qcustomplot.cpp \
-    drawplot.cpp
+    widget.cpp \
+    plot/qcustomplot.cpp \
+    plot/drawplot.cpp\
+    plot/verticalline.cpp
 
 HEADERS += \
     data/ringqueue.h \
     data/yframe.h \
     myscorllbar.h \
     mytimer.h \
-    plotdemo.h \
+    plot/mybuoy.h \
+    plot/plotdemo.h \
     serialinfo.h \
-        widget.h \
-    qcustomplot.h \
-    drawplot.h
+    widget.h \
+    plot/qcustomplot.h \
+    plot/drawplot.h\
+    plot/verticalline.h
 
 FORMS += \
         widget.ui \

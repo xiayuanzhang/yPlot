@@ -6,7 +6,6 @@
 #include <QThread>
 #include <QDebug>
 
-
 class TimerThread : public QThread {
     Q_OBJECT
 

@@ -15,14 +15,16 @@ drawPlot::drawPlot(QWidget *parent) :
     //坐标轴初始化
     //this->xAxis->setTickLabelFont(QFont("Helvetica",9));
     this->xAxis->setRange(m_buffSize-m_watchSize,m_buffSize);
-    this->xAxis->ticker()->setTickCount(15);//主刻度
+    this->xAxis->ticker()->setTickCount(5);//主刻度
     this->xAxis->ticker()->setTickStepStrategy(QCPAxisTicker::tssReadability);//可读性优于设置
-    this->xAxis->setTickLabels(false);
+    //设置tick字体
+    this->xAxis->setTickLabelFont(QFont("Helvetica",8));
+    //this->xAxis->setTickLabels(false);
 
 
     //Y轴初始化
     this->yAxis->setPadding(10);
-    this->yAxis->setTickLabelFont(QFont("Helvetica",9));
+    this->yAxis->setTickLabelFont(QFont("Helvetica",8));
     this->yAxis->setRange(-1, 1);
     this->yAxis->ticker()->setTickCount(8);//主刻度
     this->yAxis->ticker()->setTickStepStrategy(QCPAxisTicker::tssReadability);//可读性优于设置
@@ -80,6 +82,9 @@ drawPlot::drawPlot(QWidget *parent) :
     //移动
     setAutoXRange(true);
     setAutoYRange(true);
+
+    buoy = new MyBuoy(this);
+    buoy->setFont(QFont("Helvetica",9));
 }
 
 //颜色获取网站
@@ -267,10 +272,12 @@ void drawPlot::onLegendClick(QCPLegend *legend, QCPAbstractLegendItem *item, QMo
             if(graph->visible() == true){
                 graph->setVisible(false);//设置为不可见
                 item->setTextColor(QColor(0xDDDDDD)); //图例文字颜色变灰，表示隐藏了
+                buoy->setEnable(m_plot.at(i),false);
             }
             else {
                 graph->setVisible(true);//设置为可见
                 item->setTextColor(graph->pen().color()); //恢复颜色
+                buoy->setEnable(m_plot.at(i),true);
             }
             break;
         }
@@ -323,6 +330,8 @@ void drawPlot::refreshView()
         emit xVisibleRangeChanged(lower,upper);
     }
 
+    buoy->refresh();
+
     //刷新波形
     this->replot(QCustomPlot::rpQueuedReplot);
 }
@@ -345,6 +354,7 @@ void drawPlot::adjustPlotNums(int chs)
         //设置图例颜色
         item = this->legend->itemWithPlottable(m_plot.at(i));
         item->setTextColor(m_plot.at(i)->pen().color());
+        item->setFont(QFont("Helvetica",9));
     }
     //设置线条粗细
     setPlotWidth(1);
@@ -456,7 +466,7 @@ void drawPlot::setPlotWidth(int i)
 
 void drawPlot::mousePressEvent(QMouseEvent *event)
 {
-
+    buoy->setPixelPos(event->localPos());
     mouseDrag->press(event);
 
     QCustomPlot::mousePressEvent(event);
@@ -464,6 +474,8 @@ void drawPlot::mousePressEvent(QMouseEvent *event)
 
 void drawPlot::mouseMoveEvent(QMouseEvent *event)
 {
+    buoy->setPixelPos(event->localPos());
+
     mouseDrag->move(event);
 
     QCustomPlot::mouseMoveEvent(event);
@@ -471,6 +483,8 @@ void drawPlot::mouseMoveEvent(QMouseEvent *event)
 
 void drawPlot::mouseReleaseEvent(QMouseEvent *event)
 {
+    buoy->setPixelPos(event->localPos());
+
     mouseDrag->release(event);
     QCustomPlot::mouseReleaseEvent(event);
 }

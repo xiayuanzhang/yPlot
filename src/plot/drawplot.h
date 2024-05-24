@@ -6,6 +6,7 @@
 #include "qcustomplot.h"
 #include <QTimer>
 #include <QPoint>
+#include "mybuoy.h"
 
 
 class MouseDrag;
@@ -111,6 +112,7 @@ private:
     double lastXAxisLower = 0;
     double lastXAxisUpper = 0;
 
+    MyBuoy *buoy = nullptr;
 
 };
 
@@ -149,7 +151,15 @@ private:
     QPoint movePointR;
     QPoint releasePointR;
 
+
+
     const int checkDragDirectionPix = 5;
 };
+
+
+
+
+
+
 
 #endif // DRAWPLOT_H

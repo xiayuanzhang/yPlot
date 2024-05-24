@@ -6,7 +6,13 @@
 #include <QComboBox>
 #include <QMessageBox>
 
-
+/*!
+ * \brief Widget::Widget
+ * \param resizeEnable
+ * \param shadowBorder
+ * \param winNativeEvent
+ * \param parent
+ */
 Widget::Widget(bool resizeEnable,
                bool shadowBorder,
                bool winNativeEvent,
