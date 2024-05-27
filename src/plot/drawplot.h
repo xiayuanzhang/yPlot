@@ -20,9 +20,9 @@ public:
     void initColor(int i);  //i控制使用几号方案
     QColor getColor(int i); //获取颜色方案中的颜色值
     QString getName(int i);
-    double getXIndex();
-    double increaseXIndex();
-    void resetXIndex();
+    double getXIndex();  //获取当前x轴索引值
+    double increaseXIndex(); //增加x轴索引值.并返回增加后的值
+    void resetXIndex(); //复位x轴索引值
 
     void resetXRange();
     void resetYRange();
@@ -39,32 +39,24 @@ public:
 
     void clearAllPlot(); //清除曲线并复位视图
 
-    void addPoint(QVector<QVector<double>> newdata);
+    void addPoint(QVector<QVector<double>> newdata); //添加数据点
 
-    void setPlotName(QVector<QString> name);
-    //是否允许Y轴自动调整
-    void enableAutoY(bool flag = false,Qt::Orientations orientations = Qt::Vertical);
-    void enablem_autoMoveX(bool flag = false ,Qt::Orientations orientations = Qt::Horizontal);
-    bool getAutoYState(){return m_autoMoveY;}
+    void setPlotName(QVector<QString> name); //设置曲线名称
 
-    void setBuffSize(int t);
-    void setWindSize(int t);
-    void setIntervalSize(int t);
-    int getBuffSize(){return m_buffSize;}
-    int getWindSize(){return m_watchSize;}
+    void setBuffSize(int t);//设置数据缓存区时间跨度
+    void setWindSize(int t);//设置可视区域时间跨度
+    int getBuffSize(){return m_buffSize;} //获取数据缓存区时间跨度
+    int getWindSize(){return m_watchSize;} //获取可视区域时间跨度
 
+    void setPlotWidth(int i);//设置曲线宽度
 
+    void showAllPlot();  //显示所有曲线
+    void hideAllPlot(); //隐藏所有曲线
 
-    void setPlotWidth(int i);
-
-
-     void showAllPlot();
-     void hideAllPlot();
-
-     void mouseDragStart(Qt::MouseButton but,QPoint point);
-     void mouseDragMove(Qt::MouseButton but,QPoint point);
-     void mouseDragEnd(Qt::MouseButton but,QPoint point);
-     void mouseClick(Qt::MouseButton but,QPoint point);
+    void mouseDragStart(Qt::MouseButton but,QPoint point);
+    void mouseDragMove(Qt::MouseButton but,QPoint point);
+    void mouseDragEnd(Qt::MouseButton but,QPoint point);
+    void mouseClick(Qt::MouseButton but,QPoint point);
 
 protected:
      void mousePressEvent(QMouseEvent *event) ;

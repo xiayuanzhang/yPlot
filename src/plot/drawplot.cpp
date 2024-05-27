@@ -84,7 +84,7 @@ drawPlot::drawPlot(QWidget *parent) :
     setAutoYRange(true);
 
     buoy = new MyBuoy(this);
-    buoy->setFont(QFont("Helvetica",9));
+    //buoy->setFont(QFont("Helvetica",9));
 }
 
 //颜色获取网站
@@ -356,11 +356,11 @@ void drawPlot::adjustPlotNums(int chs)
         item->setTextColor(m_plot.at(i)->pen().color());
         item->setFont(QFont("Helvetica",9));
     }
-    //设置线条粗细
-    setPlotWidth(1);
 
-    //设置X轴范围
-    resetXYRange();
+    setPlotWidth(1); //设置线条粗细
+
+
+    resetXYRange();//设置X轴范围
 }
 
 void drawPlot::clearAllPlot()

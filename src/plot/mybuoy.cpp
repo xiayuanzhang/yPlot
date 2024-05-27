@@ -3,15 +3,13 @@
 MyBuoy::MyBuoy(QCustomPlot *plot)
 {
 
-#define xRelative 20
-
     qcp = plot;
 
     label = new QLabel(qcp);
     // 设置 QLabel 的背景为半透明的白色
     label->setStyleSheet("background-color: rgba(255, 255, 255, 255);border: 1px solid black;");
     label->setFont(QFont("Helvetica",9));
-    label->setMargin(10);
+    // label->setMargin(-5);
     label->setVisible(false);
     label->setAttribute(Qt::WA_TransparentForMouseEvents); //鼠标事件传递
 
@@ -96,7 +94,7 @@ void MyBuoy::refresh()
     //    qDebug()<<xIndex;
 
 
-    QString nameMax = QString("x=%1").arg(intKey);
+    QString nameMax = QString("X=%1").arg(intKey);
 
     appendText(nameMax,Qt::black);
     for(int i = 0;i<qcp->graphCount();i++){
@@ -126,9 +124,9 @@ void MyBuoy::refresh()
         }
     }
     QFontMetrics fontm(label->font());
-    nameMax += "xxa"; //3个字符占位
+    nameMax += "xx"; //字符占位,增加宽度
     int wid = fontm.width(nameMax);
-    int hig = int((fontm.height() + fontm.height()*0.5) * (showCount + 1)) + 20;
+    int hig = int((fontm.height() + fontm.height()*0.5) * (showCount+0.5));
     label->resize(wid,hig);
 
     QPoint pos = pixelPos.toPoint();
