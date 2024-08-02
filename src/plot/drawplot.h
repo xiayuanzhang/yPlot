@@ -21,6 +21,7 @@ public:
     QColor getColor(int i); //获取颜色方案中的颜色值
     QString getName(int i);
     double getXIndex();  //获取当前x轴索引值
+    double getHeadXIndex(); //获取显示的第一个点的X索引值
     double increaseXIndex(); //增加x轴索引值.并返回增加后的值
     void resetXIndex(); //复位x轴索引值
 
@@ -32,6 +33,7 @@ public:
     void autoXRange(void); //自动调整X轴范围
     void setAutoYRange(bool enable); //是否使能Y轴自动调整
     void autoYRange(void); //自动调整Y轴范围
+    void setXRange(int lower, int upper); //手动设置X的范围. 触发自动调整会覆盖手动设置的值.
 
     void setRefreshInterval(int interval_ms); //设置刷新间隔
 
@@ -53,15 +55,18 @@ public:
     void showAllPlot();  //显示所有曲线
     void hideAllPlot(); //隐藏所有曲线
 
+    void moursePress(Qt::MouseButton but,QPoint point);
     void mouseDragStart(Qt::MouseButton but,QPoint point);
     void mouseDragMove(Qt::MouseButton but,QPoint point);
     void mouseDragEnd(Qt::MouseButton but,QPoint point);
     void mouseClick(Qt::MouseButton but,QPoint point);
+    void mouseDoubleClick(Qt::MouseButton but,QPoint point);
 
 protected:
      void mousePressEvent(QMouseEvent *event) ;
      void mouseMoveEvent(QMouseEvent *event) ;
      void mouseReleaseEvent(QMouseEvent *event) ;
+     void mouseDoubleClickEvent(QMouseEvent *event);
      void wheelEvent(QWheelEvent *event);
 
 private slots:
@@ -81,6 +86,7 @@ signals:
 private:
     //x轴索引值记录
     double xIndexCount = 0;
+    double xHeadIndexCount = 0;
 
     bool stopFlag = 0;
     int m_buffSize = 120;  //数据缓存区时间跨度,单位
@@ -122,12 +128,15 @@ public:
     void press(QMouseEvent *event);
     void move(QMouseEvent *event);
     void release(QMouseEvent *event);
+    void doubleClick(QMouseEvent *event);
 
 signals:
+    void pressed(Qt::MouseButton but, QPoint point);
     void clicked(Qt::MouseButton but, QPoint point);
     void startDrag(Qt::MouseButton but, QPoint point);
     void endDrag(Qt::MouseButton but, QPoint point);
     void drag(Qt::MouseButton but, QPoint point);
+    void doubleClicked(Qt::MouseButton but, QPoint point);
 private:
     //左键
     bool isPress = false;

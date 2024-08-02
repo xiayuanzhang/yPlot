@@ -10,15 +10,31 @@ class MyScorllBar : public QObject
 public:
     explicit MyScorllBar(QScrollBar *scrollbar = nullptr,QObject *parent = nullptr);
 
-    void setValueRange(int min, int max);
+    /**
+     * @brief setPageRange 设置当前窗口显示的范围
+     * @param min watch窗口的Lower
+     * @param max watch窗口的Upper
+     * @note  通过换算之后, 滑动条范围为 (0 , rangMax), value在这个范围中
+     */
+    void setPageRange(int min, int max);
+
+    /**
+     * @brief setRange 设置滚动条的总范围
+     * @param min 0
+     * @param max bufferSize的大小
+     */
     void setRange(int min, int max);
 
 Q_SIGNALS:
-    void valueChanged(int value);
+    void sliderMoved(int min,int max);
 
 
 private Q_SLOTS:
-    void slot_valueChanged(int value);
+    /**
+     * @brief slot_sliderMoved 当滚动条的值发生改变时发出该信号.
+     * @param value
+     */
+    void slot_sliderMoved(int position);
 
 private:
     QScrollBar *m_scrollBar;
@@ -27,6 +43,8 @@ private:
 
     int m_valueMin = 0;
     int m_valueMax = 50;
+
+    bool isPressed = false;
 };
 
 #endif // MYSCORLLBAR_H

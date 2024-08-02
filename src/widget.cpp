@@ -60,15 +60,10 @@ Widget::Widget(bool resizeEnable,
     //滑块大小 = pageStep()
     scrollBar = new MyScorllBar(ui->scrollBar_pos,this);
     scrollBar->setRange(0,buffsize);
-    scrollBar->setValueRange(0,watchsize);
-    connect(scrollBar,&MyScorllBar::valueChanged,this,&Widget::slot_scrollBarvalueChanged);
+    scrollBar->setPageRange(0,watchsize);
+    connect(scrollBar,&MyScorllBar::sliderMoved,this,&Widget::slot_scrollBarMove);
 
-
-//    ui->scrollBar_pos->setEnabled(false); //不允许拖动滑块。
-    connect(ui->plotView,SIGNAL(xVisibleRangeChanged(double,double)),
-            this,SLOT(slot_plotviewXRangeChanged(double,double)));//连接定时器溢出信号和槽函数
-    connect(ui->plotView,SIGNAL(stopStatusChanged(bool)),
-            this,SLOT(onStopStatusChanged(bool)));//连接定时器溢出信号和槽函数
+    connect(ui->plotView,&drawPlot::xVisibleRangeChanged,this,&Widget::slot_plotviewXRangeChanged);
 
     //创建命令输入窗口
     createCmd();
@@ -94,6 +89,10 @@ Widget::Widget(bool resizeEnable,
     //设置波特率
     QString baud = settings->value("baud","115200").toString();
     ui->comboBox_baud->setCurrentText(baud);
+
+    //UI控件初始状态
+    ui->checkBox_stop->setChecked(false);
+    ui->scrollBar_pos->setEnabled(false);
 }
 
 Widget::~Widget()
@@ -355,12 +354,12 @@ void Widget::onReadyRead()
 //暂停接收按钮
 void Widget::on_checkBox_stop_clicked(bool checked)
 {
-    //ui->plotView->setStopShow(checked); //true 为暂停状态
-}
+    m_stopReceivePlotData = checked;
+    ui->scrollBar_pos->setEnabled(checked); //不允许拖动滑块。
 
-void Widget::onStopStatusChanged(bool stop)
-{
-    ui->checkBox_stop->setChecked(stop);
+    if(!checked){
+        ui->plotView->resetXYRange();
+    }
 }
 
 
@@ -439,7 +438,7 @@ void Widget::on_spinBox_buff_editingFinished()
 
     //滑块范围为[0, buffSize]
     scrollBar->setRange(0,ui->plotView->getBuffSize());
-    scrollBar->setValueRange(0,ui->plotView->getWindSize());
+    scrollBar->setPageRange(0,ui->plotView->getWindSize());
 }
 
 void Widget::on_spinBox_wind_editingFinished()
@@ -454,7 +453,7 @@ void Widget::on_spinBox_wind_editingFinished()
     ui->plotView->setWindSize(arg1);
 
     scrollBar->setRange(0,ui->plotView->getBuffSize());
-    scrollBar->setValueRange(0,ui->plotView->getWindSize());
+    scrollBar->setPageRange(0,ui->plotView->getWindSize());
 
 }
 
@@ -463,15 +462,17 @@ void Widget::on_spinBox_wind_editingFinished()
 //滑块跟随视窗运动
 void Widget::slot_plotviewXRangeChanged(double low,double up)
 {
-    //阻止发出信号
-    scrollBar->setValueRange(low,up);
+    scrollBar->setPageRange(low,up);
 }
 
 
 //视窗跟随滑块运动
-void Widget::slot_scrollBarvalueChanged(int value)
+void Widget::slot_scrollBarMove(int min,int max)
 {
-    qDebug()<<"the scollbar valueChanged";
+    //如果处于暂停状态,滑块可以拖动视窗, 如果处于接收数据状态, 滑块禁止滑动
+    qDebug()<<"min = "<<min<<" max = "<<max;
+    qDebug()<<"plotView->getHeadXIndex() = "<<ui->plotView->getHeadXIndex();
+    ui->plotView->setXRange(min+ui->plotView->getHeadXIndex(),max+ui->plotView->getHeadXIndex());
 }
 
 //隐藏全部
@@ -538,6 +539,8 @@ void Widget::onFrameReceived(QVector<YFrame_t> frame)
             ui->plotView->setPlotName(name);
             break;
         case ID_WAVE: //波形
+            if(m_stopReceivePlotData)
+                break;
             data.clear();
             ddata.clear();
 

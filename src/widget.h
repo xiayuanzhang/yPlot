@@ -54,7 +54,6 @@ private slots:
     void onReadyRead();
 
     void on_checkBox_stop_clicked(bool checked);
-    void onStopStatusChanged(bool stop);
 
 
     void on_pushButton_resetKey_clicked();
@@ -81,7 +80,7 @@ private slots:
 
 
 
-    void slot_scrollBarvalueChanged(int value);
+    void slot_scrollBarMove(int min, int max);
 
 
 
@@ -95,8 +94,7 @@ private slots:
 
 private:
     Ui::Widget *ui;
-    QPoint m_startMovePoint;
-    bool m_startMoveFlag;
+    bool m_stopReceivePlotData = false;
 
     QSerialPort *serialport;//串口对象
     SerialInfo *serialInfo;//串口信息对象

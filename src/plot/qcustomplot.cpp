@@ -9527,7 +9527,7 @@ void QCPAxis::mousePressEvent(QMouseEvent *event, const QVariant &details)
     event->ignore();
     return;
   }
-  
+
   if (event->buttons() == Qt::RightButton)
   {
     mDragging = true;
@@ -18533,7 +18533,8 @@ void QCPAxisRect::layoutChanged()
 void QCPAxisRect::mousePressEvent(QMouseEvent *event, const QVariant &details)
 {
   Q_UNUSED(details)
-  if (event->buttons() & Qt::RightButton)
+  // 设置鼠标左键拖拽, 移动XY轴的范围 --yuan
+  if (event->buttons() & Qt::LeftButton)
   {
     mDragging = true;
     // initialize antialiasing backup in case we start dragging:

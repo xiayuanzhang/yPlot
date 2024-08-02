@@ -30,10 +30,10 @@ drawPlot::drawPlot(QWidget *parent) :
     this->yAxis->ticker()->setTickStepStrategy(QCPAxisTicker::tssReadability);//可读性优于设置
 
 
-    //框选放大样式设置
-    this->selectionRect()->setPen(QPen(Qt::black,1,Qt::DashLine));//设置选框的样式：虚线
-    this->selectionRect()->setBrush(QBrush(QColor(0,0,100,50)));//设置选框的样式：半透明浅蓝
-    this->setSelectionRectMode(QCP::SelectionRectMode::srmZoom);
+    //框选放大样式设置, v3.0.0 禁止框选放大
+    // this->selectionRect()->setPen(QPen(Qt::black,1,Qt::DashLine));//设置选框的样式：虚线
+    // this->selectionRect()->setBrush(QBrush(QColor(0,0,100,50)));//设置选框的样式：半透明浅蓝
+    // this->setSelectionRectMode(QCP::SelectionRectMode::srmZoom);
 
     //曲线可选，图例可选，可多选
     //取消曲线可选 QCP::iSelectPlottables|
@@ -73,10 +73,12 @@ drawPlot::drawPlot(QWidget *parent) :
 
     //鼠标拖动检测
     mouseDrag = new MouseDrag(this);
+    connect(mouseDrag, &MouseDrag::pressed, this, &drawPlot::moursePress);
     connect(mouseDrag, &MouseDrag::startDrag, this, &drawPlot::mouseDragStart);
     connect(mouseDrag, &MouseDrag::drag, this, &drawPlot::mouseDragMove);
     connect(mouseDrag, &MouseDrag::endDrag, this, &drawPlot::mouseDragEnd);
     connect(mouseDrag, &MouseDrag::clicked, this, &drawPlot::mouseClick);
+    connect(mouseDrag, &MouseDrag::doubleClicked, this, &drawPlot::mouseDoubleClick);
 
 
     //移动
@@ -164,6 +166,11 @@ double drawPlot::getXIndex()
     return xIndexCount;
 }
 
+double drawPlot::getHeadXIndex()
+{
+    return xHeadIndexCount;
+}
+
 double drawPlot::increaseXIndex()
 {
     xIndexCount++;
@@ -173,6 +180,7 @@ double drawPlot::increaseXIndex()
 void drawPlot::resetXIndex()
 {
     xIndexCount = 0;
+    xHeadIndexCount = 0;
 }
 
 void drawPlot::resetXRange()
@@ -189,6 +197,7 @@ void drawPlot::resetXRange()
 void drawPlot::resetYRange()
 {
     this->yAxis->setRange(-0.00000001,0.00000001);
+    this->yAxis->rescale(true); //true表示值控制
     //this->yAxis->setRange(-300,300);
     //this->replot(QCustomPlot::rpQueuedReplot);
 }
@@ -225,6 +234,11 @@ void drawPlot::autoYRange()
     if(m_autoMoveY && !m_isDrag && !m_isRoom){
         this->yAxis->rescale(true); //true表示值控制可见的曲线
     }
+}
+
+void drawPlot::setXRange(int lower, int upper)
+{
+    this->xAxis->setRange(lower,upper);
 }
 
 void drawPlot::setRefreshInterval(int interval_ms)
@@ -407,8 +421,11 @@ void drawPlot::addPoint(QVector<QVector<double>> newdata)
     double x = getXIndex();
     if(x > m_buffSize){
         for(int i = 0;i<m_plot.size();i++){
-            m_plot.at(i)->data()->removeBefore(x - m_buffSize);
+            xHeadIndexCount = x - m_buffSize;
+            m_plot.at(i)->data()->removeBefore(xHeadIndexCount);
         }
+    }else{
+        xHeadIndexCount = 0;
     }
 
     //移动x轴. x超过默认窗口大小,且使能了自动移动x, 则移动x
@@ -489,6 +506,13 @@ void drawPlot::mouseReleaseEvent(QMouseEvent *event)
     QCustomPlot::mouseReleaseEvent(event);
 }
 
+void drawPlot::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    buoy->setPixelPos(event->localPos());
+    mouseDrag->doubleClick(event);
+    QCustomPlot::mouseDoubleClickEvent(event);
+}
+
 
 void drawPlot::wheelEvent(QWheelEvent *event)
 {
@@ -518,22 +542,24 @@ void drawPlot::hideAllPlot()
     }
 }
 
+void drawPlot::moursePress(Qt::MouseButton but, QPoint point)
+{
+
+}
+
 void drawPlot::mouseDragStart(Qt::MouseButton but,QPoint point)
 {
     Q_UNUSED(point);
-    if(but == Qt::RightButton){//进入拖动, 关闭自动X,Y
+    if(but == Qt::LeftButton){//进入拖动, 关闭自动X,Y
         m_isDrag = true;
-    }else if(but == Qt::LeftButton){
-         m_isRoom = true;
     }
-
 }
 
 void drawPlot::mouseDragMove(Qt::MouseButton but,QPoint point)
 {
     Q_UNUSED(point);
     //拖拽移动中
-    if(but == Qt::RightButton){
+    if(but == Qt::LeftButton){
     }
 
 }
@@ -541,28 +567,25 @@ void drawPlot::mouseDragMove(Qt::MouseButton but,QPoint point)
 void drawPlot::mouseDragEnd(Qt::MouseButton but,QPoint point)
 {
     Q_UNUSED(point);
-    if(but == Qt::RightButton){
-    }else if(but == Qt::LeftButton){
-        //缩放释放
+    if(but == Qt::LeftButton){
     }
 }
 
 void drawPlot::mouseClick(Qt::MouseButton but, QPoint point)
 {
     Q_UNUSED(point);
-    if(but == Qt::RightButton){
-        //右键单击,将视图还原
+}
+
+void drawPlot::mouseDoubleClick(Qt::MouseButton but, QPoint point)
+{
+    //双击鼠标左键，恢复原始大小
+    Q_UNUSED(point);
+    if(but == Qt::LeftButton){
         m_isRoom = false;
         m_isDrag = false;
         resetXYRange();
-
     }
 }
-
-
-
-
-
 
 
 MouseDrag::MouseDrag(QObject *parent)
@@ -588,6 +611,7 @@ void MouseDrag::press(QMouseEvent *event)
         isDrag = false;
         pressPoint = event->pos();
     }
+    emit pressed(event->button(), event->pos());
 }
 
 void MouseDrag::move(QMouseEvent *event)
@@ -644,5 +668,10 @@ void MouseDrag::release(QMouseEvent *event)
             emit clicked(Qt::LeftButton,event->pos());
         }
     }
+}
+
+void MouseDrag::doubleClick(QMouseEvent *event)
+{
+    emit doubleClicked(event->button(),event->pos());
 }
 

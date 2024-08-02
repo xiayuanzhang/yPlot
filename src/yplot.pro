@@ -62,7 +62,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 
 
-INCLUDEPATH += $$PWD/qframeless
+INCLUDEPATH += $$PWD/qframeless \
+    $$PWD/plot \
+    $$PWD/data
 include ($$PWD/qframeless/qframeless.pri)
 
 DISTFILES += \
