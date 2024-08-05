@@ -6,8 +6,13 @@
 #include <QTimer>
 #include "data/ringqueue.h"
 
-#define ID_NAME 0x01
-#define ID_WAVE 0x02
+#define ID_PLOTNAME 0x01
+#define ID_PLOT 0x02
+#define ID_INFO 0x03
+#define ID_DEBUG  0x04
+#define ID_WARING 0x05
+
+#define ID_SENDCMD 0x10
 
 
 typedef struct _YFrameType
@@ -46,6 +51,7 @@ public:
 
     static QByteArray packData(const YFrame_t &frame);
     static QByteArray packData(uint8_t id, const QByteArray &data = {});
+    static QByteArray packData(uint8_t id, const QString &data = {});
     static QByteArray packData(uint8_t id, uint8_t cmd);
 
     static QVector<float> byteArrayToFloat(const QByteArray &data);

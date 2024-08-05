@@ -232,8 +232,7 @@ void Widget::createCmd()
        connect(cmdbt,&QPushButton::clicked,  //点击按钮发送数据
                [=]()
                {
-                    //qDebug()<<cmdli->text();
-                    serialport->write(cmdli->text().toLocal8Bit());
+                   yframe->packData(ID_SENDCMD,cmdli->text());
                });
 
        connect(keyli,&QLineEdit::editingFinished, //完成可输入按键值
@@ -534,11 +533,11 @@ void Widget::onFrameReceived(QVector<YFrame_t> frame)
     for(int i = 0;i < frame.length();i++){
         auto m = frame.at(i);
         switch(m.id){
-        case ID_NAME: //名称
+        case ID_PLOTNAME: //名称
             name = YFrame::byteArrayToQString(m.data);
             ui->plotView->setPlotName(name);
             break;
-        case ID_WAVE: //波形
+        case ID_PLOT: //波形
             if(m_stopReceivePlotData)
                 break;
             data.clear();
