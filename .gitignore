@@ -53,3 +53,10 @@ compile_commands.json
 *creator.user*
 
 *_qmlcache.qrc
+
+
+# new
+*.idx
+*.stash
+*.exe
+*.rc

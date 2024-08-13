@@ -33,7 +33,7 @@ Widget::Widget(bool resizeEnable,
 
     //数据解析
     yframe = new YFrame(this);
-    connect(yframe,YFrame::frameReceived,this,onFrameReceived);
+    connect(yframe,&YFrame::frameReceived,this,&Widget::onFrameReceived);;
     yframe->startAutoParse(5);//5ms解析一次数据
 
 
@@ -229,11 +229,13 @@ void Widget::createCmd()
        pLayout->addWidget(cmdbt, i/2, (i%2)*3+3);//把输入框添加到栅格布局的第i行第2/5列
 
 
-       connect(cmdbt,&QPushButton::clicked,  //点击按钮发送数据
+       connect(cmdbt,&QPushButton::clicked,this,  //点击按钮发送数据
                [=]()
                {
-                    //qDebug()<<cmdli->text();
-                    serialport->write(cmdli->text().toLocal8Bit());
+                   //串口发送打包数据
+                   //@tag 发送指令
+                    QByteArray pack =  yframe->packData(YPLOT_ID_SENDCMD,cmdli->text().toUtf8());
+                    serialport->write(pack);
                });
 
        connect(keyli,&QLineEdit::editingFinished, //完成可输入按键值
@@ -534,11 +536,11 @@ void Widget::onFrameReceived(QVector<YFrame_t> frame)
     for(int i = 0;i < frame.length();i++){
         auto m = frame.at(i);
         switch(m.id){
-        case ID_NAME: //名称
+        case YPLOT_ID_PLOTNAME: //名称
             name = YFrame::byteArrayToQString(m.data);
             ui->plotView->setPlotName(name);
             break;
-        case ID_WAVE: //波形
+        case YPLOT_ID_PLOT: //波形
             if(m_stopReceivePlotData)
                 break;
             data.clear();

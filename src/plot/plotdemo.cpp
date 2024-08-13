@@ -35,6 +35,6 @@ void PlotDemo::update()
     data.resize(24);
     //拷贝数据
     memcpy(data.data(), m_ch, 24);
-    QByteArray sendbuff = YFrame::packData(ID_WAVE, data);
+    QByteArray sendbuff = YFrame::packData(YPLOT_ID_PLOT, data);
     emit readyRead(sendbuff);
 }

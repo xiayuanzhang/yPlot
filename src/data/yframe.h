@@ -6,9 +6,16 @@
 #include <QTimer>
 #include "data/ringqueue.h"
 
-#define ID_NAME 0x01
-#define ID_WAVE 0x02
 
+enum{
+    YPLOT_ID_PLOTNAME = 0x01, ///< 向上位机发送plot的name
+    YPLOT_ID_PLOT = 0x02, ///< 向上位机发送plot数据
+    YPLOT_ID_INFO = 0x03, ///< 向上位机发送info信息
+    YPLOT_ID_DEBUG = 0x04, ///< 向上位机发送debug信息
+    YPLOT_ID_WARNING = 0x05, ///< 向上位机发送warning信息
+
+    YPLOT_ID_SENDCMD = 0x10, /// < 接收上位机下发的命令
+};
 
 typedef struct _YFrameType
 {
