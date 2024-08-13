@@ -91,6 +91,7 @@ QByteArray YFrame::packData(const YFrame_t &frame)
     data.append((frame.len >> 8) & 0xFF);
     data.append(frame.data);
     return data;
+}
 
 QByteArray YFrame::packData(uint8_t id, const QByteArray &data)
 {
@@ -98,6 +99,15 @@ QByteArray YFrame::packData(uint8_t id, const QByteArray &data)
     frame.id = id;
     frame.len = data.size();
     frame.data = data;
+    return packData(frame);
+}
+
+QByteArray YFrame::packData(uint8_t id, const QString &data)
+{
+    YFrame_t frame;
+    frame.id = id;
+    frame.len = data.size();
+    frame.data = data.toUtf8();
     return packData(frame);
 }
 

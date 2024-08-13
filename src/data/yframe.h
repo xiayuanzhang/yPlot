@@ -53,6 +53,7 @@ public:
 
     static QByteArray packData(const YFrame_t &frame);
     static QByteArray packData(uint8_t id, const QByteArray &data = {});
+    static QByteArray packData(uint8_t id, const QString &data = {});
     static QByteArray packData(uint8_t id, uint8_t cmd);
 
     static QVector<float> byteArrayToFloat(const QByteArray &data);

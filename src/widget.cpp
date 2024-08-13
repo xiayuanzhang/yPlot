@@ -234,7 +234,7 @@ void Widget::createCmd()
                {
                    //串口发送打包数据
                    //@tag 发送指令
-                    QByteArray pack =  yframe->packData(YPLOT_ID_SENDCMD,cmdli->text().toUtf8());
+                    QByteArray pack =  yframe->packData(YPLOT_ID_SENDCMD,cmdli->text());
                     serialport->write(pack);
                });
 

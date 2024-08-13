@@ -197,7 +197,7 @@ void drawPlot::resetXRange()
 void drawPlot::resetYRange()
 {
     this->yAxis->setRange(-0.00000001,0.00000001);
-    this->yAxis->rescale(true); //true表示值控制
+    this->yAxis->rescale(true); //从新缩放y轴大小
     //this->yAxis->setRange(-300,300);
     //this->replot(QCustomPlot::rpQueuedReplot);
 }
