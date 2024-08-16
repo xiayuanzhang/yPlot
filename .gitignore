@@ -60,3 +60,5 @@ compile_commands.json
 *.stash
 *.exe
 *.rc
+
+src/build/*
