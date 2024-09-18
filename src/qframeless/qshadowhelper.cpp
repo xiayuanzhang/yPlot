@@ -1,6 +1,7 @@
 ﻿#include <QVBoxLayout>
 #include <QPainter>
 #include <QMap>
+#include <QtMath>
 #include <QMainWindow>
 #include "qshadowhelper.h"
 

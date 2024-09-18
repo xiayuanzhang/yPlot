@@ -93,6 +93,8 @@ Widget::Widget(bool resizeEnable,
     //UI控件初始状态
     ui->checkBox_stop->setChecked(false);
     ui->scrollBar_pos->setEnabled(false);
+
+
 }
 
 Widget::~Widget()
@@ -366,7 +368,7 @@ void Widget::on_checkBox_stop_clicked(bool checked)
 
 
 
-//按键快捷键复位
+//按键重置
 void Widget::on_pushButton_resetKey_clicked()
 {
     memset(cmdKey,0,sizeof (cmdKey));
@@ -375,6 +377,12 @@ void Widget::on_pushButton_resetKey_clicked()
         QLineEdit *keyli = ui->scrollArea->widget()->findChild<QLineEdit*>(name);
         keyli->setText("*");
     }
+
+    // if(ui->plainTextEditRx->isVisible()){
+    //     ui->plainTextEditRx->setVisible(false);
+    // }else{
+    //     ui->plainTextEditRx->setVisible(true);
+    // }
 }
 
 //指令框复位

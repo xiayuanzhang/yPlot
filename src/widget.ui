@@ -101,28 +101,6 @@ QPushButton#pushButton_clear
 }
 
 
-QPushButton#pushButton_showall
-{
-	border-image:url(:/img/showall.png);
-	max-height:28px;
-	max-width:28px;
-}
-
-
-QPushButton#pushButton_hideall
-{
-	border-image:url(:/img/hideall.svg);
-	max-height:28px;
-	max-width:28px;
-}
-
-QPushButton#pushButton_reset
-{
-	border-image:url(:/img/reset.png);
-	max-height:28px;
-	max-width:28px;
-}
-
 QPushButton#pushButton_demo
 {
 	border-image:url(:/img/demo.svg);
@@ -159,7 +137,7 @@ QComboBox#comboBox_port
 }
 
 
-
+/**************************开串口, 关串口*/
 /*单选框未选中样式*/
 QCheckBox#checkBox_open::indicator::unchecked {
 	image:url(:/img/open-off.svg);
@@ -178,6 +156,8 @@ QCheckBox#checkBox_open{
 	max-height: 28px;
 }
 
+
+/********************暂停**/
 /*单选框未选中样式*/
 QCheckBox#checkBox_stop::indicator::unchecked {
 	image:url(:/img/stop-off.svg);
@@ -196,6 +176,8 @@ QCheckBox#checkBox_stop{
 	max-height: 28px;
 }
 
+
+/*********************手动Y,自动Y*/
 /*单选框未选中样式*/
 QCheckBox#checkBox_auto::indicator::unchecked {
 	image:url(:/img/y-auto.png);
@@ -215,31 +197,38 @@ QCheckBox#checkBox_auto{
 }
 
 
+/**************************显示或隐藏**/
 
-/**************************tools**************************/
-QWidget#widget_tools
-{
-	background-color:#F7FBFD;
-	border-radius:10px;
+#checkBoxHide::indicator::unchecked {
+	image:url(:/img/hideall.svg);
 }
-QLabel#label_datatype
-{
-	background-color:#F7FBFD;
-}
-QLabel#label_channel
-{
-	background-color:#F7FBFD;
+/*单选框选中样式*/
+#checkBoxHide::indicator::checked { 
+	image:url(:/img/showall.svg);
 }
 
-QComboBox#comboBox_datatype
-{
-	background-color:rgb(222, 241, 255);
-	border-radius:5px;
+#checkBoxHide::indicator{ 
+	width: 28px;
+	height: 28px;
+}
+#checkBoxHide{ 
+	max-width: 28px;
+	max-height: 28px;
 }
 
 
 
+/*******************************复位***/
+QPushButton#pushButton_reset
+{
+	border-image:url(:/img/reset.png);
+	max-height:28px;
+	max-width:28px;
+}
 
+
+
+/********************SpinBox**/
 QSpinBox {
 	padding-right:20px;
 	border-radius:5px;
@@ -248,8 +237,8 @@ QSpinBox {
 
 /* 向上按钮 */
 QSpinBox::up-button {
-top:6px;
-right:10px;/*控制箭头左右偏移*/
+	top:6px;
+	right:10px;/*控制箭头左右偏移*/
 	width:10px;
 	height: 10px;   
 	border-image:url(:/img/up.svg);
@@ -259,8 +248,8 @@ right:10px;/*控制箭头左右偏移*/
 
 /* 向下按钮 */
 QSpinBox::down-button {
-bottom:6px;
-right:10px;/*控制箭头左右偏移*/
+	bottom:6px;
+	right:10px;/*控制箭头左右偏移*/
 	width:10px;
 	height: 10px;   
 	border-image:url(:/img/down.svg);
@@ -268,20 +257,11 @@ right:10px;/*控制箭头左右偏移*/
 	border-top-width:0;
 }
 
-QPushButton#pushButton_resetCmd
-{
-	border-radius:5px;
-	background:rgb(222, 241, 255);;
-}
 
 
-QPushButton#pushButton_resetKey
-{
-	border-radius:5px;
-	background:rgb(222, 241, 255);
-}
 
 
+/*frame边框是在qt designer中去除的*/
 /********************************************************/
 QWidget#scrollAreaWidgetContents{
 	border:none;
@@ -289,7 +269,88 @@ QWidget#scrollAreaWidgetContents{
 	background-color: #F7FBFD;
 }
 
-/*frame边框是在qt designer中去除的*/
+
+/**************************tools**************************/
+QWidget#widget_tools
+{
+	background-color:#F7FBFD;
+	border-radius:10px;
+}
+
+QScrollArea#scrollAreaTools {
+	border:none;
+	border-radius:10px;
+}
+
+
+QScrollArea#scrollAreaTools &gt; QWidget {
+	border:10px;
+	border-radius:10px;
+}
+
+
+QScrollArea#scrollAreaTools &gt; QWidget &gt; QWidget {
+	/*border:none;*/
+    background-color:(222, 241, 255);
+	/*border-radius:10px;*/
+}
+
+/*group*/
+#scrollAreaTools QGroupBox
+{
+	border-radius:10px;
+	padding: 5px; /* 设置内部边距 */
+	padding-top: 30px;
+	background-color:#F7FBFD;
+
+}
+
+/*group - title*/
+#scrollAreaTools QGroupBox::title {
+    background-color: rgb(220, 220, 220); /* 标题的背景颜色 */
+    margin-radius: 5px; /* 标题部分的圆角 */
+	top: 5px;
+    padding: 5px; /* 标题部分的内边距 */
+    subcontrol-position: top center; /* 标题的位置 */
+    subcontrol-origin: margin; /* 标题的位置起点 */
+}
+
+#scrollAreaTools QPushButton
+{
+	border-radius:5px;
+	background:rgb(222, 241, 255);
+}
+
+
+/*单选框未选中样式*/
+#scrollAreaTools QCheckBox::indicator::unchecked {
+	image:url(:/img/open-off.svg);
+}
+/*单选框选中样式*/
+#scrollAreaTools QCheckBox::indicator::checked { 
+	image:url(:/img/open-on.svg);
+}
+
+#scrollAreaTools QCheckBox::indicator{ 
+	width: 50px;
+	height: 28px;
+	
+}
+
+#scrollAreaTools QCheckBox{ 
+
+	border-radius:5px;
+}
+
+
+/**********************rx_textbxo**/
+#plainTextEditRx 
+{
+	border-radius:10px;
+	background-color:#F7FBFD;
+}
+
+
 
 
 
@@ -365,10 +426,7 @@ subcontrol-origin: margin;
       background: none;
   }</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
-   <property name="spacing">
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,2,0,1">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -774,50 +832,15 @@ subcontrol-origin: margin;
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_showall">
+       <widget class="QCheckBox" name="checkBoxHide">
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
-        <property name="contextMenuPolicy">
-         <enum>Qt::DefaultContextMenu</enum>
-        </property>
         <property name="toolTip">
-         <string>  显示全部数据</string>
+         <string>  切换Y轴自适应</string>
         </property>
         <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_21">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>30</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_hideall">
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="contextMenuPolicy">
-         <enum>Qt::DefaultContextMenu</enum>
-        </property>
-        <property name="toolTip">
-         <string>  隐藏全部数据</string>
-        </property>
-        <property name="text">
-         <string/>
+         <string>CheckBox</string>
         </property>
        </widget>
       </item>
@@ -1052,390 +1075,394 @@ subcontrol-origin: margin;
     </widget>
    </item>
    <item>
-    <widget class="QSplitter" name="splitter">
-     <property name="lineWidth">
-      <number>1</number>
-     </property>
+    <widget class="Line" name="line">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
-     <property name="handleWidth">
-      <number>15</number>
-     </property>
-     <widget class="QWidget" name="layoutWidget">
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QScrollBar" name="scrollBar_pos">
-         <property name="singleStep">
-          <number>3</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="drawPlot" name="plotView" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>1</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>300</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="layoutWidget">
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <item>
-            <spacer name="horizontalSpacer_14">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>10</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QWidget" name="widget_tools" native="true">
-             <property name="minimumSize">
-              <size>
-               <width>210</width>
-               <height>210</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>210</width>
-               <height>210</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true"/>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_2">
-                <item>
-                 <widget class="QLabel" name="label_3">
-                  <property name="minimumSize">
-                   <size>
-                    <width>70</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>70</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>缓存</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="spinBox_buff">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="toolTip">
-                   <string>  数据缓存，单位秒</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="maximum">
-                   <number>86400000</number>
-                  </property>
-                  <property name="value">
-                   <number>1</number>
-                  </property>
-                  <property name="displayIntegerBase">
-                   <number>10</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout">
-                <item>
-                 <widget class="QLabel" name="label">
-                  <property name="minimumSize">
-                   <size>
-                    <width>70</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>70</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>视窗</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="spinBox_wind">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="toolTip">
-                   <string>  视窗区域，单位秒</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="maximum">
-                   <number>86400000</number>
-                  </property>
-                  <property name="value">
-                   <number>1</number>
-                  </property>
-                  <property name="displayIntegerBase">
-                   <number>10</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_resetKey">
-                <property name="minimumSize">
-                 <size>
-                  <width>180</width>
-                  <height>40</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>180</width>
-                  <height>40</height>
-                 </size>
-                </property>
-                <property name="cursor">
-                 <cursorShape>PointingHandCursor</cursorShape>
-                </property>
-                <property name="toolTip">
-                 <string>  复位指令快捷键</string>
-                </property>
-                <property name="text">
-                 <string>按键重置</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_resetCmd">
-                <property name="minimumSize">
-                 <size>
-                  <width>180</width>
-                  <height>40</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>180</width>
-                  <height>40</height>
-                 </size>
-                </property>
-                <property name="cursor">
-                 <cursorShape>PointingHandCursor</cursorShape>
-                </property>
-                <property name="toolTip">
-                 <string>  复位指令框</string>
-                </property>
-                <property name="whatsThis">
-                 <string/>
-                </property>
-                <property name="text">
-                 <string>指令重置</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_15">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>10</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>10</width>
-             <height>10</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QScrollArea" name="scrollArea">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>210</width>
-             <height>210</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="sizeIncrement">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="baseSize">
-            <size>
-             <width>210</width>
-             <height>210</height>
-            </size>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
-           <property name="widgetResizable">
-            <bool>true</bool>
-           </property>
-           <widget class="QWidget" name="scrollAreaWidgetContents">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>0</y>
-              <width>1288</width>
-              <height>382</height>
-             </rect>
-            </property>
-           </widget>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>10</width>
-             <height>10</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_16">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>10</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
     </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QScrollBar" name="scrollBar_pos">
+       <property name="singleStep">
+        <number>3</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="drawPlot" name="plotView" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>1</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>300</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
+     <item>
+      <widget class="QWidget" name="widget_tools" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QScrollArea" name="scrollAreaTools">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents_2">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>227</width>
+             <height>506</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <property name="leftMargin">
+             <number>5</number>
+            </property>
+            <property name="topMargin">
+             <number>5</number>
+            </property>
+            <property name="rightMargin">
+             <number>5</number>
+            </property>
+            <property name="bottomMargin">
+             <number>5</number>
+            </property>
+            <item>
+             <widget class="QGroupBox" name="groupBox_3">
+              <property name="title">
+               <string>波形设置</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_9">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                 <item>
+                  <widget class="QLabel" name="label_3">
+                   <property name="minimumSize">
+                    <size>
+                     <width>70</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>70</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>缓存</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="spinBox_buff">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="toolTip">
+                    <string>  数据缓存，单位秒</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                   </property>
+                   <property name="maximum">
+                    <number>86400000</number>
+                   </property>
+                   <property name="value">
+                    <number>1</number>
+                   </property>
+                   <property name="displayIntegerBase">
+                    <number>10</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <item>
+                  <widget class="QLabel" name="label">
+                   <property name="minimumSize">
+                    <size>
+                     <width>70</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>70</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>视窗</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="spinBox_wind">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="toolTip">
+                    <string>  视窗区域，单位秒</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                   </property>
+                   <property name="maximum">
+                    <number>86400000</number>
+                   </property>
+                   <property name="value">
+                    <number>1</number>
+                   </property>
+                   <property name="displayIntegerBase">
+                    <number>10</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox">
+              <property name="title">
+               <string>发送设置</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_7">
+               <item>
+                <widget class="QCheckBox" name="checkBoxHexSend">
+                 <property name="text">
+                  <string>HEX发送</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkBoxAutoSend">
+                 <property name="text">
+                  <string>自动循环发送</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="title">
+               <string>接收设置</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_8">
+               <item>
+                <widget class="QCheckBox" name="checkBoxShowReceive">
+                 <property name="text">
+                  <string>接收窗口</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkBoxHexReceive">
+                 <property name="text">
+                  <string>HEX接收</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_resetCmd">
+                 <property name="minimumSize">
+                  <size>
+                   <width>180</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>180</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="toolTip">
+                  <string>  复位指令框</string>
+                 </property>
+                 <property name="whatsThis">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string>指令重置</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_resetKey">
+                 <property name="minimumSize">
+                  <size>
+                   <width>180</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>180</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="toolTip">
+                  <string>  复位指令快捷键</string>
+                 </property>
+                 <property name="text">
+                  <string>按键重置</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QPlainTextEdit" name="plainTextEditRx"/>
+       <widget class="QScrollArea" name="scrollArea">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>210</width>
+          <height>210</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="sizeIncrement">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="baseSize">
+         <size>
+          <width>210</width>
+          <height>210</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>579</width>
+           <height>308</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
