@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.c": "c",
+        "xutility": "cpp",
+        "algorithm": "cpp"
+    }
+}

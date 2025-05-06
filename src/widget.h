@@ -15,6 +15,8 @@
 #include "plotdemo.h"
 #include "myscorllbar.h"
 
+#include "cmdlist.h"
+
 namespace Ui {
 class Widget;
 }
@@ -35,7 +37,6 @@ private:
 
     void keyPressEvent(QKeyEvent *e);  //widget下的按键按下事件
 
-    void createCmd();
 private slots:
 
     void maximizedChanged(bool max);
@@ -45,9 +46,6 @@ private slots:
     void on_pushButton_little_clicked();
 
     void on_pushButton_size_clicked();
-
-    void lineEdit_finish();
-    void lineEdit_return();
 
     void on_checkBox_open_clicked(bool checked);
 
@@ -92,14 +90,14 @@ private slots:
     void onFrameReceived(QVector<YFrame_t> frame);
     void on_pushButton_demo_clicked();
 
+    void onReadySend(QString cmd);
+
 private:
     Ui::Widget *ui;
     bool m_stopReceivePlotData = false;
 
     QSerialPort *serialport;//串口对象
     SerialInfo *serialInfo;//串口信息对象
-
-    QChar cmdKey[50];//命令
 
     PlotDemo *plotdemo;
 //数据
@@ -109,6 +107,7 @@ private:
 
     MyScorllBar *scrollBar;
 
+    CmdList *cmdList;
 };
 
 #endif // WIDGET_H

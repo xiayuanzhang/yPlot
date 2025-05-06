@@ -26,6 +26,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    cmdlist.cpp \
     data/yframe.cpp \
     main.cpp \
     myscorllbar.cpp \
@@ -33,12 +34,16 @@ SOURCES += \
     plot/mybuoy.cpp \
     plot/plotdemo.cpp \
     serialinfo.cpp \
+    setupframe.cpp \
+    setupmanage.cpp \
+    setupplot.cpp \
     widget.cpp \
     plot/qcustomplot.cpp \
     plot/drawplot.cpp\
     plot/verticalline.cpp
 
 HEADERS += \
+    cmdlist.h \
     data/ringqueue.h \
     data/yframe.h \
     myscorllbar.h \
@@ -46,12 +51,18 @@ HEADERS += \
     plot/mybuoy.h \
     plot/plotdemo.h \
     serialinfo.h \
+    setupframe.h \
+    setupmanage.h \
+    setupplot.h \
     widget.h \
     plot/qcustomplot.h \
     plot/drawplot.h\
     plot/verticalline.h
 
 FORMS += \
+    cmdlist.ui \
+    setupframe.ui \
+    setupplot.ui \
         widget.ui \
 
 # Default rules for deployment.
